@@ -7,6 +7,7 @@ public class BackgroundTiles : MonoBehaviour
 {
     public TileBase FirstTile;
     public TileBase SecondTile;
+    public Transform Car;
     public int MapSize = 8;
 
     private Tilemap map;
@@ -16,17 +17,19 @@ public class BackgroundTiles : MonoBehaviour
     {
         map = GetComponent<Tilemap>();
         mainCamera = Camera.main;
+        randomizeMap();
     }
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            randomizeMap();
-            // Vector3 clickWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            // Vector3Int clickCell = map.WorldToCell(new Vector3(clickWorld.x, clickWorld.y, 0));
-            // Debug.Log(clickCell);
-            // map.SetTile(clickCell, TileToSet);
+            Vector3 clickWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int clickCell = map.WorldToCell(new Vector3(clickWorld.x, clickWorld.y, 0));
+            Debug.Log(clickWorld);
+            Debug.Log(clickCell);
+            Car.position = map.CellToWorld(clickCell);
+            Debug.Log(Car.position);
         }
     }
 
