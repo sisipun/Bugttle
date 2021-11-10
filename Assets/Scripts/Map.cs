@@ -6,20 +6,20 @@ using UnityEngine.Tilemaps;
 public class Map : MonoBehaviour
 {
     [SerializeField]
-    private Tilemap Background;
+    private Tilemap background;
     [SerializeField]
-    private TileBase[] BackgroundTiles;
+    private TileBase[] backgroundTiles;
 
     [SerializeField]
-    private Tilemap Hover;
+    private Tilemap hover;
     [SerializeField]
-    private TileBase HoverTile;
+    private TileBase hoverTile;
 
     [SerializeField]
-    private GameObject BugPrefub;
+    private BugData[] bugsData;
     
     [SerializeField]
-    private int MapSize = 8;
+    private int mapSize = 8;
 
     private GameObject[,] map;
     private Grid grid;
@@ -27,8 +27,7 @@ public class Map : MonoBehaviour
 
     private Vector3Int previouseMouseCell = new Vector3Int();
     
-    private GameObject selected = null;
-    private Vector3Int selectedCell;
+    private Vector3Int? selectedCell = null;
 
 
     // Start is called before the first frame update
@@ -36,11 +35,10 @@ public class Map : MonoBehaviour
     {
         grid = GetComponent<Grid>();
         camera = Camera.main;
-        randomizeBackground();
+        map = new GameObject[mapSize, mapSize];
 
-        map = new GameObject[MapSize, MapSize];
-        map[0, 0] = GameObject.Instantiate(BugPrefub, grid.CellToWorld(new Vector3Int(0, 0, 0)), Quaternion.identity);
-        map[3, 6] = GameObject.Instantiate(BugPrefub, grid.CellToWorld(new Vector3Int(3, 6, 0)), Quaternion.identity);
+        RandomizeBackground();
+        RandomizeBugs();
     }
 
     // Update is called once per frame
@@ -48,34 +46,46 @@ public class Map : MonoBehaviour
     {
         Vector3 mouseWorld = camera.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int mouseCell = grid.WorldToCell(new Vector2(mouseWorld.x, mouseWorld.y));
-        if (previouseMouseCell != mouseCell) {
-            Hover.SetTile(previouseMouseCell, null);
-            Hover.SetTile(mouseCell, HoverTile);
+        if (previouseMouseCell != mouseCell && mouseCell.x >= 0 && mouseCell.y >= 0 && mouseCell.x < mapSize && mouseCell.y < mapSize) {
+            hover.SetTile(previouseMouseCell, null);
+            hover.SetTile(mouseCell, hoverTile);
             previouseMouseCell = mouseCell;
         }
 
         if (Input.GetMouseButtonDown(0)) {
-            if (selected == null) {
-                selectedCell = mouseCell;
-                selected = map[selectedCell.x, selectedCell.y];
-            } else {
+            if (selectedCell.HasValue && selectedCell != mouseCell && map[mouseCell.x, mouseCell.y] == null) {                
+                GameObject selected = map[selectedCell.Value.x, selectedCell.Value.y];
                 selected.transform.position = grid.CellToWorld(mouseCell);
                 map[mouseCell.x, mouseCell.y] = selected;
-                map[selectedCell.x, selectedCell.y] = null;
-                selected = null;
+                map[selectedCell.Value.x, selectedCell.Value.y] = null;
+                selectedCell = null;
+            } else if (map[mouseCell.x, mouseCell.y] != null) {
+                selectedCell = mouseCell;
             }
         }
 
         if (Input.GetMouseButtonDown(1)) {
-            selected = null;
+            selectedCell = null;
         }
     }
 
-    void randomizeBackground() {
-        for (int i = 0; i < MapSize; i++) {
-            for (int j = 0; j < MapSize; j++) {
-                Background.SetTile(new Vector3Int(i, j, 0), BackgroundTiles[Random.Range(0, BackgroundTiles.GetLength(0) - 1)]);
+    private void RandomizeBackground() {
+        for (int i = 0; i < mapSize; i++) {
+            for (int j = 0; j < mapSize; j++) {
+                background.SetTile(new Vector3Int(i, j, 0), backgroundTiles[Random.Range(0, backgroundTiles.Length)]);
             }
+        }
+    }
+
+    private void RandomizeBugs() {
+        for (int i = 0; i < mapSize; i++) {
+            int cell = Random.Range(0, mapSize);
+            BugData bugData = bugsData[Random.Range(0, bugsData.Length)];
+            Vector3 position = grid.CellToWorld(new Vector3Int(i, cell, 0));
+            GameObject bug = Instantiate<GameObject>(bugData.Prefub, position, Quaternion.identity);
+            Bug bugComponent = bug.GetComponent<Bug>();
+            bugComponent.Init(bugData);
+            map[i, cell] = bug;
         }
     }
 }

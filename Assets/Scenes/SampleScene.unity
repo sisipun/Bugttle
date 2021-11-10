@@ -422,17 +422,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a4164922d875a4ea5ccd4d14c23a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Background: {fileID: 433640503}
-  BackgroundTiles:
+  background: {fileID: 433640503}
+  backgroundTiles:
   - {fileID: 11400000, guid: f6e453a5133c664469c826e3302f0556, type: 2}
-  - {fileID: 11400000, guid: 65303475424488e489a3050f91098c8b, type: 2}
+  - {fileID: 11400000, guid: 7a528d1047f10d540833bfa3b51028c7, type: 2}
   - {fileID: 11400000, guid: 741700d0cb28c1545a762f46bbf79fe8, type: 2}
-  - {fileID: 11400000, guid: d212452aca766e249916daa9c7218807, type: 2}
-  - {fileID: 11400000, guid: aeaabf4e030f0404c91b8360ed1dc956, type: 2}
-  Hover: {fileID: 1969206186}
-  HoverTile: {fileID: 11400000, guid: 7ec956d4906208e4f8032c2398b4af93, type: 2}
-  BugPrefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
-  MapSize: 8
+  - {fileID: 11400000, guid: 72ff4e2fefcbe1046be9651de193d8b6, type: 2}
+  - {fileID: 11400000, guid: 31975588b87062e4fa3b1d9d852c634b, type: 2}
+  hover: {fileID: 1969206186}
+  hoverTile: {fileID: 11400000, guid: 27914a1892817a74aaebf965eafd306c, type: 2}
+  bugsData:
+  - {fileID: 11400000, guid: 91fe5bc2829d7394499150e21f581a61, type: 2}
+  - {fileID: 11400000, guid: fdc25de45b22df647b430250daa14e08, type: 2}
+  - {fileID: 11400000, guid: 74ffbf0350876194694207ffabe2c743, type: 2}
+  mapSize: 8
 --- !u!1 &1969206183
 GameObject:
   m_ObjectHideFlags: 0
