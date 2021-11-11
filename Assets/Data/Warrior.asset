@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fedae4c4028d9b47a905f5808f8b087, type: 3}
   m_Name: Warrior
   m_EditorClassIdentifier: 
-  body: {fileID: 21300000, guid: b5a458e87f5d6bb41be8fa5b988925bc, type: 3}
   prefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
+  body: {fileID: 21300000, guid: b5a458e87f5d6bb41be8fa5b988925bc, type: 3}
+  turnRange: 3
+  attackRange: 1
+  health: 3

@@ -13,29 +13,37 @@ public class Map : MonoBehaviour
     [SerializeField]
     private Tilemap hover;
     [SerializeField]
-    private TileBase hoverTile;
+    private TileBase turnHoverTile;
+    [SerializeField]
+    private TileBase attackHoverTile;
+
+    [SerializeField]
+    private Tilemap pointer;
+    [SerializeField]
+    private TileBase pointerTile;
+
 
     [SerializeField]
     private BugData[] bugsData;
-    
+
     [SerializeField]
     private int mapSize = 8;
 
-    private GameObject[,] map;
+    private Bug[,] map;
     private Grid grid;
-    private Camera camera;
+    private Camera mainCamera;
 
-    private Vector3Int previouseMouseCell = new Vector3Int();
-    
-    private Vector3Int? selectedCell = null;
+    private Vector2Int previouseMouseCell = new Vector2Int();
+
+    private Bug selected = null;
 
 
     // Start is called before the first frame update
     void Start()
     {
         grid = GetComponent<Grid>();
-        camera = Camera.main;
-        map = new GameObject[mapSize, mapSize];
+        mainCamera = Camera.main;
+        map = new Bug[mapSize, mapSize];
 
         RandomizeBackground();
         RandomizeBugs();
@@ -44,48 +52,102 @@ public class Map : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 mouseWorld = camera.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int mouseCell = grid.WorldToCell(new Vector2(mouseWorld.x, mouseWorld.y));
-        if (previouseMouseCell != mouseCell && mouseCell.x >= 0 && mouseCell.y >= 0 && mouseCell.x < mapSize && mouseCell.y < mapSize) {
-            hover.SetTile(previouseMouseCell, null);
-            hover.SetTile(mouseCell, hoverTile);
+        Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2Int mouseCell = ((Vector2Int)grid.WorldToCell(mouseWorld));
+        if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= mapSize || mouseCell.y >= mapSize)
+        {
+            return;
+        }
+
+        if (previouseMouseCell != mouseCell)
+        {
+            pointer.SetTile(((Vector3Int)previouseMouseCell), null);
+            pointer.SetTile(((Vector3Int)mouseCell), pointerTile);
             previouseMouseCell = mouseCell;
         }
 
-        if (Input.GetMouseButtonDown(0)) {
-            if (selectedCell.HasValue && selectedCell != mouseCell && map[mouseCell.x, mouseCell.y] == null) {                
-                GameObject selected = map[selectedCell.Value.x, selectedCell.Value.y];
-                selected.transform.position = grid.CellToWorld(mouseCell);
-                map[mouseCell.x, mouseCell.y] = selected;
-                map[selectedCell.Value.x, selectedCell.Value.y] = null;
-                selectedCell = null;
-            } else if (map[mouseCell.x, mouseCell.y] != null) {
-                selectedCell = mouseCell;
-            }
+        if (Input.GetMouseButtonDown(0))
+        {
+            ClearHover();
+            onTurn(mouseCell);
         }
-
-        if (Input.GetMouseButtonDown(1)) {
-            selectedCell = null;
+        else if (Input.GetMouseButtonDown(1))
+        {
+            ClearHover();
+            selected = null;
         }
     }
 
-    private void RandomizeBackground() {
-        for (int i = 0; i < mapSize; i++) {
-            for (int j = 0; j < mapSize; j++) {
-                background.SetTile(new Vector3Int(i, j, 0), backgroundTiles[Random.Range(0, backgroundTiles.Length)]);
+    private void onTurn(Vector2Int turn)
+    {
+        Bug clicked = map[turn.x, turn.y];
+        if (clicked != null)
+        {
+            selected = clicked;
+            ShowPossibleTurns(selected.PossibleTurns(map));
+            return;
+        }
+        if (selected == null)
+        {
+            return;
+        }
+
+        List<Vector2Int> possibleTurns = selected.PossibleTurns(map);
+        if (possibleTurns.Contains(turn))
+        {
+            selected.transform.position = grid.CellToWorld(((Vector3Int)turn));
+            map[selected.Position.x, selected.Position.y] = null;
+            map[turn.x, turn.y] = selected;
+            selected.Position = turn;
+        }
+
+        selected = null;
+    }
+
+    private void RandomizeBackground()
+    {
+        for (int x = 0; x < mapSize; x++)
+        {
+            for (int y = 0; y < mapSize; y++)
+            {
+                background.SetTile(((Vector3Int)new Vector2Int(x, y)), backgroundTiles[Random.Range(0, backgroundTiles.Length)]);
             }
         }
     }
 
-    private void RandomizeBugs() {
-        for (int i = 0; i < mapSize; i++) {
-            int cell = Random.Range(0, mapSize);
+    private void RandomizeBugs()
+    {
+        for (int x = 0; x < mapSize; x++)
+        {
+            int y = Random.Range(0, mapSize);
             BugData bugData = bugsData[Random.Range(0, bugsData.Length)];
-            Vector3 position = grid.CellToWorld(new Vector3Int(i, cell, 0));
-            GameObject bug = Instantiate<GameObject>(bugData.Prefub, position, Quaternion.identity);
-            Bug bugComponent = bug.GetComponent<Bug>();
-            bugComponent.Init(bugData);
-            map[i, cell] = bug;
+            Vector2Int position = new Vector2Int(x, y);
+            Bug bug = Instantiate<GameObject>(
+                bugData.Prefub,
+                grid.CellToWorld(((Vector3Int)new Vector2Int(position.x, position.y))),
+                 Quaternion.identity
+            ).GetComponent<Bug>();
+            bug.Init(position, bugData);
+            map[x, y] = bug;
+        }
+    }
+
+    private void ShowPossibleTurns(List<Vector2Int> turns)
+    {
+        foreach (Vector2Int turn in turns)
+        {
+            hover.SetTile(((Vector3Int)turn), turnHoverTile);
+        }
+    }
+
+    private void ClearHover()
+    {
+        for (int x = 0; x < mapSize; x++)
+        {
+            for (int y = 0; y < mapSize; y++)
+            {
+                hover.SetTile(((Vector3Int)new Vector2Int(x, y)), null);
+            }
         }
     }
 }
