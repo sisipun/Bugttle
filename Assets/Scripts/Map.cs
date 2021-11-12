@@ -29,13 +29,12 @@ public class Map : MonoBehaviour
     [SerializeField]
     private int mapSize = 8;
 
-    private Bug[,] map;
     private Grid grid;
     private Camera mainCamera;
 
-    private Vector2Int previouseMouseCell = new Vector2Int();
-
-    private Bug selected = null;
+    private Bug[,] map;
+    private Vector2Int previouseMouseCell;
+    private Bug selected;
 
 
     // Start is called before the first frame update
@@ -43,7 +42,10 @@ public class Map : MonoBehaviour
     {
         grid = GetComponent<Grid>();
         mainCamera = Camera.main;
+
         map = new Bug[mapSize, mapSize];
+        previouseMouseCell = ((Vector2Int)grid.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
+        selected = null;
 
         RandomizeBackground();
         RandomizeBugs();
@@ -53,7 +55,7 @@ public class Map : MonoBehaviour
     void Update()
     {
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2Int mouseCell = ((Vector2Int)grid.WorldToCell(mouseWorld));
+        Vector2Int mouseCell = ((Vector2Int)grid.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= mapSize || mouseCell.y >= mapSize)
         {
             return;
@@ -68,8 +70,7 @@ public class Map : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            ClearHover();
-            onTurn(mouseCell);
+            onClick(mouseCell);
         }
         else if (Input.GetMouseButtonDown(1))
         {
@@ -78,30 +79,70 @@ public class Map : MonoBehaviour
         }
     }
 
-    private void onTurn(Vector2Int turn)
+    private void onClick(Vector2Int click)
     {
-        Bug clicked = map[turn.x, turn.y];
-        if (clicked != null)
+        Bug clicked = map[click.x, click.y];
+
+        if (selected == null && clicked != null)
         {
-            selected = clicked;
-            ShowPossibleTurns(selected.PossibleTurns(map));
-            return;
-        }
-        if (selected == null)
-        {
+            SetSelected(clicked);
             return;
         }
 
-        List<Vector2Int> possibleTurns = selected.PossibleTurns(map);
-        if (possibleTurns.Contains(turn))
+        if (selected != null && clicked == null)
         {
-            selected.transform.position = grid.CellToWorld(((Vector3Int)turn));
-            map[selected.Position.x, selected.Position.y] = null;
-            map[turn.x, turn.y] = selected;
-            selected.Position = turn;
+            List<Vector2Int> possibleTurns = selected.PossibleTurns(map);
+            if (possibleTurns.Contains(click))
+            {
+                Turn(click);
+            }
+            SetSelected(null);
+            return;
         }
 
-        selected = null;
+        if (selected != null && clicked != null)
+        {
+            List<Vector2Int> possibleAttacks = selected.PossibleAttacks(map);
+            if (possibleAttacks.Contains(click))
+            {
+                Attack(clicked);
+                SetSelected(null);
+            }
+            else
+            {
+                SetSelected(clicked);
+            }
+            return;
+        }
+    }
+
+    private void Turn(Vector2Int position)
+    {
+        selected.transform.position = grid.CellToWorld(((Vector3Int)position));
+        map[selected.Position.x, selected.Position.y] = null;
+        map[position.x, position.y] = selected;
+        selected.Position = position;
+    }
+
+    private void Attack(Bug bug)
+    {
+        bug.Hit();
+        if (bug.IsDead)
+        {
+            map[bug.Position.x, bug.Position.y] = null;
+            Destroy(bug.gameObject);
+        }
+    }
+
+    private void SetSelected(Bug bug)
+    {
+        ClearHover();
+        selected = bug;
+        if (selected != null)
+        {
+            ShowHover(selected.PossibleTurns(map), turnHoverTile);
+            ShowHover(selected.PossibleAttacks(map), attackHoverTile);
+        }
     }
 
     private void RandomizeBackground()
@@ -132,11 +173,11 @@ public class Map : MonoBehaviour
         }
     }
 
-    private void ShowPossibleTurns(List<Vector2Int> turns)
+    private void ShowHover(List<Vector2Int> positions, TileBase tile)
     {
-        foreach (Vector2Int turn in turns)
+        foreach (Vector2Int position in positions)
         {
-            hover.SetTile(((Vector3Int)turn), turnHoverTile);
+            hover.SetTile(((Vector3Int)position), tile);
         }
     }
 

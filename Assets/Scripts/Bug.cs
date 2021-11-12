@@ -11,6 +11,7 @@ public class Bug : MonoBehaviour
 
     private Vector2Int position;
 
+    public bool IsDead => health == 0;
     public Vector2Int Position
     {
         get
@@ -38,19 +39,44 @@ public class Bug : MonoBehaviour
         this.health = data.Health;
     }
 
+    public void Hit()
+    {
+        health -= 1;
+    }
+
     public List<Vector2Int> PossibleTurns(Bug[,] map)
     {
         List<Vector2Int> turns = new List<Vector2Int>();
-        for (int i = position.x - turnRange; i <= position.x + turnRange; i++)
+        for (int x = 0; x < map.GetLength(0); x++)
         {
-            for (int j = position.y - turnRange; j <= position.y + turnRange; j++)
+            for (int y = 0; y < map.GetLength(1); y++)
             {
-                if (i >= 0 && j >= 0 && i < map.GetLength(0) && j < map.GetLength(1) && map[i, j] == null)
+                int range = Mathf.Abs(position.x - x) + Mathf.Abs(position.y - y);
+                Vector2Int turn = new Vector2Int(x, y);
+                if (range <= turnRange && map[x, y] == null && turn != position)
                 {
-                    turns.Add(new Vector2Int(i, j));
+                    turns.Add(turn);
                 }
             }
         }
         return turns;
+    }
+
+    public List<Vector2Int> PossibleAttacks(Bug[,] map)
+    {
+        List<Vector2Int> attacks = new List<Vector2Int>();
+        for (int x = 0; x < map.GetLength(0); x++)
+        {
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                int range = Mathf.Abs(position.x - x) + Mathf.Abs(position.y - y);
+                Vector2Int attack = new Vector2Int(x, y);
+                if (range <= attackRange && map[x, y] != null && attack != position)
+                {
+                    attacks.Add(attack);
+                }
+            }
+        }
+        return attacks;
     }
 }
