@@ -7,7 +7,7 @@ public class Cell
     private Vector2Int position;
     private int cost;
     private Bug bug;
-    
+
     public Vector2Int Position => position;
     public int Cost => cost;
     public bool HasBug => bug != null;

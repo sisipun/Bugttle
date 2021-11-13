@@ -3,17 +3,17 @@ using UnityEngine;
 
 class PathFinder
 {
-    public static List<Vector2Int> Find(Cell[,] map, Vector2Int source, Vector2Int target, int maxCost)
+    public static Path Find(Cell[,] map, Vector2Int source, Vector2Int target, int maxCost)
     {
         if (source == target)
         {
-            return new List<Vector2Int>();
+            return new Path();
         }
 
         Dictionary<Vector2Int, Vector2Int> path = new Dictionary<Vector2Int, Vector2Int>();
         Dictionary<Vector2Int, int> cost = new Dictionary<Vector2Int, int>();
         SortedSet<KeyValuePair<Vector2Int, int>> points = new SortedSet<KeyValuePair<Vector2Int, int>>(new PointComparer());
-        
+
         points.Add(new KeyValuePair<Vector2Int, int>(source, 0));
         cost.Add(source, 0);
 
@@ -34,9 +34,9 @@ class PathFinder
                 Cell neighborCell = map[neighbor.x, neighbor.y];
                 int neighborCost = cost[point] + neighborCell.Cost;
                 if (
-                    !neighborCell.HasBug! 
-                    && neighborCost <= maxCost 
-                    && (cost.ContainsKey(neighbor) || neighborCost < cost[neighbor]))
+                    !neighborCell.HasBug
+                    && neighborCost <= maxCost
+                    && (!cost.ContainsKey(neighbor) || neighborCost < cost[neighbor]))
                 {
                     cost[neighbor] = neighborCost;
                     path[neighbor] = point;
@@ -45,7 +45,7 @@ class PathFinder
             }
         }
 
-        return GetShortestPath(path, source, target);
+        return GetShortestPath(path, cost, source, target);
     }
 
     private static List<Vector2Int> GetNeighbors(Cell[,] map, Vector2Int point)
@@ -75,21 +75,27 @@ class PathFinder
         return Mathf.Abs(target.x - source.x) + Mathf.Abs(target.y - source.y);
     }
 
-    private static List<Vector2Int> GetShortestPath(Dictionary<Vector2Int, Vector2Int> path, Vector2Int source, Vector2Int target) {
+    private static Path GetShortestPath(
+        Dictionary<Vector2Int, Vector2Int> path, 
+        Dictionary<Vector2Int, int> cost, 
+        Vector2Int source, 
+        Vector2Int target
+    )
+    {
         List<Vector2Int> shortestPath = new List<Vector2Int>();
         Vector2Int current = target;
         while (current != source)
         {
             shortestPath.Add(current);
-            if (!path.ContainsKey(current)) 
+            if (!path.ContainsKey(current))
             {
-                return new List<Vector2Int>();
+                return new Path();
             }
             current = path[current];
         }
-        
+
         shortestPath.Reverse();
-        return shortestPath;
+        return new Path(shortestPath, cost[target]);
     }
 
     private class PointComparer : IComparer<KeyValuePair<Vector2Int, int>>

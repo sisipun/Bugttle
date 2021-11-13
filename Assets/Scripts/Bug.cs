@@ -15,20 +15,7 @@ public class Bug : MonoBehaviour
 
     public bool IsUserSide => side == Side.USER;
     public bool IsDead => health == 0;
-    public Vector2Int Position
-    {
-        get
-        {
-            return position;
-        }
-
-        set
-        {
-            int stepsCount = Mathf.Abs(position.x - value.x) + Mathf.Abs(position.y - value.y);
-            stepsLeft -= stepsCount;
-            position = value;
-        }
-    }
+    public Vector2Int Position => position;
 
     void Awake()
     {
@@ -64,22 +51,29 @@ public class Bug : MonoBehaviour
         attacksLeft = 1;
     }
 
-    public List<Vector2Int> PossibleMoves(Cell[,] map)
+    public void Move(Vector2Int newPosition, int cost) 
     {
-        List<Vector2Int> moves = new List<Vector2Int>();
+        stepsLeft -= cost;
+        position = newPosition;
+    }
+
+    public Dictionary<Vector2Int, Path> PossibleMoves(Cell[,] map)
+    {
+        Dictionary<Vector2Int, Path> moves = new Dictionary<Vector2Int, Path>();
         if (stepsLeft == 0)
         {
             return moves;
         }
-        
+
         for (int x = 0; x < map.GetLength(0); x++)
         {
             for (int y = 0; y < map.GetLength(1); y++)
             {
                 Vector2Int move = new Vector2Int(x, y);
-                if (PathFinder.Find(map, position, move, stepsLeft).Count != 0)
+                Path path = PathFinder.Find(map, position, move, stepsLeft);
+                if (path.IsExists)
                 {
-                    moves.Add(move);
+                    moves.Add(move, path);
                 }
             }
         }

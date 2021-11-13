@@ -74,6 +74,20 @@ public class Map : MonoBehaviour
             selected = null;
         }
     }
+    public void EndTurn()
+    {
+        for (int x = 0; x < mapSize; x++)
+        {
+            for (int y = 0; y < mapSize; y++)
+            {
+                Bug bug = map[x, y].Bug;
+                if (bug != null && bug.IsUserSide)
+                {
+                    bug.ResetTurn();
+                }
+            }
+        }
+    }
 
     private void onClick(Vector2Int click)
     {
@@ -87,10 +101,10 @@ public class Map : MonoBehaviour
 
         if (selected != null && clicked == null)
         {
-            List<Vector2Int> possibleMoves = selected.PossibleMoves(map);
-            if (possibleMoves.Contains(click))
+            Dictionary<Vector2Int, Path> possibleMoves = selected.PossibleMoves(map);
+            if (possibleMoves.ContainsKey(click))
             {
-                Move(click);
+                Move(click, possibleMoves[click]);
             }
             SetSelected(null);
             return;
@@ -112,12 +126,12 @@ public class Map : MonoBehaviour
         }
     }
 
-    private void Move(Vector2Int position)
+    private void Move(Vector2Int position, Path path)
     {
         selected.transform.position = grid.CellToWorld(((Vector3Int)position));
         map[selected.Position.x, selected.Position.y].Bug = null;
         map[position.x, position.y].Bug = selected;
-        selected.Position = position;
+        selected.Move(position, path.Cost);
     }
 
     private void Attack(Bug bug)
@@ -126,7 +140,7 @@ public class Map : MonoBehaviour
         bug.Hit();
         if (bug.IsDead)
         {
-            map[bug.Position.x, bug.Position.y] = null;
+            map[bug.Position.x, bug.Position.y].Bug = null;
             Destroy(bug.gameObject);
         }
     }
@@ -137,7 +151,7 @@ public class Map : MonoBehaviour
         selected = bug;
         if (selected != null)
         {
-            ShowHover(selected.PossibleMoves(map), moveHoverTile);
+            ShowHover(selected.PossibleMoves(map).Keys, moveHoverTile);
             ShowHover(selected.PossibleAttacks(map), attackHoverTile);
         }
     }
@@ -171,7 +185,7 @@ public class Map : MonoBehaviour
         }
     }
 
-    private void ShowHover(List<Vector2Int> positions, TileBase tile)
+    private void ShowHover(ICollection<Vector2Int> positions, TileBase tile)
     {
         foreach (Vector2Int position in positions)
         {
