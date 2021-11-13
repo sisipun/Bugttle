@@ -1,16 +1,19 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Bug : MonoBehaviour
 {
     private SpriteRenderer spriteRenderer;
-    private int turnRange;
+    private Side side;
+    private int moveRange;
     private int attackRange;
+
     private int health;
-
     private Vector2Int position;
+    private int stepsLeft;
+    private int attacksLeft;
 
+    public bool IsUserSide => side == Side.USER;
     public bool IsDead => health == 0;
     public Vector2Int Position
     {
@@ -21,6 +24,8 @@ public class Bug : MonoBehaviour
 
         set
         {
+            int stepsCount = Mathf.Abs(position.x - value.x) + Mathf.Abs(position.y - value.y);
+            stepsLeft -= stepsCount;
             position = value;
         }
     }
@@ -30,53 +35,83 @@ public class Bug : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Init(Vector2Int position, BugData data)
+    public void Init(Vector2Int position, Side side, BugData data)
     {
-        this.spriteRenderer.sprite = data.Body;
         this.position = position;
-        this.turnRange = data.TurnRange;
+        this.side = side;
+        this.moveRange = data.MoveRange;
         this.attackRange = data.AttackRange;
         this.health = data.Health;
+        this.stepsLeft = moveRange;
+        this.attacksLeft = 1;
+        this.spriteRenderer.sprite = IsUserSide ? data.UserBody : data.AiBody;
     }
 
     public void Hit()
     {
-        health -= 1;
+        health--;
     }
 
-    public List<Vector2Int> PossibleTurns(Bug[,] map)
+    public void Attack()
     {
-        List<Vector2Int> turns = new List<Vector2Int>();
+        attacksLeft--;
+        stepsLeft = 0;
+    }
+
+    public void ResetTurn()
+    {
+        stepsLeft = moveRange;
+        attacksLeft = 1;
+    }
+
+    public List<Vector2Int> PossibleMoves(Cell[,] map)
+    {
+        List<Vector2Int> moves = new List<Vector2Int>();
+        if (stepsLeft == 0)
+        {
+            return moves;
+        }
+        
         for (int x = 0; x < map.GetLength(0); x++)
         {
             for (int y = 0; y < map.GetLength(1); y++)
             {
-                int range = Mathf.Abs(position.x - x) + Mathf.Abs(position.y - y);
-                Vector2Int turn = new Vector2Int(x, y);
-                if (range <= turnRange && map[x, y] == null && turn != position)
+                Vector2Int move = new Vector2Int(x, y);
+                if (PathFinder.Find(map, position, move, stepsLeft).Count != 0)
                 {
-                    turns.Add(turn);
+                    moves.Add(move);
                 }
             }
         }
-        return turns;
+        return moves;
     }
 
-    public List<Vector2Int> PossibleAttacks(Bug[,] map)
+    public List<Vector2Int> PossibleAttacks(Cell[,] map)
     {
         List<Vector2Int> attacks = new List<Vector2Int>();
+        if (attacksLeft == 0)
+        {
+            return attacks;
+        }
+
         for (int x = 0; x < map.GetLength(0); x++)
         {
             for (int y = 0; y < map.GetLength(1); y++)
             {
                 int range = Mathf.Abs(position.x - x) + Mathf.Abs(position.y - y);
-                Vector2Int attack = new Vector2Int(x, y);
-                if (range <= attackRange && map[x, y] != null && attack != position)
+                Bug attacked = map[x, y].Bug;
+                if (range <= attackRange && attacked != null && attacked.side != side)
                 {
-                    attacks.Add(attack);
+                    attacks.Add(new Vector2Int(x, y));
                 }
             }
         }
         return attacks;
+    }
+
+    public enum Side
+    {
+        USER,
+        AI
     }
 }

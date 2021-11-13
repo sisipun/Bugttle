@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBug", menuName = "Scriptable Objects/Card Bug")]
+[CreateAssetMenu(fileName = "NewBug", menuName = "Scriptable Objects/New Bug")]
 public class BugData : ScriptableObject
 {
 
     [SerializeField]
     private GameObject prefub;
     [SerializeField]
-    private Sprite body;
+    private Sprite userBody;
     [SerializeField]
-    private int turnRange;
+    private Sprite aiBody;
+    [SerializeField]
+    private int moveRange;
     [SerializeField]
     private int attackRange;
     [SerializeField]
     private int health;
 
     public GameObject Prefub => prefub;
-    public Sprite Body => body;
-    public int TurnRange => turnRange;
+    public Sprite UserBody => userBody;
+    public Sprite AiBody => aiBody;
+    public int MoveRange => moveRange;
     public int AttackRange => attackRange;
     public int Health => health;
 }

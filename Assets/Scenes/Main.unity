@@ -424,14 +424,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   background: {fileID: 433640503}
-  backgroundTiles:
-  - {fileID: 11400000, guid: f6e453a5133c664469c826e3302f0556, type: 2}
-  - {fileID: 11400000, guid: 7a528d1047f10d540833bfa3b51028c7, type: 2}
-  - {fileID: 11400000, guid: 741700d0cb28c1545a762f46bbf79fe8, type: 2}
-  - {fileID: 11400000, guid: 72ff4e2fefcbe1046be9651de193d8b6, type: 2}
-  - {fileID: 11400000, guid: 31975588b87062e4fa3b1d9d852c634b, type: 2}
+  backgroundCells:
+  - {fileID: 11400000, guid: e8242cde811d30c469a7bbc0f7c02bff, type: 2}
+  - {fileID: 11400000, guid: 1e94cc8e838363e4c95829fd0cdfc684, type: 2}
   hover: {fileID: 1969206186}
-  turnHoverTile: {fileID: 11400000, guid: f58651913b506164f88ee05eb4f3ba71, type: 2}
+  moveHoverTile: {fileID: 11400000, guid: f58651913b506164f88ee05eb4f3ba71, type: 2}
   attackHoverTile: {fileID: 11400000, guid: 4369ba129ca790346b142a8763605488, type: 2}
   pointer: {fileID: 1247228805}
   pointerTile: {fileID: 11400000, guid: 79b18063fa0f05343ad1571f067db9fc, type: 2}

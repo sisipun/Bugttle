@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -8,12 +7,12 @@ public class Map : MonoBehaviour
     [SerializeField]
     private Tilemap background;
     [SerializeField]
-    private TileBase[] backgroundTiles;
+    private CellData[] backgroundCells;
 
     [SerializeField]
     private Tilemap hover;
     [SerializeField]
-    private TileBase turnHoverTile;
+    private TileBase moveHoverTile;
     [SerializeField]
     private TileBase attackHoverTile;
 
@@ -21,7 +20,6 @@ public class Map : MonoBehaviour
     private Tilemap pointer;
     [SerializeField]
     private TileBase pointerTile;
-
 
     [SerializeField]
     private BugData[] bugsData;
@@ -32,18 +30,17 @@ public class Map : MonoBehaviour
     private Grid grid;
     private Camera mainCamera;
 
-    private Bug[,] map;
+    private Cell[,] map;
     private Vector2Int previouseMouseCell;
     private Bug selected;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         grid = GetComponent<Grid>();
         mainCamera = Camera.main;
 
-        map = new Bug[mapSize, mapSize];
+        map = new Cell[mapSize, mapSize];
         previouseMouseCell = ((Vector2Int)grid.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         selected = null;
 
@@ -51,7 +48,6 @@ public class Map : MonoBehaviour
         RandomizeBugs();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
@@ -81,20 +77,20 @@ public class Map : MonoBehaviour
 
     private void onClick(Vector2Int click)
     {
-        Bug clicked = map[click.x, click.y];
+        Bug clicked = map[click.x, click.y].Bug;
 
         if (selected == null && clicked != null)
         {
-            SetSelected(clicked);
+            SetSelected(clicked.IsUserSide ? clicked : null);
             return;
         }
 
         if (selected != null && clicked == null)
         {
-            List<Vector2Int> possibleTurns = selected.PossibleTurns(map);
-            if (possibleTurns.Contains(click))
+            List<Vector2Int> possibleMoves = selected.PossibleMoves(map);
+            if (possibleMoves.Contains(click))
             {
-                Turn(click);
+                Move(click);
             }
             SetSelected(null);
             return;
@@ -110,22 +106,23 @@ public class Map : MonoBehaviour
             }
             else
             {
-                SetSelected(clicked);
+                SetSelected(clicked.IsUserSide ? clicked : null);
             }
             return;
         }
     }
 
-    private void Turn(Vector2Int position)
+    private void Move(Vector2Int position)
     {
         selected.transform.position = grid.CellToWorld(((Vector3Int)position));
-        map[selected.Position.x, selected.Position.y] = null;
-        map[position.x, position.y] = selected;
+        map[selected.Position.x, selected.Position.y].Bug = null;
+        map[position.x, position.y].Bug = selected;
         selected.Position = position;
     }
 
     private void Attack(Bug bug)
     {
+        selected.Attack();
         bug.Hit();
         if (bug.IsDead)
         {
@@ -140,7 +137,7 @@ public class Map : MonoBehaviour
         selected = bug;
         if (selected != null)
         {
-            ShowHover(selected.PossibleTurns(map), turnHoverTile);
+            ShowHover(selected.PossibleMoves(map), moveHoverTile);
             ShowHover(selected.PossibleAttacks(map), attackHoverTile);
         }
     }
@@ -151,7 +148,8 @@ public class Map : MonoBehaviour
         {
             for (int y = 0; y < mapSize; y++)
             {
-                background.SetTile(((Vector3Int)new Vector2Int(x, y)), backgroundTiles[Random.Range(0, backgroundTiles.Length)]);
+                Cell cell = new Cell(background, new Vector2Int(x, y), backgroundCells[Random.Range(0, backgroundCells.Length)]);
+                map[x, y] = cell;
             }
         }
     }
@@ -168,8 +166,8 @@ public class Map : MonoBehaviour
                 grid.CellToWorld(((Vector3Int)new Vector2Int(position.x, position.y))),
                  Quaternion.identity
             ).GetComponent<Bug>();
-            bug.Init(position, bugData);
-            map[x, y] = bug;
+            bug.Init(position, x < mapSize / 2 ? Bug.Side.USER : Bug.Side.AI, bugData);
+            map[x, y].Bug = bug;
         }
     }
 
