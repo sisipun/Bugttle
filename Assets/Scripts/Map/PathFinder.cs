@@ -76,9 +76,9 @@ class PathFinder
     }
 
     private static Path GetShortestPath(
-        Dictionary<Vector2Int, Vector2Int> path, 
-        Dictionary<Vector2Int, int> cost, 
-        Vector2Int source, 
+        Dictionary<Vector2Int, Vector2Int> path,
+        Dictionary<Vector2Int, int> cost,
+        Vector2Int source,
         Vector2Int target
     )
     {

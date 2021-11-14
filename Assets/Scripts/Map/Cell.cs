@@ -4,10 +4,12 @@ using UnityEngine.Tilemaps;
 
 public class Cell
 {
+    private TileBase tile;
     private Vector2Int position;
     private int cost;
     private Bug bug;
 
+    public TileBase Tile => tile;
     public Vector2Int Position => position;
     public int Cost => cost;
     public bool HasBug => bug != null;
@@ -24,10 +26,11 @@ public class Cell
         }
     }
 
-    public Cell(Tilemap map, Vector2Int position, CellData data)
+    public Cell(Vector2Int position, CellData data)
     {
+        this.tile = data.Tile;
         this.position = position;
         this.cost = data.Cost;
-        map.SetTile((Vector3Int)this.position, data.Tile);
+        this.bug = null;
     }
 }

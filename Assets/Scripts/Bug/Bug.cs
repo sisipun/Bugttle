@@ -11,7 +11,7 @@ public class Bug : MonoBehaviour
     private Side side;
     private int moveRange;
     private int attackRange;
-    
+
     private Vector2Int position;
     private int stepsLeft;
     private int attacksLeft;
@@ -22,7 +22,7 @@ public class Bug : MonoBehaviour
 
     void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void Init(Vector2Int position, Side side, BugData data)
@@ -54,13 +54,13 @@ public class Bug : MonoBehaviour
         attacksLeft = 1;
     }
 
-    public void Move(Vector2Int newPosition, Path path) 
+    public void Move(Vector2Int newPosition, Path path)
     {
         stepsLeft -= path.Cost;
         position = newPosition;
     }
 
-    public Dictionary<Vector2Int, Path> PossibleMoves(Cell[,] map)
+    public Dictionary<Vector2Int, Path> PossibleMoves(Map map)
     {
         Dictionary<Vector2Int, Path> moves = new Dictionary<Vector2Int, Path>();
         if (stepsLeft == 0)
@@ -68,12 +68,12 @@ public class Bug : MonoBehaviour
             return moves;
         }
 
-        for (int x = 0; x < map.GetLength(0); x++)
+        for (int x = 0; x < map.Size; x++)
         {
-            for (int y = 0; y < map.GetLength(1); y++)
+            for (int y = 0; y < map.Size; y++)
             {
                 Vector2Int move = new Vector2Int(x, y);
-                Path path = PathFinder.Find(map, position, move, stepsLeft);
+                Path path = map.FindPath(position, move, stepsLeft);
                 if (path.IsExists)
                 {
                     moves.Add(move, path);
@@ -83,7 +83,7 @@ public class Bug : MonoBehaviour
         return moves;
     }
 
-    public List<Vector2Int> PossibleAttacks(Cell[,] map)
+    public List<Vector2Int> PossibleAttacks(Map map)
     {
         List<Vector2Int> attacks = new List<Vector2Int>();
         if (attacksLeft == 0)
@@ -91,12 +91,12 @@ public class Bug : MonoBehaviour
             return attacks;
         }
 
-        for (int x = 0; x < map.GetLength(0); x++)
+        for (int x = 0; x < map.Size; x++)
         {
-            for (int y = 0; y < map.GetLength(1); y++)
+            for (int y = 0; y < map.Size; y++)
             {
                 int range = Mathf.Abs(position.x - x) + Mathf.Abs(position.y - y);
-                Bug attacked = map[x, y].Bug;
+                Bug attacked = map.GetBug(x, y);
                 if (range <= attackRange && attacked != null && attacked.side != side)
                 {
                     attacks.Add(new Vector2Int(x, y));
