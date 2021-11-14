@@ -27,7 +27,7 @@ public class BugGenerator : MonoBehaviour
                 background.CellToWorld(new Vector2Int(position.x, position.y)),
                 Quaternion.identity
             ).GetComponent<Bug>();
-            bug.Init(position, x < map.Size / 2 ? Bug.Side.USER : Bug.Side.AI, data);
+            bug.Init(position, x < map.Size / 2 ? BugSide.GREEN : BugSide.RED, data);
             map.SetBug(position, bug);
         }
     }

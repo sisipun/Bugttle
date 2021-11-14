@@ -8,21 +8,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Hover hover;
     [SerializeField] private Pointer pointer;
     [SerializeField] private BugGenerator bugGenerator;
+    [SerializeField] private BaseController greenController;
+    [SerializeField] private BaseController redController;
 
-    private Camera mainCamera;
+    private BugSide currentSide;
 
-    private Vector2Int previouseMouseCell;
-    private Bug selected;
-
-    void Awake()
-    {
-        this.mainCamera = Camera.main;
-    }
+    public Map GameMap => map;
+    public Background GameBackground => background;
+    public Hover GameHover => hover;
+    public Pointer GamePointer => pointer;
 
     void Start()
     {
-        this.previouseMouseCell = ((Vector2Int)background.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
-        this.selected = null;
+        this.currentSide = BugSide.GREEN;
 
         map.Init();
         background.Init(map);
@@ -30,32 +28,39 @@ public class GameManager : MonoBehaviour
         pointer.Init(map);
         bugGenerator.Init(map, background);
         bugGenerator.Generate();
+        greenController.Init(this, BugSide.GREEN);
+        redController.Init(this, BugSide.RED);
     }
 
     void Update()
     {
-        Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2Int mouseCell = ((Vector2Int)background.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
-        if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= map.Size || mouseCell.y >= map.Size)
+        if (currentSide == BugSide.GREEN)
         {
-            return;
+            greenController.handleInput();
         }
+        else if (currentSide == BugSide.RED)
+        {
+            redController.handleInput();
+        }
+    }
 
-        if (previouseMouseCell != mouseCell)
-        {
-            pointer.Clear();
-            pointer.SetPosition(mouseCell);
-            previouseMouseCell = mouseCell;
-        }
+    public void Move(Vector2Int from, Vector2Int to, Path path)
+    {
+        Bug bug = map.GetBug(from);
+        bug.transform.position = background.CellToWorld(to);
+        map.SetBug(from, null);
+        map.SetBug(to, bug);
+        bug.Move(to, path);
+    }
 
-        if (Input.GetMouseButtonDown(0))
+    public void Attack(Bug source, Bug target)
+    {
+        source.Attack();
+        target.Damage();
+        if (target.IsDead)
         {
-            onClick(mouseCell);
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            hover.Clear();
-            selected = null;
+            map.SetBug(target.Position, null);
+            Destroy(target.gameObject);
         }
     }
 
@@ -66,78 +71,13 @@ public class GameManager : MonoBehaviour
             for (int y = 0; y < map.Size; y++)
             {
                 Bug bug = map.GetBug(x, y);
-                if (bug != null && bug.IsUserSide)
+                if (bug != null && bug.Side == currentSide)
                 {
                     bug.EndTurn();
                 }
             }
         }
-    }
 
-    private void onClick(Vector2Int click)
-    {
-        Bug clicked = map.GetBug(click);
-
-        if (selected == null && clicked != null)
-        {
-            SetSelected(clicked.IsUserSide ? clicked : null);
-            return;
-        }
-
-        if (selected != null && clicked == null)
-        {
-            Dictionary<Vector2Int, Path> possibleMoves = selected.PossibleMoves(map);
-            if (possibleMoves.ContainsKey(click))
-            {
-                Move(click, possibleMoves[click]);
-            }
-            SetSelected(null);
-            return;
-        }
-
-        if (selected != null && clicked != null)
-        {
-            List<Vector2Int> possibleAttacks = selected.PossibleAttacks(map);
-            if (possibleAttacks.Contains(click))
-            {
-                Attack(clicked);
-                SetSelected(null);
-            }
-            else
-            {
-                SetSelected(clicked.IsUserSide ? clicked : null);
-            }
-            return;
-        }
-    }
-
-    private void Move(Vector2Int position, Path path)
-    {
-        selected.transform.position = background.CellToWorld(position);
-        map.SetBug(selected.Position, null);
-        map.SetBug(position, selected);
-        selected.Move(position, path);
-    }
-
-    private void Attack(Bug bug)
-    {
-        selected.Attack();
-        bug.Damage();
-        if (bug.IsDead)
-        {
-            map.SetBug(bug.Position, null);
-            Destroy(bug.gameObject);
-        }
-    }
-
-    private void SetSelected(Bug bug)
-    {
-        hover.Clear();
-        selected = bug;
-        if (selected != null)
-        {
-            hover.SetMovable(selected.PossibleMoves(map).Keys);
-            hover.SetAttackable(selected.PossibleAttacks(map));
-        }
+        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
     }
 }

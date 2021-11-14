@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AiController : MonoBehaviour
+[CreateAssetMenu(fileName = "AiController", menuName = "Scriptable Objects/Controllers/Ai Controller")]
+public class AiController : BaseController
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void handleInput()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        game.EndTurn();
     }
 }

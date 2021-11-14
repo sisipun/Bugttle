@@ -8,7 +8,7 @@ public class Bug : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    private Side side;
+    private BugSide side;
     private int moveRange;
     private int attackRange;
 
@@ -16,7 +16,7 @@ public class Bug : MonoBehaviour
     private int stepsLeft;
     private int attacksLeft;
 
-    public bool IsUserSide => side == Side.USER;
+    public BugSide Side => side;
     public bool IsDead => health.IsDead;
     public Vector2Int Position => position;
 
@@ -25,7 +25,7 @@ public class Bug : MonoBehaviour
         this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Init(Vector2Int position, Side side, BugData data)
+    public void Init(Vector2Int position, BugSide side, BugData data)
     {
         this.position = position;
         this.side = side;
@@ -33,8 +33,8 @@ public class Bug : MonoBehaviour
         this.attackRange = data.AttackRange;
         this.stepsLeft = moveRange;
         this.attacksLeft = 1;
-        this.spriteRenderer.sprite = IsUserSide ? data.UserBody : data.AiBody;
-        this.health.Init(data.Health, IsUserSide ? data.UserColor : data.AiColor);
+        this.spriteRenderer.sprite = side == BugSide.GREEN ? data.GreenBody : data.RedBody;
+        this.health.Init(data.Health, side == BugSide.GREEN ? data.GreenColor : data.RedColor);
     }
 
     public void Damage()
@@ -104,11 +104,5 @@ public class Bug : MonoBehaviour
             }
         }
         return attacks;
-    }
-
-    public enum Side
-    {
-        USER,
-        AI
     }
 }
