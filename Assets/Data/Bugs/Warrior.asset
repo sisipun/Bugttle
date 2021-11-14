@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
   userBody: {fileID: 21300000, guid: 86087b0422d6eed43938aa2f00ab8268, type: 3}
+  userColor: {r: 0.26666668, g: 0.9529412, b: 0.5686275, a: 1}
   aiBody: {fileID: 21300000, guid: 32ee160439e1a6b4c919824f6e1cd544, type: 3}
+  aiColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
   moveRange: 3
   attackRange: 1
   health: 3

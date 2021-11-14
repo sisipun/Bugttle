@@ -9,7 +9,11 @@ public class BugData : ScriptableObject
     [SerializeField]
     private Sprite userBody;
     [SerializeField]
+    private Color userColor;
+    [SerializeField]
     private Sprite aiBody;
+    [SerializeField]
+    private Color aiColor;
     [SerializeField]
     private int moveRange;
     [SerializeField]
@@ -19,7 +23,9 @@ public class BugData : ScriptableObject
 
     public GameObject Prefub => prefub;
     public Sprite UserBody => userBody;
+    public Color UserColor => userColor;
     public Sprite AiBody => aiBody;
+    public Color AiColor => aiColor;
     public int MoveRange => moveRange;
     public int AttackRange => attackRange;
     public int Health => health;

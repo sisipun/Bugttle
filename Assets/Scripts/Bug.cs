@@ -3,18 +3,21 @@ using UnityEngine;
 
 public class Bug : MonoBehaviour
 {
+    [SerializeField]
+    private HealthBar health;
+
     private SpriteRenderer spriteRenderer;
+
     private Side side;
     private int moveRange;
     private int attackRange;
-
-    private int health;
+    
     private Vector2Int position;
     private int stepsLeft;
     private int attacksLeft;
 
     public bool IsUserSide => side == Side.USER;
-    public bool IsDead => health == 0;
+    public bool IsDead => health.IsDead;
     public Vector2Int Position => position;
 
     void Awake()
@@ -28,15 +31,15 @@ public class Bug : MonoBehaviour
         this.side = side;
         this.moveRange = data.MoveRange;
         this.attackRange = data.AttackRange;
-        this.health = data.Health;
         this.stepsLeft = moveRange;
         this.attacksLeft = 1;
         this.spriteRenderer.sprite = IsUserSide ? data.UserBody : data.AiBody;
+        this.health.Init(data.Health, IsUserSide ? data.UserColor : data.AiColor);
     }
 
-    public void Hit()
+    public void Damage()
     {
-        health--;
+        health.Damage(1);
     }
 
     public void Attack()
@@ -45,15 +48,15 @@ public class Bug : MonoBehaviour
         stepsLeft = 0;
     }
 
-    public void ResetTurn()
+    public void EndTurn()
     {
         stepsLeft = moveRange;
         attacksLeft = 1;
     }
 
-    public void Move(Vector2Int newPosition, int cost) 
+    public void Move(Vector2Int newPosition, Path path) 
     {
-        stepsLeft -= cost;
+        stepsLeft -= path.Cost;
         position = newPosition;
     }
 

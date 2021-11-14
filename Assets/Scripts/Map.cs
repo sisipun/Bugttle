@@ -83,7 +83,7 @@ public class Map : MonoBehaviour
                 Bug bug = map[x, y].Bug;
                 if (bug != null && bug.IsUserSide)
                 {
-                    bug.ResetTurn();
+                    bug.EndTurn();
                 }
             }
         }
@@ -131,13 +131,13 @@ public class Map : MonoBehaviour
         selected.transform.position = grid.CellToWorld(((Vector3Int)position));
         map[selected.Position.x, selected.Position.y].Bug = null;
         map[position.x, position.y].Bug = selected;
-        selected.Move(position, path.Cost);
+        selected.Move(position, path);
     }
 
     private void Attack(Bug bug)
     {
         selected.Attack();
-        bug.Hit();
+        bug.Damage();
         if (bug.IsDead)
         {
             map[bug.Position.x, bug.Position.y].Bug = null;
