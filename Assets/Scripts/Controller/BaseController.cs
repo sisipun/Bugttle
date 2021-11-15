@@ -11,5 +11,12 @@ public abstract class BaseController : ScriptableObject
         this.side = side;
     }
 
-    public abstract void handleInput();
+    public virtual void StartTurn()
+    {
+    }
+    public abstract void HandleInput();
+
+    public virtual void EndTurn()
+    {
+    }
 }

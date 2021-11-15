@@ -53,4 +53,32 @@ public class Map : MonoBehaviour
     {
         SetBug(position.x, position.y, bug);
     }
+
+    public void RemoveBug(Vector2Int position)
+    {
+        RemoveBug(position.x, position.y);
+    }
+
+    public void RemoveBug(int x, int y)
+    {
+        Bug bug = GetBug(x, y);
+        if (bug != null)
+        {
+            SetBug(x, y, null);
+            Destroy(bug.gameObject);
+        }
+    }
+
+    public void Clear()
+    {
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                RemoveBug(x, y);
+                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
+                map[x, y] = cell;
+            }
+        }
+    }
 }

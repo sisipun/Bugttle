@@ -17,7 +17,7 @@ public class UserController : BaseController
         this.selected = null;
     }
 
-    public override void handleInput()
+    public override void HandleInput()
     {
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int mouseCell = ((Vector2Int)game.GameBackground.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
@@ -42,6 +42,12 @@ public class UserController : BaseController
             game.GameHover.Clear();
             selected = null;
         }
+    }
+
+    public override void EndTurn()
+    {
+        game.GameHover.Clear();
+        game.GamePointer.Clear();
     }
 
     private void onClick(Vector2Int click)

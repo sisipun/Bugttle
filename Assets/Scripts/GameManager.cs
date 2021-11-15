@@ -12,36 +12,49 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BaseController redController;
 
     private BugSide currentSide;
+    private Dictionary<BugSide, BaseController> controllers;
 
     public Map GameMap => map;
     public Background GameBackground => background;
     public Hover GameHover => hover;
     public Pointer GamePointer => pointer;
+    public bool IsGameOver
+    {
+        get
+        {
+            bool hasGreen = false;
+            bool hasRed = false;
+            for (int x = 0; x < map.Size; x++)
+            {
+                for (int y = 0; y < map.Size; y++)
+                {
+                    Bug bug = map.GetBug(x, y);
+                    if (bug != null)
+                    {
+                        if (bug.Side == BugSide.GREEN)
+                        {
+                            hasGreen = true;
+                        }
+                        if (bug.Side == BugSide.RED)
+                        {
+                            hasRed = true;
+                        }
+                    }
+                }
+            }
+
+            return !hasGreen || !hasRed;
+        }
+    }
 
     void Start()
     {
-        this.currentSide = BugSide.GREEN;
-
-        map.Init();
-        background.Init(map);
-        hover.Init(map);
-        pointer.Init(map);
-        bugGenerator.Init(map, background);
-        bugGenerator.Generate();
-        greenController.Init(this, BugSide.GREEN);
-        redController.Init(this, BugSide.RED);
+        Init();
     }
 
     void Update()
     {
-        if (currentSide == BugSide.GREEN)
-        {
-            greenController.handleInput();
-        }
-        else if (currentSide == BugSide.RED)
-        {
-            redController.handleInput();
-        }
+        controllers[currentSide].HandleInput();
     }
 
     public void Move(Vector2Int from, Vector2Int to, Path path)
@@ -59,8 +72,11 @@ public class GameManager : MonoBehaviour
         target.Damage();
         if (target.IsDead)
         {
-            map.SetBug(target.Position, null);
-            Destroy(target.gameObject);
+            map.RemoveBug(target.Position);
+            if (IsGameOver)
+            {
+                Reset();
+            }
         }
     }
 
@@ -78,6 +94,38 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        controllers[currentSide].EndTurn();
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
+        controllers[currentSide].StartTurn();
+    }
+
+    public void Reset()
+    {
+        this.map.Clear();
+        this.background.Clear();
+        this.hover.Clear();
+        this.pointer.Clear();
+        this.greenController.EndTurn();
+        this.redController.EndTurn();
+        Init();
+    }
+
+    private void Init()
+    {
+        this.map.Init();
+        this.background.Init(map);
+        this.hover.Init(map);
+        this.pointer.Init(map);
+        this.greenController.Init(this, BugSide.GREEN);
+        this.redController.Init(this, BugSide.RED);
+
+        this.bugGenerator.Init(map, background);
+        this.bugGenerator.Generate();
+
+        this.currentSide = BugSide.GREEN;
+        this.controllers = new Dictionary<BugSide, BaseController>();
+        this.controllers.Add(BugSide.GREEN, greenController);
+        this.controllers.Add(BugSide.RED, redController);
+        this.controllers[currentSide].StartTurn();
     }
 }

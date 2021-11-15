@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BugGenerator : MonoBehaviour
@@ -29,22 +27,6 @@ public class BugGenerator : MonoBehaviour
             ).GetComponent<Bug>();
             bug.Init(position, x < map.Size / 2 ? BugSide.GREEN : BugSide.RED, data);
             map.SetBug(position, bug);
-        }
-    }
-
-    public void Clear()
-    {
-        for (int x = 0; x < map.Size; x++)
-        {
-            for (int y = 0; y < map.Size; y++)
-            {
-                Bug bug = map.GetBug(x, y);
-                if (bug != null)
-                {
-                    Destroy(bug.gameObject);
-                    map.SetBug(x, y, null);
-                }
-            }
         }
     }
 }
