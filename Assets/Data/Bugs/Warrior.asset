@@ -21,6 +21,6 @@ MonoBehaviour:
   aiColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
   redBody: {fileID: 21300000, guid: 32ee160439e1a6b4c919824f6e1cd544, type: 3}
   redColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
-  moveRange: 3
+  moveRange: 4
   attackRange: 1
   health: 3

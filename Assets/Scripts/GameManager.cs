@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private GameObject ui;
     [SerializeField] private Map map;
     [SerializeField] private Background background;
     [SerializeField] private Hover hover;
@@ -12,11 +11,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BugGenerator bugGenerator;
     [SerializeField] private BaseController greenController;
     [SerializeField] private BaseController redController;
+    [SerializeField] private UserInterface ui;
 
     private BugSide currentSide;
     private Dictionary<BugSide, BaseController> controllers;
     private IEnumerator handleInput;
 
+    public UserInterface GameUi => ui;
     public Map GameMap => map;
     public Background GameBackground => background;
     public Hover GameHover => hover;
@@ -53,11 +54,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Init();
-    }
-
-    void Update()
-    {
-        controllers[currentSide].HandleInput();
     }
 
     public void Move(Vector2Int from, Vector2Int to, Path path)
@@ -103,16 +99,6 @@ public class GameManager : MonoBehaviour
         controllers[currentSide].StartTurn();
         this.handleInput = controllers[currentSide].HandleInput();
         StartCoroutine(handleInput);
-    }
-
-    public void HideUi()
-    {
-        ui.SetActive(false);
-    }
-
-    public void ShowUi()
-    {
-        ui.SetActive(true);
     }
 
     public void Reset()

@@ -20,7 +20,7 @@ public class UserController : BaseController
 
     public override void StartTurn()
     {
-        game.ShowUi();
+        game.GameUi.ShowUi();
     }
 
     public override IEnumerator HandleInput()
@@ -36,7 +36,7 @@ public class UserController : BaseController
     {
         game.GameHover.Clear();
         game.GamePointer.Clear();
-        game.HideUi();
+        game.GameUi.HideUi();
     }
 
     private void HandleInputIteration()
