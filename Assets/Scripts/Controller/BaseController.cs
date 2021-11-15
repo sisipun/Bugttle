@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class BaseController : ScriptableObject
@@ -14,7 +15,7 @@ public abstract class BaseController : ScriptableObject
     public virtual void StartTurn()
     {
     }
-    public abstract void HandleInput();
+    public abstract IEnumerator HandleInput();
 
     public virtual void EndTurn()
     {

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,11 +29,12 @@ public class AiController : BaseController
         }
     }
 
-    public override void HandleInput()
+    public override IEnumerator HandleInput()
     {
         foreach (Bug bug in bugs)
         {
             MakeBugTurn(bug);
+            yield return new WaitForSeconds(1.0f);
         }
 
         game.EndTurn();

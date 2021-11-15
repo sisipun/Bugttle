@@ -48,7 +48,7 @@ public class Bug : MonoBehaviour
         stepsLeft = 0;
     }
 
-    public void EndTurn()
+    public void StartTurn()
     {
         stepsLeft = moveRange;
         attacksLeft = 1;

@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject ui;
     [SerializeField] private Map map;
     [SerializeField] private Background background;
     [SerializeField] private Hover hover;
@@ -13,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private BugSide currentSide;
     private Dictionary<BugSide, BaseController> controllers;
+    private IEnumerator handleInput;
 
     public Map GameMap => map;
     public Background GameBackground => background;
@@ -82,6 +85,10 @@ public class GameManager : MonoBehaviour
 
     public void EndTurn()
     {
+        StopCoroutine(handleInput);
+        controllers[currentSide].EndTurn();
+        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
+
         for (int x = 0; x < map.Size; x++)
         {
             for (int y = 0; y < map.Size; y++)
@@ -89,14 +96,23 @@ public class GameManager : MonoBehaviour
                 Bug bug = map.GetBug(x, y);
                 if (bug != null && bug.Side == currentSide)
                 {
-                    bug.EndTurn();
+                    bug.StartTurn();
                 }
             }
         }
-
-        controllers[currentSide].EndTurn();
-        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
         controllers[currentSide].StartTurn();
+        this.handleInput = controllers[currentSide].HandleInput();
+        StartCoroutine(handleInput);
+    }
+
+    public void HideUi()
+    {
+        ui.SetActive(false);
+    }
+
+    public void ShowUi()
+    {
+        ui.SetActive(true);
     }
 
     public void Reset()
@@ -127,5 +143,7 @@ public class GameManager : MonoBehaviour
         this.controllers.Add(BugSide.GREEN, greenController);
         this.controllers.Add(BugSide.RED, redController);
         this.controllers[currentSide].StartTurn();
+        this.handleInput = this.controllers[currentSide].HandleInput();
+        StartCoroutine(this.handleInput);
     }
 }

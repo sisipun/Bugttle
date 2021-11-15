@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 327306551}
   - component: {fileID: 327306550}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a4164922d875a4ea5ccd4d14c23a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ui: {fileID: 1182204780}
   map: {fileID: 19013744}
   background: {fileID: 433640504}
   hover: {fileID: 1969206187}
@@ -767,7 +768,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 327306551}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: Init
+        m_MethodName: Reset
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

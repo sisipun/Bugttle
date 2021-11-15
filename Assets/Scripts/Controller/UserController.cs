@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "UserController", menuName = "Scriptable Objects/Controllers/User Controller")]
 public class UserController : BaseController
@@ -17,7 +18,28 @@ public class UserController : BaseController
         this.selected = null;
     }
 
-    public override void HandleInput()
+    public override void StartTurn()
+    {
+        game.ShowUi();
+    }
+
+    public override IEnumerator HandleInput()
+    {
+        while (true)
+        {
+            HandleInputIteration();
+            yield return null;
+        }
+    }
+
+    public override void EndTurn()
+    {
+        game.GameHover.Clear();
+        game.GamePointer.Clear();
+        game.HideUi();
+    }
+
+    private void HandleInputIteration()
     {
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int mouseCell = ((Vector2Int)game.GameBackground.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
@@ -42,12 +64,6 @@ public class UserController : BaseController
             game.GameHover.Clear();
             selected = null;
         }
-    }
-
-    public override void EndTurn()
-    {
-        game.GameHover.Clear();
-        game.GamePointer.Clear();
     }
 
     private void onClick(Vector2Int click)
