@@ -6,22 +6,24 @@ public class Map : MonoBehaviour
 {
     [SerializeField] private int size = 8;
     [SerializeField] private CellData[] cells;
+    [SerializeField] private Background background;
 
-    private Cell[,] map;
+    private MapCell[,] map;
 
     public int Size => size;
 
     public void Init()
     {
-        this.map = new Cell[size, size];
+        this.map = new MapCell[size, size];
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
-                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
+                MapCell cell = new MapCell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
                 map[x, y] = cell;
             }
         }
+        this.background.Init(this);
     }
 
     public Path FindPath(Vector2Int soruce, Vector2Int target, int maxCost)
@@ -29,7 +31,7 @@ public class Map : MonoBehaviour
         return PathFinder.Find(map, soruce, target, maxCost);
     }
 
-    public Cell GetCell(Vector2Int position)
+    public MapCell GetCell(Vector2Int position)
     {
         return map[position.x, position.y];
     }
@@ -44,14 +46,18 @@ public class Map : MonoBehaviour
         return map[x, y].Bug;
     }
 
-    public void SetBug(int x, int y, Bug bug)
-    {
-        map[x, y].Bug = bug;
-    }
-
     public void SetBug(Vector2Int position, Bug bug)
     {
         SetBug(position.x, position.y, bug);
+        if (bug != null)
+        {
+            bug.transform.position = background.CellToWorld(position);
+        }
+    }
+
+    public void SetBug(int x, int y, Bug bug)
+    {
+        map[x, y].Bug = bug;
     }
 
     public void RemoveBug(Vector2Int position)
@@ -69,6 +75,11 @@ public class Map : MonoBehaviour
         }
     }
 
+    public Vector2Int WorldToCell(Vector3 position)
+    {
+        return background.WorldToCell(position);
+    }
+
     public void Clear()
     {
         for (int x = 0; x < size; x++)
@@ -76,9 +87,10 @@ public class Map : MonoBehaviour
             for (int y = 0; y < size; y++)
             {
                 RemoveBug(x, y);
-                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
+                MapCell cell = new MapCell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
                 map[x, y] = cell;
             }
         }
+        this.background.Clear();
     }
 }

@@ -5,131 +5,69 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Map map;
-    [SerializeField] private Background background;
-    [SerializeField] private Hover hover;
-    [SerializeField] private Pointer pointer;
+    [SerializeField] private BaseLevel level;
+    [SerializeField] private UserInterface ui;
+
     [SerializeField] private BugGenerator bugGenerator;
     [SerializeField] private BaseController greenController;
     [SerializeField] private BaseController redController;
-    [SerializeField] private UserInterface ui;
 
-    private BugSide currentSide;
     private Dictionary<BugSide, BaseController> controllers;
     private IEnumerator handleInput;
-
-    public UserInterface GameUi => ui;
-    public Map GameMap => map;
-    public Background GameBackground => background;
-    public Hover GameHover => hover;
-    public Pointer GamePointer => pointer;
-    public bool IsGameOver
-    {
-        get
-        {
-            bool hasGreen = false;
-            bool hasRed = false;
-            for (int x = 0; x < map.Size; x++)
-            {
-                for (int y = 0; y < map.Size; y++)
-                {
-                    Bug bug = map.GetBug(x, y);
-                    if (bug != null)
-                    {
-                        if (bug.Side == BugSide.GREEN)
-                        {
-                            hasGreen = true;
-                        }
-                        if (bug.Side == BugSide.RED)
-                        {
-                            hasRed = true;
-                        }
-                    }
-                }
-            }
-
-            return !hasGreen || !hasRed;
-        }
-    }
 
     void Start()
     {
         Init();
     }
 
-    public void Move(Vector2Int from, Vector2Int to, Path path)
+    void Update()
     {
-        Bug bug = map.GetBug(from);
-        bug.transform.position = background.CellToWorld(to);
-        map.SetBug(from, null);
-        map.SetBug(to, bug);
-        bug.Move(to, path);
-    }
-
-    public void Attack(Bug source, Bug target)
-    {
-        source.Attack();
-        target.Damage();
-        if (target.IsDead)
+        if (level.IsGameOver())
         {
-            map.RemoveBug(target.Position);
-            if (IsGameOver)
-            {
-                Reset();
-            }
+            Reset();
         }
     }
 
     public void EndTurn()
     {
         StopCoroutine(handleInput);
-        controllers[currentSide].EndTurn();
-        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
+        controllers[level.CurrentSide].EndTurn();
 
-        for (int x = 0; x < map.Size; x++)
-        {
-            for (int y = 0; y < map.Size; y++)
-            {
-                Bug bug = map.GetBug(x, y);
-                if (bug != null && bug.Side == currentSide)
-                {
-                    bug.StartTurn();
-                }
-            }
-        }
-        controllers[currentSide].StartTurn();
-        this.handleInput = controllers[currentSide].HandleInput();
+        this.level.EndTurn();
+
+        controllers[level.CurrentSide].StartTurn();
+        this.handleInput = controllers[level.CurrentSide].HandleInput();
         StartCoroutine(handleInput);
     }
 
     public void Reset()
     {
         this.map.Clear();
-        this.background.Clear();
-        this.hover.Clear();
-        this.pointer.Clear();
+        this.level.Reset();
+        this.ui.Reset();
+
         this.greenController.EndTurn();
         this.redController.EndTurn();
+
         Init();
     }
 
     private void Init()
     {
         this.map.Init();
-        this.background.Init(map);
-        this.hover.Init(map);
-        this.pointer.Init(map);
-        this.greenController.Init(this, BugSide.GREEN);
-        this.redController.Init(this, BugSide.RED);
+        this.level.Init(map);
+        this.ui.Init(map);
+        this.greenController.Init(level, ui, BugSide.GREEN);
+        this.redController.Init(level, ui, BugSide.RED);
 
-        this.bugGenerator.Init(map, background);
+        this.bugGenerator.Init(map);
         this.bugGenerator.Generate();
 
-        this.currentSide = BugSide.GREEN;
         this.controllers = new Dictionary<BugSide, BaseController>();
         this.controllers.Add(BugSide.GREEN, greenController);
         this.controllers.Add(BugSide.RED, redController);
-        this.controllers[currentSide].StartTurn();
-        this.handleInput = this.controllers[currentSide].HandleInput();
+        this.controllers[level.CurrentSide].StartTurn();
+        this.handleInput = this.controllers[level.CurrentSide].HandleInput();
         StartCoroutine(this.handleInput);
     }
 }

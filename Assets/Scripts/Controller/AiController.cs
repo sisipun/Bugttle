@@ -7,15 +7,16 @@ public class AiController : BaseController
 {
     private List<Bug> bugs;
 
-    public override void Init(GameManager game, BugSide side)
+    public override void Init(BaseLevel level, UserInterface ui, BugSide side)
     {
-        base.Init(game, side);
+        base.Init(level, ui, side);
         this.bugs = new List<Bug>();
     }
 
     public override void StartTurn()
     {
-        Map map = game.GameMap;
+        base.StartTurn();
+        Map map = level.LevelMap;
         for (int x = 0; x < map.Size; x++)
         {
             for (int y = 0; y < map.Size; y++)
@@ -37,24 +38,25 @@ public class AiController : BaseController
             yield return new WaitForSeconds(1.0f);
         }
 
-        game.EndTurn();
+        ui.ClickEndTurnButton();
     }
 
     public override void EndTurn()
     {
+        base.EndTurn();
         bugs.Clear();
     }
 
     private void MakeBugTurn(Bug bug)
     {
-        List<Vector2Int> attacks = bug.PossibleAttacks(game.GameMap);
+        List<Vector2Int> attacks = bug.PossibleAttacks(level.LevelMap);
         if (attacks.Count > 0)
         {
-            game.Attack(bug, game.GameMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
+            level.Attack(bug, level.LevelMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
             return;
         }
 
-        Dictionary<Vector2Int, Path> moves = bug.PossibleMoves(game.GameMap);
+        Dictionary<Vector2Int, Path> moves = bug.PossibleMoves(level.LevelMap);
         if (moves.Count > 0)
         {
             KeyValuePair<Vector2Int, Path> currentMove;
@@ -69,13 +71,13 @@ public class AiController : BaseController
                 }
                 i++;
             }
-            game.Move(bug.Position, currentMove.Key, currentMove.Value);
+            level.Move(bug.Position, currentMove.Key, currentMove.Value);
         }
 
-        attacks = bug.PossibleAttacks(game.GameMap);
+        attacks = bug.PossibleAttacks(level.LevelMap);
         if (attacks.Count > 0)
         {
-            game.Attack(bug, game.GameMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
+            level.Attack(bug, level.LevelMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
         }
     }
 }

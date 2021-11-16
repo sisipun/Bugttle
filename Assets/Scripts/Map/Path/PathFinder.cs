@@ -3,7 +3,7 @@ using UnityEngine;
 
 class PathFinder
 {
-    public static Path Find(Cell[,] map, Vector2Int source, Vector2Int target, int maxCost)
+    public static Path Find(MapCell[,] map, Vector2Int source, Vector2Int target, int maxCost)
     {
         if (source == target)
         {
@@ -31,7 +31,7 @@ class PathFinder
             List<Vector2Int> neighbors = GetNeighbors(map, point);
             foreach (Vector2Int neighbor in neighbors)
             {
-                Cell neighborCell = map[neighbor.x, neighbor.y];
+                MapCell neighborCell = map[neighbor.x, neighbor.y];
                 int neighborCost = cost[point] + neighborCell.Cost;
                 if (
                     !neighborCell.HasBug
@@ -48,7 +48,7 @@ class PathFinder
         return GetShortestPath(path, cost, source, target);
     }
 
-    private static List<Vector2Int> GetNeighbors(Cell[,] map, Vector2Int point)
+    private static List<Vector2Int> GetNeighbors(MapCell[,] map, Vector2Int point)
     {
         List<Vector2Int> neighbors = new List<Vector2Int>();
         if (point.x - 1 >= 0)

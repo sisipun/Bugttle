@@ -3,12 +3,14 @@ using UnityEngine;
 
 public abstract class BaseController : ScriptableObject
 {
-    protected GameManager game;
+    protected BaseLevel level;
+    protected UserInterface ui;
     protected BugSide side;
 
-    public virtual void Init(GameManager game, BugSide side)
+    public virtual void Init(BaseLevel level, UserInterface ui, BugSide side)
     {
-        this.game = game;
+        this.level = level;
+        this.ui = ui;
         this.side = side;
     }
 

@@ -10,17 +10,18 @@ public class UserController : BaseController
     private Vector2Int previouseMouseCell;
     private Bug selected;
 
-    public override void Init(GameManager game, BugSide side)
+    public override void Init(BaseLevel level, UserInterface ui, BugSide side)
     {
-        base.Init(game, side);
+        base.Init(level, ui, side);
         this.mainCamera = Camera.main;
-        this.previouseMouseCell = ((Vector2Int)game.GameBackground.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
+        this.previouseMouseCell = ((Vector2Int)level.LevelMap.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selected = null;
     }
 
     public override void StartTurn()
     {
-        game.GameUi.ShowUi();
+        base.StartTurn();
+        ui.ShowUi();
     }
 
     public override IEnumerator HandleInput()
@@ -34,24 +35,25 @@ public class UserController : BaseController
 
     public override void EndTurn()
     {
-        game.GameHover.Clear();
-        game.GamePointer.Clear();
-        game.GameUi.HideUi();
+        base.EndTurn();
+        ui.LevelHover.Clear();
+        ui.LevelPointer.Clear();
+        ui.HideUi();
     }
 
     private void HandleInputIteration()
     {
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2Int mouseCell = ((Vector2Int)game.GameBackground.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
-        if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= game.GameMap.Size || mouseCell.y >= game.GameMap.Size)
+        Vector2Int mouseCell = ((Vector2Int)level.LevelMap.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
+        if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= level.LevelMap.Size || mouseCell.y >= level.LevelMap.Size)
         {
             return;
         }
 
         if (previouseMouseCell != mouseCell)
         {
-            game.GamePointer.Clear();
-            game.GamePointer.SetPosition(mouseCell);
+            ui.LevelPointer.Clear();
+            ui.LevelPointer.SetPosition(mouseCell);
             previouseMouseCell = mouseCell;
         }
 
@@ -61,14 +63,14 @@ public class UserController : BaseController
         }
         else if (Input.GetMouseButtonDown(1))
         {
-            game.GameHover.Clear();
+            ui.LevelHover.Clear();
             selected = null;
         }
     }
 
     private void onClick(Vector2Int click)
     {
-        Bug clicked = game.GameMap.GetBug(click);
+        Bug clicked = level.LevelMap.GetBug(click);
 
         if (selected == null && clicked != null)
         {
@@ -78,10 +80,10 @@ public class UserController : BaseController
 
         if (selected != null && clicked == null)
         {
-            Dictionary<Vector2Int, Path> possibleMoves = selected.PossibleMoves(game.GameMap);
+            Dictionary<Vector2Int, Path> possibleMoves = selected.PossibleMoves(level.LevelMap);
             if (possibleMoves.ContainsKey(click))
             {
-                game.Move(selected.Position, click, possibleMoves[click]);
+                level.Move(selected.Position, click, possibleMoves[click]);
             }
             SetSelected(null);
             return;
@@ -89,10 +91,10 @@ public class UserController : BaseController
 
         if (selected != null && clicked != null)
         {
-            List<Vector2Int> possibleAttacks = selected.PossibleAttacks(game.GameMap);
+            List<Vector2Int> possibleAttacks = selected.PossibleAttacks(level.LevelMap);
             if (possibleAttacks.Contains(click))
             {
-                game.Attack(selected, clicked);
+                level.Attack(selected, clicked);
                 SetSelected(null);
             }
             else
@@ -105,12 +107,12 @@ public class UserController : BaseController
 
     private void SetSelected(Bug bug)
     {
-        game.GameHover.Clear();
+        ui.LevelHover.Clear();
         selected = bug;
         if (selected != null)
         {
-            game.GameHover.SetMovable(selected.PossibleMoves(game.GameMap).Keys);
-            game.GameHover.SetAttackable(selected.PossibleAttacks(game.GameMap));
+            ui.LevelHover.SetMovable(selected.PossibleMoves(level.LevelMap).Keys);
+            ui.LevelHover.SetAttackable(selected.PossibleAttacks(level.LevelMap));
         }
     }
 }

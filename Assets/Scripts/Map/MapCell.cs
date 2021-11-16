@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Cell
+public class MapCell
 {
     private TileBase tile;
     private Vector2Int position;
@@ -26,7 +26,7 @@ public class Cell
         }
     }
 
-    public Cell(Vector2Int position, CellData data)
+    public MapCell(Vector2Int position, CellData data)
     {
         this.tile = data.Tile;
         this.position = position;
