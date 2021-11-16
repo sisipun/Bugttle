@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class BaseController : ScriptableObject
+public abstract class BaseController : MonoBehaviour
 {
     protected BaseLevel level;
     protected UserInterface ui;

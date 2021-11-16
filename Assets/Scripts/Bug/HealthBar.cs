@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField]
-    private Image fill;
+    [SerializeField] private Image fill;
 
     private Slider slider;
 

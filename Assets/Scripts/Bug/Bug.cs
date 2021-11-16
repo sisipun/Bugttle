@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class Bug : MonoBehaviour
 {
-    [SerializeField]
-    private HealthBar health;
+    [SerializeField] private HealthBar health;
 
     private SpriteRenderer spriteRenderer;
 

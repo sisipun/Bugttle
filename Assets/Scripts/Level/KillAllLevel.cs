@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class KillAllLevel : BaseLevel
 {
     public override bool IsGameOver()

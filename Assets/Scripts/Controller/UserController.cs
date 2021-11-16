@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "UserController", menuName = "Scriptable Objects/Controllers/User Controller")]
 public class UserController : BaseController
 {
     private Camera mainCamera;

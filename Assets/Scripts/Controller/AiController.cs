@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "AiController", menuName = "Scriptable Objects/Controllers/Ai Controller")]
 public class AiController : BaseController
 {
     private List<Bug> bugs;
@@ -34,8 +33,7 @@ public class AiController : BaseController
     {
         foreach (Bug bug in bugs)
         {
-            MakeBugTurn(bug);
-            yield return new WaitForSeconds(1.0f);
+            yield return StartCoroutine(MakeBugTurn(bug));
         }
 
         ui.ClickEndTurnButton();
@@ -47,13 +45,14 @@ public class AiController : BaseController
         bugs.Clear();
     }
 
-    private void MakeBugTurn(Bug bug)
+    private IEnumerator MakeBugTurn(Bug bug)
     {
         List<Vector2Int> attacks = bug.PossibleAttacks(level.LevelMap);
         if (attacks.Count > 0)
         {
             level.Attack(bug, level.LevelMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
-            return;
+            yield return new WaitForSeconds(1.0f);
+            yield break;
         }
 
         Dictionary<Vector2Int, Path> moves = bug.PossibleMoves(level.LevelMap);
@@ -72,12 +71,14 @@ public class AiController : BaseController
                 i++;
             }
             level.Move(bug.Position, currentMove.Key, currentMove.Value);
+            yield return new WaitForSeconds(1.0f);
         }
 
         attacks = bug.PossibleAttacks(level.LevelMap);
         if (attacks.Count > 0)
         {
             level.Attack(bug, level.LevelMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
+            yield return new WaitForSeconds(1.0f);
         }
     }
 }

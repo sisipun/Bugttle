@@ -14,7 +14,7 @@ public class Hover : MonoBehaviour
     {
         this.tilemap = GetComponent<Tilemap>();
     }
-    
+
     public void Init(Map map)
     {
         this.size = map.Size;

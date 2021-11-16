@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,7 +12,7 @@ public class Pointer : MonoBehaviour
     {
         this.tilemap = GetComponent<Tilemap>();
     }
-    
+
     public void Init(Map map)
     {
         this.size = map.Size;
