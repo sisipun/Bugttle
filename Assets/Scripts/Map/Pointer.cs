@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -21,6 +22,14 @@ public class Pointer : MonoBehaviour
     public void SetPosition(Vector2Int position)
     {
         tilemap.SetTile(((Vector3Int)position), pointerTile);
+    }
+
+    public void SetPath(List<Vector2Int> path)
+    {
+        foreach (Vector2Int position in path)
+        {
+            tilemap.SetTile(((Vector3Int)position), pointerTile);
+        }
     }
 
     public void Clear()

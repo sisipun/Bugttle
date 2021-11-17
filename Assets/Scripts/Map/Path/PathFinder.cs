@@ -25,7 +25,8 @@ class PathFinder
             Vector2Int point = priorityPoint.Key;
             if (point == target)
             {
-                break;
+                // TODO remove comment if performance problem. Now we try to find best solution
+                // break;
             }
 
             List<Vector2Int> neighbors = GetNeighbors(map, point);

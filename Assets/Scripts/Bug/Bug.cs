@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Bug : MonoBehaviour
 {
+    private const string ENABLE_OUTLINE_MATERIAL_KEY = "_OutlineEnabled";
+
     [SerializeField] private HealthBar health;
 
     private SpriteRenderer spriteRenderer;
@@ -57,6 +59,16 @@ public class Bug : MonoBehaviour
     {
         stepsLeft -= path.Cost;
         position = newPosition;
+    }
+
+    public void SetOutlined()
+    {
+        spriteRenderer.material.SetFloat(ENABLE_OUTLINE_MATERIAL_KEY, 1);
+    }
+
+    public void ResetOutlined()
+    {
+        spriteRenderer.material.SetFloat(ENABLE_OUTLINE_MATERIAL_KEY, 0);
     }
 
     public Dictionary<Vector2Int, Path> PossibleMoves(Map map)

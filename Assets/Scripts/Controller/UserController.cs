@@ -7,6 +7,8 @@ public class UserController : BaseController
     private Camera mainCamera;
     private Vector2Int previouseMouseCell;
     private Bug selected;
+    private Dictionary<Vector2Int, Path> selectedPossibleMoves;
+    private List<Vector2Int> selectedPossibleAttacks;
 
     public override void Init(BaseLevel level, UserInterface ui, BugSide side)
     {
@@ -14,6 +16,8 @@ public class UserController : BaseController
         this.mainCamera = Camera.main;
         this.previouseMouseCell = ((Vector2Int)level.LevelMap.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selected = null;
+        this.selectedPossibleMoves = new Dictionary<Vector2Int, Path>();
+        this.selectedPossibleAttacks = new List<Vector2Int>();
     }
 
     public override void StartTurn()
@@ -50,9 +54,7 @@ public class UserController : BaseController
 
         if (previouseMouseCell != mouseCell)
         {
-            ui.LevelPointer.Clear();
-            ui.LevelPointer.SetPosition(mouseCell);
-            previouseMouseCell = mouseCell;
+            onMouseCellChange(mouseCell);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -63,6 +65,18 @@ public class UserController : BaseController
         {
             ui.LevelHover.Clear();
             selected = null;
+        }
+    }
+
+    private void onMouseCellChange(Vector2Int newMouseCell)
+    {
+        ui.LevelPointer.Clear();
+        ui.LevelPointer.SetPosition(newMouseCell);
+        previouseMouseCell = newMouseCell;
+        if (selected != null && selectedPossibleMoves.ContainsKey(newMouseCell))
+        {
+            Path path = selectedPossibleMoves[newMouseCell];
+            ui.LevelPointer.SetPath(path.Value);
         }
     }
 
@@ -78,10 +92,9 @@ public class UserController : BaseController
 
         if (selected != null && clicked == null)
         {
-            Dictionary<Vector2Int, Path> possibleMoves = selected.PossibleMoves(level.LevelMap);
-            if (possibleMoves.ContainsKey(click))
+            if (selectedPossibleMoves.ContainsKey(click))
             {
-                level.Move(selected.Position, click, possibleMoves[click]);
+                level.Move(selected.Position, click, selectedPossibleMoves[click]);
             }
             SetSelected(null);
             return;
@@ -89,8 +102,7 @@ public class UserController : BaseController
 
         if (selected != null && clicked != null)
         {
-            List<Vector2Int> possibleAttacks = selected.PossibleAttacks(level.LevelMap);
-            if (possibleAttacks.Contains(click))
+            if (selectedPossibleAttacks.Contains(click))
             {
                 level.Attack(selected, clicked);
                 SetSelected(null);
@@ -106,11 +118,24 @@ public class UserController : BaseController
     private void SetSelected(Bug bug)
     {
         ui.LevelHover.Clear();
+        selectedPossibleMoves.Clear();
+        selectedPossibleAttacks.Clear();
+        if (selected != null)
+        {
+            selected.ResetOutlined();
+        }
+
         selected = bug;
         if (selected != null)
         {
-            ui.LevelHover.SetMovable(selected.PossibleMoves(level.LevelMap).Keys);
-            ui.LevelHover.SetAttackable(selected.PossibleAttacks(level.LevelMap));
+            selected.SetOutlined();
+            foreach (KeyValuePair<Vector2Int, Path> move in selected.PossibleMoves(level.LevelMap))
+            {
+                selectedPossibleMoves.Add(move.Key, move.Value);
+            }
+            selectedPossibleAttacks.AddRange(selected.PossibleAttacks(level.LevelMap));
+            ui.LevelHover.SetMovable(selectedPossibleMoves.Keys);
+            ui.LevelHover.SetAttackable(selectedPossibleAttacks);
         }
     }
 }
