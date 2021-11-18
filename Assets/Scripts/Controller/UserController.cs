@@ -10,7 +10,7 @@ public class UserController : BaseController
     private Dictionary<Vector2Int, Path> selectedPossibleMoves;
     private List<Vector2Int> selectedPossibleAttacks;
 
-    public override void Init(BaseLevel level, UserInterface ui, BugSide side)
+    public override void Init(BaseLevel level, LevelUi ui, BugSide side)
     {
         base.Init(level, ui, side);
         this.mainCamera = Camera.main;
@@ -23,7 +23,7 @@ public class UserController : BaseController
     public override void StartTurn()
     {
         base.StartTurn();
-        ui.ShowUi();
+        ui.Show();
     }
 
     public override IEnumerator HandleInput()
@@ -40,7 +40,7 @@ public class UserController : BaseController
         base.EndTurn();
         ui.LevelHover.Clear();
         ui.LevelPointer.Clear();
-        ui.HideUi();
+        ui.Hide();
         SetSelected(null);
     }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UserInterface : MonoBehaviour
+public class LevelUi : MonoBehaviour
 {
     [SerializeField] private Hover hover;
     [SerializeField] private Pointer pointer;
@@ -16,12 +16,12 @@ public class UserInterface : MonoBehaviour
         this.pointer.Init(map);
     }
 
-    public void HideUi()
+    public void Hide()
     {
         this.gameObject.SetActive(false);
     }
 
-    public void ShowUi()
+    public void Show()
     {
         this.gameObject.SetActive(true);
     }
@@ -35,6 +35,6 @@ public class UserInterface : MonoBehaviour
     {
         this.hover.Clear();
         this.pointer.Clear();
-        this.ShowUi();
+        this.Show();
     }
 }

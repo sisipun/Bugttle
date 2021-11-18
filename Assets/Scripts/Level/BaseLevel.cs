@@ -4,17 +4,21 @@ public abstract class BaseLevel : MonoBehaviour
 {
     protected BugSide currentSide;
     protected Map map;
+    protected int turnNumber;
 
     public BugSide CurrentSide => currentSide;
     public Map LevelMap => map;
+    public int RoundNumber => (turnNumber + 1) / 2;
 
     public virtual void Init(Map map)
     {
-        this.currentSide = BugSide.GREEN;
+        Reset();
         this.map = map;
     }
 
     public abstract bool IsGameOver();
+
+    public abstract LevelType Type();
 
     public virtual void Move(Vector2Int from, Vector2Int to, Path path)
     {
@@ -36,6 +40,7 @@ public abstract class BaseLevel : MonoBehaviour
 
     public virtual void EndTurn()
     {
+        turnNumber++;
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
         for (int x = 0; x < map.Size; x++)
         {
@@ -53,5 +58,6 @@ public abstract class BaseLevel : MonoBehaviour
     public void Reset()
     {
         this.currentSide = BugSide.GREEN;
+        this.turnNumber = 1;
     }
 }

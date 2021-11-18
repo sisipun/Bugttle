@@ -25,4 +25,9 @@ public class KillAllLevel : BaseLevel
 
         return !hasGreen || !hasRed;
     }
+
+    public override LevelType Type()
+    {
+        return LevelType.KILL_ALL;
+    }
 }

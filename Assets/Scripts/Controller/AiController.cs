@@ -6,7 +6,7 @@ public class AiController : BaseController
 {
     private List<Bug> bugs;
 
-    public override void Init(BaseLevel level, UserInterface ui, BugSide side)
+    public override void Init(BaseLevel level, LevelUi ui, BugSide side)
     {
         base.Init(level, ui, side);
         this.bugs = new List<Bug>();

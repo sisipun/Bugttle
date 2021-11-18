@@ -4,10 +4,10 @@ using UnityEngine;
 public abstract class BaseController : MonoBehaviour
 {
     protected BaseLevel level;
-    protected UserInterface ui;
+    protected LevelUi ui;
     protected BugSide side;
 
-    public virtual void Init(BaseLevel level, UserInterface ui, BugSide side)
+    public virtual void Init(BaseLevel level, LevelUi ui, BugSide side)
     {
         this.level = level;
         this.ui = ui;

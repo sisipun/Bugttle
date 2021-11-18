@@ -4,22 +4,24 @@ public class DoNotDieLevel : BaseLevel
 {
     [SerializeField] private int roundCount;
 
-    private int turnsLeft;
-
     public override void Init(Map map)
     {
         base.Init(map);
-        this.turnsLeft = roundCount * 2;
     }
 
     public override bool IsGameOver()
     {
-        return turnsLeft <= 0;
+        return roundCount < RoundNumber;
+    }
+
+    
+    public override LevelType Type()
+    {
+        return LevelType.DO_NOT_DIE;
     }
 
     public override void EndTurn()
     {
         base.EndTurn();
-        this.turnsLeft--;
     }
 }
