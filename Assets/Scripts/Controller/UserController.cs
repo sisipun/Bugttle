@@ -41,6 +41,7 @@ public class UserController : BaseController
         ui.LevelHover.Clear();
         ui.LevelPointer.Clear();
         ui.HideUi();
+        SetSelected(null);
     }
 
     private void HandleInputIteration()
