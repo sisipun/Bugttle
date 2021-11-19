@@ -4,22 +4,30 @@ using UnityEngine;
 public abstract class BaseController : MonoBehaviour
 {
     protected BaseLevel level;
-    protected LevelUi ui;
     protected BugSide side;
+    protected bool turnEnded;
 
-    public virtual void Init(BaseLevel level, LevelUi ui, BugSide side)
+    public bool IsTurnEnded => turnEnded;
+
+    public virtual void Init(BaseLevel level, BugSide side)
     {
         this.level = level;
-        this.ui = ui;
         this.side = side;
+        this.turnEnded = false;
     }
 
     public virtual void StartTurn()
     {
+        this.turnEnded = false;
     }
-    public abstract IEnumerator HandleInput();
+    
+    public abstract IEnumerator TurnAction();
 
     public virtual void EndTurn()
+    {
+    }
+
+    public virtual void Reset()
     {
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private LevelUi levelUi;
     [SerializeField] private Map map;
-    [SerializeField] private List<BaseLevel> levels;
-    [SerializeField] private LevelUi ui;
+    [SerializeField] private BaseLevel[] levels;
 
     [SerializeField] private BugGenerator bugGenerator;
     [SerializeField] private BaseController greenController;
@@ -14,7 +14,7 @@ public class LevelManager : MonoBehaviour
 
     private Dictionary<BugSide, BaseController> sideToController;
     private Dictionary<LevelType, BaseLevel> typeToLevel;
-    private IEnumerator handleInput;
+    private IEnumerator currentAction;
     private BaseLevel level;
 
     void Awake()
@@ -36,25 +36,30 @@ public class LevelManager : MonoBehaviour
         {
             RestartLevel();
         }
+        if (currentAction != null && sideToController[level.CurrentSide].IsTurnEnded)
+        {
+            EndTurn();
+        }
     }
 
     public void StartLevel(LevelType type)
     {
         level = typeToLevel[type];
+        levelUi.Show();
         Init();
     }
 
     public void EndTurn()
     {
-        StopCoroutine(handleInput);
+        StopCoroutine(currentAction);
         BaseController controller = sideToController[level.CurrentSide];
         sideToController[level.CurrentSide].EndTurn();
 
         this.level.EndTurn();
 
         sideToController[level.CurrentSide].StartTurn();
-        this.handleInput = sideToController[level.CurrentSide].HandleInput();
-        StartCoroutine(handleInput);
+        this.currentAction = sideToController[level.CurrentSide].TurnAction();
+        StartCoroutine(currentAction);
     }
 
     
@@ -74,26 +79,27 @@ public class LevelManager : MonoBehaviour
     {
         this.map.Clear();
         this.level.Reset();
-        this.ui.Reset();
 
         this.greenController.EndTurn();
         this.redController.EndTurn();
+        
+        this.greenController.Reset();
+        this.redController.Reset();
     }
 
     private void Init()
     {
         this.map.Init();
         this.level.Init(map);
-        this.ui.Init(map);
-        this.greenController.Init(level, ui, BugSide.GREEN);
-        this.redController.Init(level, ui, BugSide.RED);
+        this.greenController.Init(level, BugSide.GREEN);
+        this.redController.Init(level, BugSide.RED);
 
         this.bugGenerator.Init(map);
         this.bugGenerator.Generate();
 
         BaseController controller = this.sideToController[level.CurrentSide];
         controller.StartTurn();
-        this.handleInput = controller.HandleInput();
-        StartCoroutine(this.handleInput);
+        this.currentAction = controller.TurnAction();
+        StartCoroutine(this.currentAction);
     }
 }

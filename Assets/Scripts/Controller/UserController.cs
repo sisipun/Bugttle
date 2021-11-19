@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class UserController : BaseController
 {
+    [SerializeField] private PlayerUi ui;
+
     private Camera mainCamera;
     private Vector2Int previouseMouseCell;
     private Bug selected;
     private Dictionary<Vector2Int, Path> selectedPossibleMoves;
     private List<Vector2Int> selectedPossibleAttacks;
 
-    public override void Init(BaseLevel level, LevelUi ui, BugSide side)
+    public override void Init(BaseLevel level, BugSide side)
     {
-        base.Init(level, ui, side);
+        base.Init(level, side);
+        this.ui.Init(level.LevelMap);
         this.mainCamera = Camera.main;
         this.previouseMouseCell = ((Vector2Int)level.LevelMap.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selected = null;
@@ -26,7 +29,7 @@ public class UserController : BaseController
         ui.Show();
     }
 
-    public override IEnumerator HandleInput()
+    public override IEnumerator TurnAction()
     {
         while (true)
         {
@@ -42,6 +45,16 @@ public class UserController : BaseController
         ui.LevelPointer.Clear();
         ui.Hide();
         SetSelected(null);
+    }
+
+    public override void Reset()
+    {
+        this.ui.Reset();
+    }
+
+    public void SetTurnEnded()
+    {
+        turnEnded = true;
     }
 
     private void HandleInputIteration()

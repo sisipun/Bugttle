@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuUi : MonoBehaviour
+public class MenuUi : BaseUi
 {
     [SerializeField] private LevelManager levelManager;
 
@@ -16,15 +16,5 @@ public class MenuUi : MonoBehaviour
     {
         Hide();
         levelManager.StartLevel(LevelType.DO_NOT_DIE);
-    }
-
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
-
-    public void Show()
-    {
-        gameObject.SetActive(true);
     }
 }

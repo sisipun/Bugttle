@@ -6,9 +6,9 @@ public class AiController : BaseController
 {
     private List<Bug> bugs;
 
-    public override void Init(BaseLevel level, LevelUi ui, BugSide side)
+    public override void Init(BaseLevel level, BugSide side)
     {
-        base.Init(level, ui, side);
+        base.Init(level, side);
         this.bugs = new List<Bug>();
     }
 
@@ -29,14 +29,14 @@ public class AiController : BaseController
         }
     }
 
-    public override IEnumerator HandleInput()
+    public override IEnumerator TurnAction()
     {
         foreach (Bug bug in bugs)
         {
             yield return StartCoroutine(MakeBugTurn(bug));
         }
 
-        ui.ClickEndTurnButton();
+        turnEnded = true;
     }
 
     public override void EndTurn()
