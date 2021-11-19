@@ -143,11 +143,11 @@ public class UserController : BaseController
         if (selected != null)
         {
             selected.SetOutlined();
-            foreach (KeyValuePair<Vector2Int, Path> move in selected.PossibleMoves(level.LevelMap))
+            foreach (KeyValuePair<Vector2Int, Path> move in level.GetPossibleMoves(selected))
             {
                 selectedPossibleMoves.Add(move.Key, move.Value);
             }
-            selectedPossibleAttacks.AddRange(selected.PossibleAttacks(level.LevelMap));
+            selectedPossibleAttacks.AddRange(level.GetPossibleAttacks(selected));
             ui.LevelHover.SetMovable(selectedPossibleMoves.Keys);
             ui.LevelHover.SetAttackable(selectedPossibleAttacks);
         }

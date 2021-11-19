@@ -47,7 +47,7 @@ public class AiController : BaseController
 
     private IEnumerator MakeBugTurn(Bug bug)
     {
-        List<Vector2Int> attacks = bug.PossibleAttacks(level.LevelMap);
+        List<Vector2Int> attacks = level.GetPossibleAttacks(bug);
         if (attacks.Count > 0)
         {
             level.Attack(bug, level.LevelMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
@@ -55,7 +55,7 @@ public class AiController : BaseController
             yield break;
         }
 
-        Dictionary<Vector2Int, Path> moves = bug.PossibleMoves(level.LevelMap);
+        Dictionary<Vector2Int, Path> moves = level.GetPossibleMoves(bug);
         if (moves.Count > 0)
         {
             KeyValuePair<Vector2Int, Path> currentMove;
@@ -74,7 +74,7 @@ public class AiController : BaseController
             yield return new WaitForSeconds(1.0f);
         }
 
-        attacks = bug.PossibleAttacks(level.LevelMap);
+        attacks = level.GetPossibleAttacks(bug);
         if (attacks.Count > 0)
         {
             level.Attack(bug, level.LevelMap.GetBug(attacks[Random.Range(0, attacks.Count)]));
