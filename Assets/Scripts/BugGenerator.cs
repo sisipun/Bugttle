@@ -11,15 +11,23 @@ public class BugGenerator : MonoBehaviour
         this.map = map;
     }
 
-    public void Generate()
+    public void Generate(int bugsCount)
     {
-        for (int x = 0; x < map.Size; x++)
+        for (int y = 0; y < bugsCount; y++)
         {
-            int y = Random.Range(0, map.Size);
-            Vector2Int position = new Vector2Int(x, y);
+            Vector2Int position = new Vector2Int(0, y);
             BugData data = bugs[Random.Range(0, bugs.Length)];
             Bug bug = Instantiate<GameObject>(data.Prefub).GetComponent<Bug>();
-            bug.Init(position, x < map.Size / 2 ? BugSide.GREEN : BugSide.RED, data);
+            bug.Init(position,BugSide.GREEN, data);
+            map.SetBug(position, bug);
+        }
+
+        for (int y = 0; y < bugsCount; y++)
+        {
+            Vector2Int position = new Vector2Int(map.Size - 1, map.Size - 1 - y);
+            BugData data = bugs[Random.Range(0, bugs.Length)];
+            Bug bug = Instantiate<GameObject>(data.Prefub).GetComponent<Bug>();
+            bug.Init(position,BugSide.RED, data);
             map.SetBug(position, bug);
         }
     }

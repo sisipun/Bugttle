@@ -3,6 +3,9 @@ using UnityEngine;
 
 public abstract class BaseLevel : MonoBehaviour
 {
+    protected LevelState initialState;
+    protected LevelState currentState;
+    protected BugSide initialSide;
     protected BugSide currentSide;
     protected Map map;
     protected int turnNumber;
@@ -13,20 +16,26 @@ public abstract class BaseLevel : MonoBehaviour
 
     public virtual void Init(Map map)
     {
-        Reset();
+        this.initialState = LevelState.SET_POSITIONS;
+        this.initialSide = BugSide.GREEN;
         this.map = map;
+        Reset();
     }
 
     public abstract bool IsGameOver();
 
     public abstract LevelType Type();
 
-    public Dictionary<Vector2Int, Path> GetPossibleMoves(Bug bug)
+    public virtual Dictionary<Vector2Int, Path> GetPossibleMoves(Bug bug)
     {
         Dictionary<Vector2Int, Path> moves = new Dictionary<Vector2Int, Path>();
-        if (bug.StepsLeft == 0)
+        if (bug.StepsLeft == 0 || currentState == LevelState.PICK_BUGS)
         {
             return moves;
+        }
+        else if (currentState == LevelState.SET_POSITIONS)
+        {
+            return GetInitialPositions();
         }
 
         for (int x = 0; x < map.Size; x++)
@@ -44,10 +53,10 @@ public abstract class BaseLevel : MonoBehaviour
         return moves;
     }
 
-    public List<Vector2Int> GetPossibleAttacks(Bug bug)
+    public virtual List<Vector2Int> GetPossibleAttacks(Bug bug)
     {
         List<Vector2Int> attacks = new List<Vector2Int>();
-        if (bug.AttacksLeft == 0)
+        if (bug.AttacksLeft == 0 || currentState != LevelState.TURN)
         {
             return attacks;
         }
@@ -87,24 +96,68 @@ public abstract class BaseLevel : MonoBehaviour
 
     public virtual void EndTurn()
     {
-        turnNumber++;
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
-        for (int x = 0; x < map.Size; x++)
+        if (currentState == LevelState.TURN)
         {
-            for (int y = 0; y < map.Size; y++)
+            turnNumber++;
+            for (int x = 0; x < map.Size; x++)
             {
-                Bug bug = map.GetBug(x, y);
-                if (bug != null && bug.Side == currentSide)
+                for (int y = 0; y < map.Size; y++)
                 {
-                    bug.StartTurn();
+                    Bug bug = map.GetBug(x, y);
+                    if (bug != null && bug.Side == currentSide)
+                    {
+                        bug.StartTurn();
+                    }
                 }
             }
         }
+
+        CheckForStateChange();
     }
 
     public void Reset()
     {
-        this.currentSide = BugSide.GREEN;
+        this.currentState = initialState;
+        this.currentSide = initialSide;
         this.turnNumber = 1;
+    }
+
+
+    protected virtual void CheckForStateChange()
+    {
+        if (currentState == LevelState.TURN || currentSide != initialSide)
+        {
+            return;
+        }
+
+        if (currentState == LevelState.PICK_BUGS)
+        {
+            currentState = LevelState.SET_POSITIONS;
+        }
+        else if (currentState == LevelState.SET_POSITIONS)
+        {
+            currentState = LevelState.TURN;
+        }
+    }
+
+    protected virtual Dictionary<Vector2Int, Path> GetInitialPositions()
+    {
+        int initialZoneSize = 2;
+        int initialLine = currentSide == BugSide.GREEN ? 0 : map.Size - initialZoneSize;
+        int endLine = currentSide == BugSide.GREEN ? initialZoneSize : map.Size;
+        Dictionary<Vector2Int, Path> initialPositions = new Dictionary<Vector2Int, Path>();
+        for (int x = initialLine; x < endLine; x++)
+        {
+            for (int y = 0; y < map.Size; y++)
+            {
+                if (map.GetBug(x, y) == null)
+                {
+                    initialPositions.Add(new Vector2Int(x, y), new Path());
+                }
+            }
+        }
+
+        return initialPositions;
     }
 }

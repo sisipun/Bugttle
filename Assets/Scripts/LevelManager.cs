@@ -95,7 +95,7 @@ public class LevelManager : MonoBehaviour
         this.redController.Init(level, BugSide.RED);
 
         this.bugGenerator.Init(map);
-        this.bugGenerator.Generate();
+        this.bugGenerator.Generate(3);
 
         BaseController controller = this.sideToController[level.CurrentSide];
         controller.StartTurn();
