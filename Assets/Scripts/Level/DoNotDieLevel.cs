@@ -9,19 +9,22 @@ public class DoNotDieLevel : BaseLevel
         base.Init(map);
     }
 
-    public override bool IsGameOver()
+    public override BugSide? GetWinner()
     {
-        return roundCount < RoundNumber;
+        if (roundCount < RoundNumber || GetBugs(BugSide.RED).Count == 0)
+        {
+            return BugSide.GREEN;
+        } else if (GetBugs(BugSide.GREEN).Count == 0)
+        {
+            return BugSide.RED;
+        } else 
+        {
+            return null;
+        }
     }
-
     
     public override LevelType Type()
     {
         return LevelType.DO_NOT_DIE;
-    }
-
-    public override void EndTurn()
-    {
-        base.EndTurn();
     }
 }

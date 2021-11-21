@@ -7,8 +7,11 @@ public abstract class BaseLevel : MonoBehaviour
     protected LevelState currentState;
     protected BugSide initialSide;
     protected BugSide currentSide;
+    protected int initialZoneSize;
+
     protected Map map;
     protected int turnNumber;
+    protected Dictionary<BugSide, List<Bug>> bugs;
 
     public BugSide CurrentSide => currentSide;
     public Map LevelMap => map;
@@ -18,15 +21,35 @@ public abstract class BaseLevel : MonoBehaviour
     {
         this.initialState = LevelState.SET_POSITIONS;
         this.initialSide = BugSide.GREEN;
+        this.initialZoneSize = map.Size / 4;
         this.map = map;
+        this.bugs = new Dictionary<BugSide, List<Bug>>();
+        bugs[BugSide.GREEN] = new List<Bug>();
+        bugs[BugSide.RED] = new List<Bug>();
+        for(int x = 0; x < map.Size; x++)
+        {
+            for (int y = 0; y < map.Size; y++)
+            {
+                Bug bug = map.GetBug(x, y);
+                if (bug != null)
+                {
+                    bugs[bug.Side].Add(bug);
+                }
+            }
+        }
         Reset();
     }
 
-    public abstract bool IsGameOver();
+    public abstract BugSide? GetWinner();
 
     public abstract LevelType Type();
 
-    public virtual Dictionary<Vector2Int, Path> GetPossibleMoves(Bug bug)
+    public List<Bug> GetBugs(BugSide side)
+    {
+        return bugs[side];
+    }
+
+    public Dictionary<Vector2Int, Path> GetPossibleMoves(Bug bug)
     {
         Dictionary<Vector2Int, Path> moves = new Dictionary<Vector2Int, Path>();
         if (bug.StepsLeft == 0 || currentState == LevelState.PICK_BUGS)
@@ -53,7 +76,7 @@ public abstract class BaseLevel : MonoBehaviour
         return moves;
     }
 
-    public virtual List<Vector2Int> GetPossibleAttacks(Bug bug)
+    public List<Vector2Int> GetPossibleAttacks(Bug bug)
     {
         List<Vector2Int> attacks = new List<Vector2Int>();
         if (bug.AttacksLeft == 0 || currentState != LevelState.TURN)
@@ -76,25 +99,25 @@ public abstract class BaseLevel : MonoBehaviour
         return attacks;
     }
 
-    public virtual void Move(Vector2Int from, Vector2Int to, Path path)
+    public void Move(Bug bug, Vector2Int destination, Path path)
     {
-        Bug bug = map.GetBug(from);
-        map.SetBug(from, null);
-        map.SetBug(to, bug);
-        bug.Move(to, path);
+        map.SetBug(bug.Position, null);
+        map.SetBug(destination, bug);
+        bug.Move(destination, path);
     }
 
-    public virtual void Attack(Bug source, Bug target)
+    public void Attack(Bug source, Bug target)
     {
         source.Attack();
         target.Damage();
         if (target.IsDead)
         {
             map.RemoveBug(target.Position);
+            bugs[target.Side].Remove(target);
         }
     }
 
-    public virtual void EndTurn()
+    public void EndTurn()
     {
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
         if (currentState == LevelState.TURN)
@@ -123,8 +146,7 @@ public abstract class BaseLevel : MonoBehaviour
         this.turnNumber = 1;
     }
 
-
-    protected virtual void CheckForStateChange()
+    private void CheckForStateChange()
     {
         if (currentState == LevelState.TURN || currentSide != initialSide)
         {
@@ -141,9 +163,8 @@ public abstract class BaseLevel : MonoBehaviour
         }
     }
 
-    protected virtual Dictionary<Vector2Int, Path> GetInitialPositions()
+    private Dictionary<Vector2Int, Path> GetInitialPositions()
     {
-        int initialZoneSize = 2;
         int initialLine = currentSide == BugSide.GREEN ? 0 : map.Size - initialZoneSize;
         int endLine = currentSide == BugSide.GREEN ? initialZoneSize : map.Size;
         Dictionary<Vector2Int, Path> initialPositions = new Dictionary<Vector2Int, Path>();

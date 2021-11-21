@@ -1,29 +1,16 @@
 public class KillAllLevel : BaseLevel
 {
-    public override bool IsGameOver()
+    public override BugSide? GetWinner()
     {
-        bool hasGreen = false;
-        bool hasRed = false;
-        for (int x = 0; x < map.Size; x++)
+        if (GetBugs(BugSide.RED).Count == 0)
         {
-            for (int y = 0; y < map.Size; y++)
-            {
-                Bug bug = map.GetBug(x, y);
-                if (bug != null)
-                {
-                    if (bug.Side == BugSide.GREEN)
-                    {
-                        hasGreen = true;
-                    }
-                    if (bug.Side == BugSide.RED)
-                    {
-                        hasRed = true;
-                    }
-                }
-            }
+            return BugSide.GREEN;
+        } else if (GetBugs(BugSide.GREEN).Count == 0)
+        {
+            return BugSide.RED;
+        } else {
+            return BugSide.GREEN;
         }
-
-        return !hasGreen || !hasRed;
     }
 
     public override LevelType Type()

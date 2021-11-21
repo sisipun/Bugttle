@@ -4,34 +4,14 @@ using UnityEngine;
 
 public class AiController : BaseController
 {
-    private List<Bug> bugs;
-
     public override void Init(BaseLevel level, BugSide side)
     {
         base.Init(level, side);
-        this.bugs = new List<Bug>();
-    }
-
-    public override void StartTurn()
-    {
-        base.StartTurn();
-        Map map = level.LevelMap;
-        for (int x = 0; x < map.Size; x++)
-        {
-            for (int y = 0; y < map.Size; y++)
-            {
-                Bug bug = map.GetBug(x, y);
-                if (bug != null && bug.Side == side)
-                {
-                    bugs.Add(bug);
-                }
-            }
-        }
     }
 
     public override IEnumerator TurnAction()
     {
-        foreach (Bug bug in bugs)
+        foreach (Bug bug in level.GetBugs(side))
         {
             yield return StartCoroutine(MakeBugTurn(bug));
         }
@@ -42,7 +22,6 @@ public class AiController : BaseController
     public override void EndTurn()
     {
         base.EndTurn();
-        bugs.Clear();
     }
 
     private IEnumerator MakeBugTurn(Bug bug)
@@ -70,7 +49,7 @@ public class AiController : BaseController
                 }
                 i++;
             }
-            level.Move(bug.Position, currentMove.Key, currentMove.Value);
+            level.Move(bug, currentMove.Key, currentMove.Value);
             yield return new WaitForSeconds(1.0f);
         }
 

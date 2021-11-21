@@ -108,7 +108,7 @@ public class UserController : BaseController
         {
             if (selectedPossibleMoves.ContainsKey(click))
             {
-                level.Move(selected.Position, click, selectedPossibleMoves[click]);
+                level.Move(selected, click, selectedPossibleMoves[click]);
             }
             SetSelected(null);
             return;

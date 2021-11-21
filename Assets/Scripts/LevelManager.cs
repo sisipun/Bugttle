@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] private LevelUi levelUi;
+    [SerializeField] private UiManager uiManager;
     [SerializeField] private Map map;
     [SerializeField] private BaseLevel[] levels;
 
@@ -16,6 +16,7 @@ public class LevelManager : MonoBehaviour
     private Dictionary<LevelType, BaseLevel> typeToLevel;
     private IEnumerator currentAction;
     private BaseLevel level;
+    private LevelType type;
 
     void Awake()
     {
@@ -24,7 +25,7 @@ public class LevelManager : MonoBehaviour
         this.sideToController.Add(BugSide.RED, redController);
 
         this.typeToLevel = new Dictionary<LevelType, BaseLevel>();
-        foreach(BaseLevel level in levels)
+        foreach (BaseLevel level in levels)
         {
             this.typeToLevel.Add(level.Type(), level);
         }
@@ -32,9 +33,9 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        if (level != null && level.IsGameOver())
+        if (level != null && level.GetWinner().HasValue)
         {
-            RestartLevel();
+            GameOver(level.GetWinner().Value);
         }
         if (currentAction != null && sideToController[level.CurrentSide].IsTurnEnded)
         {
@@ -42,11 +43,30 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void StartLevel(LevelType type)
+    public void StartLevel(LevelData data)
     {
-        level = typeToLevel[type];
-        levelUi.Show();
+        this.type = data.Type;
         Init();
+        uiManager.ShowLevel();
+    }
+
+    public void RestartLevel()
+    {
+        Reset();
+        Init();
+        uiManager.ShowLevel();
+    }
+
+    public void GameOver(BugSide winner)
+    {
+        Reset();
+        uiManager.ShowGameOver(winner);
+    }
+
+    public void ExitToMenu()
+    {
+        Reset();
+        uiManager.ShowMenu();
     }
 
     public void EndTurn()
@@ -62,40 +82,40 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(currentAction);
     }
 
-    
-    public void RestartLevel()
-    {
-        Reset();
-        Init();
-    }
-
-    public void EndLevel()
-    {
-        Reset();
-        level = null;
-    }
-
     private void Reset()
     {
-        this.map.Clear();
-        this.level.Reset();
-
         this.greenController.EndTurn();
         this.redController.EndTurn();
-        
+
+        if (currentAction != null)
+        {
+            StopCoroutine(currentAction);
+            currentAction = null;
+        }
+
         this.greenController.Reset();
         this.redController.Reset();
+
+        if (level != null)
+        {
+            this.level.Reset();
+        }
+        this.map.Clear();
+        level = null;
     }
 
     private void Init()
     {
+        level = typeToLevel[type];
+
         this.map.Init();
-        this.level.Init(map);
-        this.greenController.Init(level, BugSide.GREEN);
-        this.redController.Init(level, BugSide.RED);
 
         this.bugGenerator.Init(map);
         this.bugGenerator.Generate(3);
+
+        this.level.Init(map);
+        this.greenController.Init(level, BugSide.GREEN);
+        this.redController.Init(level, BugSide.RED);
 
         BaseController controller = this.sideToController[level.CurrentSide];
         controller.StartTurn();
