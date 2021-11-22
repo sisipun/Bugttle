@@ -4,63 +4,46 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private ControllerManager controllerManager;
     [SerializeField] private UiManager uiManager;
     [SerializeField] private Map map;
     [SerializeField] private BaseLevel[] levels;
-
     [SerializeField] private BugGenerator bugGenerator;
-    [SerializeField] private BaseController greenController;
-    [SerializeField] private BaseController redController;
 
-    private Dictionary<BugSide, BaseController> sideToController;
     private Dictionary<LevelType, BaseLevel> typeToLevel;
-    private IEnumerator currentAction;
     private BaseLevel level;
-    private LevelType type;
+    private LevelData levelData;
 
     void Awake()
     {
-        this.sideToController = new Dictionary<BugSide, BaseController>();
-        this.sideToController.Add(BugSide.GREEN, greenController);
-        this.sideToController.Add(BugSide.RED, redController);
-
         this.typeToLevel = new Dictionary<LevelType, BaseLevel>();
         foreach (BaseLevel level in levels)
         {
+            level.OnEndTurn += OnEndTurn;
+            level.OnGameOver += OnGameOver;
             this.typeToLevel.Add(level.Type(), level);
         }
     }
 
-    void Update()
-    {
-        if (level != null && level.GetWinner().HasValue)
-        {
-            GameOver(level.GetWinner().Value);
-        }
-        if (currentAction != null && sideToController[level.CurrentSide].IsTurnEnded)
-        {
-            EndTurn();
-        }
-    }
-
     public void StartLevel(LevelData data)
-    {
-        this.type = data.Type;
-        Init();
+    {        
+        this.map.Init();
+
+        this.bugGenerator.Init(map);
+        this.bugGenerator.Generate(3);
+
+        this.levelData = data;
+        this.level = typeToLevel[levelData.Type];
+        this.level.Init(map);
+
         uiManager.ShowLevel();
+        controllerManager.StartLevel(level);
     }
 
     public void RestartLevel()
     {
         Reset();
-        Init();
-        uiManager.ShowLevel();
-    }
-
-    public void GameOver(BugSide winner)
-    {
-        Reset();
-        uiManager.ShowGameOver(winner);
+        StartLevel(levelData);
     }
 
     public void ExitToMenu()
@@ -69,57 +52,22 @@ public class LevelManager : MonoBehaviour
         uiManager.ShowMenu();
     }
 
-    public void EndTurn()
+    private void OnGameOver(BugSide winner)
     {
-        StopCoroutine(currentAction);
-        BaseController controller = sideToController[level.CurrentSide];
-        sideToController[level.CurrentSide].EndTurn();
+        controllerManager.EndLevel();
+        uiManager.ShowGameOver(winner);
+    }
 
-        this.level.EndTurn();
-
-        sideToController[level.CurrentSide].StartTurn();
-        this.currentAction = sideToController[level.CurrentSide].TurnAction();
-        StartCoroutine(currentAction);
+    private void OnEndTurn(BugSide ended, BugSide started)
+    {
+        controllerManager.EndTurn();
+        controllerManager.StartTurn(started);
     }
 
     private void Reset()
     {
-        this.greenController.EndTurn();
-        this.redController.EndTurn();
-
-        if (currentAction != null)
-        {
-            StopCoroutine(currentAction);
-            currentAction = null;
-        }
-
-        this.greenController.Reset();
-        this.redController.Reset();
-
-        if (level != null)
-        {
-            this.level.Reset();
-        }
+        controllerManager.EndLevel();
+        this.level.Reset();
         this.map.Clear();
-        level = null;
-    }
-
-    private void Init()
-    {
-        level = typeToLevel[type];
-
-        this.map.Init();
-
-        this.bugGenerator.Init(map);
-        this.bugGenerator.Generate(3);
-
-        this.level.Init(map);
-        this.greenController.Init(level, BugSide.GREEN);
-        this.redController.Init(level, BugSide.RED);
-
-        BaseController controller = this.sideToController[level.CurrentSide];
-        controller.StartTurn();
-        this.currentAction = controller.TurnAction();
-        StartCoroutine(this.currentAction);
     }
 }

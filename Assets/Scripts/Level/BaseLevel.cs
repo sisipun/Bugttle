@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public abstract class BaseLevel : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public abstract class BaseLevel : MonoBehaviour
     public BugSide CurrentSide => currentSide;
     public Map LevelMap => map;
     public int RoundNumber => (turnNumber + 1) / 2;
+
+    public UnityAction<BugSide, BugSide> OnEndTurn;
+    public UnityAction<BugSide> OnGameOver;
 
     public virtual void Init(Map map)
     {
@@ -40,9 +44,9 @@ public abstract class BaseLevel : MonoBehaviour
         Reset();
     }
 
-    public abstract BugSide? GetWinner();
-
     public abstract LevelType Type();
+
+    protected abstract void CheckForGameOver();
 
     public List<Bug> GetBugs(BugSide side)
     {
@@ -114,11 +118,13 @@ public abstract class BaseLevel : MonoBehaviour
         {
             map.RemoveBug(target.Position);
             bugs[target.Side].Remove(target);
+            CheckForGameOver();
         }
     }
 
     public void EndTurn()
     {
+        BugSide endedSide = currentSide;
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
         if (currentState == LevelState.TURN)
         {
@@ -137,6 +143,8 @@ public abstract class BaseLevel : MonoBehaviour
         }
 
         CheckForStateChange();
+        OnEndTurn.Invoke(endedSide, currentSide);
+        CheckForGameOver();
     }
 
     public void Reset()

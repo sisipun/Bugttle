@@ -23,9 +23,9 @@ public class UserController : BaseController
         this.selectedPossibleAttacks = new List<Vector2Int>();
     }
 
-    public override void StartTurn()
+    public override void OnStartTurn()
     {
-        base.StartTurn();
+        base.OnStartTurn();
         ui.Show();
     }
 
@@ -38,9 +38,9 @@ public class UserController : BaseController
         }
     }
 
-    public override void EndTurn()
+    public override void OnEndTurn()
     {
-        base.EndTurn();
+        base.OnEndTurn();
         ui.LevelHover.Clear();
         ui.LevelPointer.Clear();
         ui.Hide();
@@ -52,9 +52,9 @@ public class UserController : BaseController
         this.ui.Reset();
     }
 
-    public void SetTurnEnded()
+    public void EndTurn()
     {
-        turnEnded = true;
+        level.EndTurn();
     }
 
     private void HandleInputIteration()

@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 327306551}
   - component: {fileID: 327306550}
   - component: {fileID: 327306553}
+  - component: {fileID: 327306554}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -365,14 +366,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4a4164922d875a4ea5ccd4d14c23a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controllerManager: {fileID: 327306554}
   uiManager: {fileID: 327306553}
   map: {fileID: 889828225}
   levels:
   - {fileID: 1275918800}
   - {fileID: 1613925106}
   bugGenerator: {fileID: 327306550}
-  greenController: {fileID: 2125972987}
-  redController: {fileID: 1028318047}
 --- !u!4 &327306552
 Transform:
   m_ObjectHideFlags: 0
@@ -402,6 +402,20 @@ MonoBehaviour:
   menuUi: {fileID: 1664286740}
   levelUi: {fileID: 1182204785}
   gameOverUi: {fileID: 149913649}
+--- !u!114 &327306554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327306549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2091a587b9f7944fb8a9504640e77b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  greenController: {fileID: 2125972987}
+  redController: {fileID: 1028318047}
 --- !u!1 &341019228
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,7 +1046,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2125972987}
         m_TargetAssemblyTypeName: UserController, Assembly-CSharp
-        m_MethodName: SetTurnEnded
+        m_MethodName: EndTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

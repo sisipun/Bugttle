@@ -16,12 +16,7 @@ public class AiController : BaseController
             yield return StartCoroutine(MakeBugTurn(bug));
         }
 
-        turnEnded = true;
-    }
-
-    public override void EndTurn()
-    {
-        base.EndTurn();
+        level.EndTurn();
     }
 
     private IEnumerator MakeBugTurn(Bug bug)
