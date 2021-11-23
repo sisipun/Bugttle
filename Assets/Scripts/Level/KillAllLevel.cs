@@ -9,11 +9,11 @@ public class KillAllLevel : BaseLevel
     {
         if (GetBugs(BugSide.RED).Count == 0)
         {
-            OnGameOver.Invoke(BugSide.GREEN);
+            OnGameOver(BugSide.GREEN);
         }
         else if (GetBugs(BugSide.GREEN).Count == 0)
         {
-            OnGameOver.Invoke(BugSide.RED);
+            OnGameOver(BugSide.RED);
         }
     }
 }

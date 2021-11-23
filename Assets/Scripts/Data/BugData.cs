@@ -3,7 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewBug", menuName = "Scriptable Objects/New Bug")]
 public class BugData : ScriptableObject
 {
-
     [SerializeField] private GameObject prefub;
     [SerializeField] private Sprite userBody;
     [SerializeField] private Color userColor;

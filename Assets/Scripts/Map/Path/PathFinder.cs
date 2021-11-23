@@ -5,7 +5,7 @@ class PathFinder
 {
     public static Path Find(MapCell[,] map, Vector2Int source, Vector2Int target, int maxCost)
     {
-        if (source == target)
+        if (source == target || maxCost == 0)
         {
             return new Path();
         }
@@ -23,12 +23,6 @@ class PathFinder
             points.Remove(priorityPoint);
 
             Vector2Int point = priorityPoint.Key;
-            if (point == target)
-            {
-                // TODO remove comment if performance problem. Now we try to find best solution
-                // break;
-            }
-
             List<Vector2Int> neighbors = GetNeighbors(map, point);
             foreach (Vector2Int neighbor in neighbors)
             {

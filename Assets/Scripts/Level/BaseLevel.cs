@@ -30,7 +30,7 @@ public abstract class BaseLevel : MonoBehaviour
         this.bugs = new Dictionary<BugSide, List<Bug>>();
         bugs[BugSide.GREEN] = new List<Bug>();
         bugs[BugSide.RED] = new List<Bug>();
-        for(int x = 0; x < map.Size; x++)
+        for (int x = 0; x < map.Size; x++)
         {
             for (int y = 0; y < map.Size; y++)
             {
@@ -55,52 +55,52 @@ public abstract class BaseLevel : MonoBehaviour
 
     public Dictionary<Vector2Int, Path> GetPossibleMoves(Bug bug)
     {
-        Dictionary<Vector2Int, Path> moves = new Dictionary<Vector2Int, Path>();
-        if (bug.StepsLeft == 0 || currentState == LevelState.PICK_BUGS)
-        {
-            return moves;
-        }
-        else if (currentState == LevelState.SET_POSITIONS)
+        if (currentState == LevelState.SET_POSITIONS)
         {
             return GetInitialPositions();
         }
-
-        for (int x = 0; x < map.Size; x++)
+        else
         {
-            for (int y = 0; y < map.Size; y++)
+            Dictionary<Vector2Int, Path> moves = new Dictionary<Vector2Int, Path>();
+            for (int x = 0; x < map.Size; x++)
             {
-                Vector2Int move = new Vector2Int(x, y);
-                Path path = map.FindPath(bug.Position, move, bug.StepsLeft);
-                if (path.IsExists)
+                for (int y = 0; y < map.Size; y++)
                 {
-                    moves.Add(move, path);
+                    Vector2Int move = new Vector2Int(x, y);
+                    Path path = map.FindPath(bug.Position, move, bug.StepsLeft);
+                    if (path.IsExists)
+                    {
+                        moves.Add(move, path);
+                    }
                 }
             }
+            return moves;
         }
-        return moves;
     }
 
     public List<Vector2Int> GetPossibleAttacks(Bug bug)
     {
-        List<Vector2Int> attacks = new List<Vector2Int>();
-        if (bug.AttacksLeft == 0 || currentState != LevelState.TURN)
+        if (currentState != LevelState.TURN)
         {
-            return attacks;
+            return new List<Vector2Int>();
         }
-
-        for (int x = 0; x < map.Size; x++)
+        else
         {
-            for (int y = 0; y < map.Size; y++)
+            List<Vector2Int> attacks = new List<Vector2Int>();
+            for (int x = 0; x < map.Size; x++)
             {
-                int range = Mathf.Abs(bug.Position.x - x) + Mathf.Abs(bug.Position.y - y);
-                Bug attacked = map.GetBug(x, y);
-                if (range <= bug.AttackRange && attacked != null && attacked.Side != bug.Side)
+                for (int y = 0; y < map.Size; y++)
                 {
-                    attacks.Add(new Vector2Int(x, y));
+                    int range = Mathf.Abs(bug.Position.x - x) + Mathf.Abs(bug.Position.y - y);
+                    Bug attacked = map.GetBug(x, y);
+                    if (range <= bug.AttackRange && attacked != null && attacked.Side != bug.Side)
+                    {
+                        attacks.Add(new Vector2Int(x, y));
+                    }
                 }
             }
+            return attacks;
         }
-        return attacks;
     }
 
     public void Move(Bug bug, Vector2Int destination, Path path)
@@ -143,7 +143,7 @@ public abstract class BaseLevel : MonoBehaviour
         }
 
         CheckForStateChange();
-        OnEndTurn.Invoke(endedSide, currentSide);
+        OnEndTurn(endedSide, currentSide);
         CheckForGameOver();
     }
 
@@ -156,16 +156,7 @@ public abstract class BaseLevel : MonoBehaviour
 
     private void CheckForStateChange()
     {
-        if (currentState == LevelState.TURN || currentSide != initialSide)
-        {
-            return;
-        }
-
-        if (currentState == LevelState.PICK_BUGS)
-        {
-            currentState = LevelState.SET_POSITIONS;
-        }
-        else if (currentState == LevelState.SET_POSITIONS)
+        if (currentState == LevelState.SET_POSITIONS && currentSide == initialSide)
         {
             currentState = LevelState.TURN;
         }
