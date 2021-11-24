@@ -11,14 +11,14 @@ public abstract class BaseLevel : MonoBehaviour
     protected int initialZoneSize;
 
     protected Map map;
-    protected int turnNumber;
+    protected int roundNumber;
     protected Dictionary<BugSide, List<Bug>> bugs;
 
     public BugSide CurrentSide => currentSide;
     public Map LevelMap => map;
-    public int RoundNumber => (turnNumber + 1) / 2;
+    public int RoundNumber => roundNumber;
 
-    public UnityAction<BugSide, BugSide> OnEndTurn;
+    public UnityAction<BugSide> OnEndTurn;
     public UnityAction<BugSide> OnGameOver;
 
     public virtual void Init(Map map)
@@ -116,34 +116,27 @@ public abstract class BaseLevel : MonoBehaviour
         target.Damage();
         if (target.IsDead)
         {
-            map.RemoveBug(target.Position);
-            bugs[target.Side].Remove(target);
-            CheckForGameOver();
+            Kill(target);
         }
+    }
+
+    public void Kill(Bug bug)
+    {
+        map.RemoveBug(bug.Position);
+        bugs[bug.Side].Remove(bug);
+        CheckForGameOver();
     }
 
     public void EndTurn()
     {
-        BugSide endedSide = currentSide;
-        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
-        if (currentState == LevelState.TURN)
+        if (currentState == LevelState.TURN && currentSide != initialSide)
         {
-            turnNumber++;
-            for (int x = 0; x < map.Size; x++)
-            {
-                for (int y = 0; y < map.Size; y++)
-                {
-                    Bug bug = map.GetBug(x, y);
-                    if (bug != null && bug.Side == currentSide)
-                    {
-                        bug.StartTurn();
-                    }
-                }
-            }
+            EndRound();
         }
 
+        SwitchSide();
         CheckForStateChange();
-        OnEndTurn(endedSide, currentSide);
+        OnEndTurn(currentSide);
         CheckForGameOver();
     }
 
@@ -151,10 +144,31 @@ public abstract class BaseLevel : MonoBehaviour
     {
         this.currentState = initialState;
         this.currentSide = initialSide;
-        this.turnNumber = 1;
+        this.roundNumber = 1;
     }
 
-    private void CheckForStateChange()
+    protected virtual void EndRound()
+    {
+        roundNumber++;
+    }
+
+    protected void SwitchSide()
+    {
+        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
+        for (int x = 0; x < map.Size; x++)
+        {
+            for (int y = 0; y < map.Size; y++)
+            {
+                Bug bug = map.GetBug(x, y);
+                if (bug != null && bug.Side == currentSide)
+                {
+                    bug.StartTurn();
+                }
+            }
+        }
+    }
+
+    protected void CheckForStateChange()
     {
         if (currentState == LevelState.SET_POSITIONS && currentSide == initialSide)
         {

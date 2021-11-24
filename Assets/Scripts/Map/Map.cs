@@ -31,7 +31,24 @@ public class Map : MonoBehaviour
 
     public MapCell GetCell(Vector2Int position)
     {
-        return map[position.x, position.y];
+        return GetCell(position.x, position.y);
+    }
+
+    public MapCell GetCell(int x, int y)
+    {
+        return map[x, y];
+    }
+
+    public void SetCell(int x, int y, CellData data)
+    {
+        SetCell(new Vector2Int(x, y), data);
+    }
+
+    public void SetCell(Vector2Int position, CellData data)
+    {
+        Bug bug = GetBug(position);
+        map[position.x, position.y] = new MapCell(position, data, bug);
+        background.SetTile(position, data.Tile);
     }
 
     public Bug GetBug(Vector2Int position)

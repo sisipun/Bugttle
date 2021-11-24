@@ -30,6 +30,7 @@ class PathFinder
                 int neighborCost = cost[point] + neighborCell.Cost;
                 if (
                     !neighborCell.HasBug
+                    && neighborCell.Cost >= 0
                     && neighborCost <= maxCost
                     && (!cost.ContainsKey(neighbor) || neighborCost < cost[neighbor]))
                 {

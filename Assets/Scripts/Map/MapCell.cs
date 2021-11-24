@@ -32,4 +32,12 @@ public class MapCell
         this.cost = data.Cost;
         this.bug = null;
     }
+
+    public MapCell(Vector2Int position, CellData data, Bug bug)
+    {
+        this.tile = data.Tile;
+        this.position = position;
+        this.cost = data.Cost;
+        this.bug = null;
+    }
 }

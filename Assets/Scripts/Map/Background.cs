@@ -24,6 +24,11 @@ public class Background : MonoBehaviour
         }
     }
 
+    public void SetTile(Vector2Int position, TileBase tile)
+    {
+        tilemap.SetTile(((Vector3Int)position), tile);
+    }
+
     public void Clear()
     {
         for (int x = 0; x < size; x++)

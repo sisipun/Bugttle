@@ -58,7 +58,7 @@ public class LevelManager : MonoBehaviour
         uiManager.ShowGameOver(winner);
     }
 
-    private void OnEndTurn(BugSide ended, BugSide started)
+    private void OnEndTurn(BugSide started)
     {
         controllerManager.EndTurn();
         controllerManager.StartTurn(started);

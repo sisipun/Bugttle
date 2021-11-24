@@ -33,7 +33,7 @@ public class UserController : BaseController
     {
         while (true)
         {
-            HandleInputIteration();
+            HandleInput();
             yield return null;
         }
     }
@@ -57,7 +57,7 @@ public class UserController : BaseController
         level.EndTurn();
     }
 
-    private void HandleInputIteration()
+    private void HandleInput()
     {
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int mouseCell = ((Vector2Int)level.LevelMap.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
