@@ -100,7 +100,7 @@ public class UserController : BaseController
 
         if (selected == null && clicked != null)
         {
-            SetSelected(clicked.Side == side ? clicked : null);
+            SetSelected(clicked);
             return;
         }
 
@@ -123,7 +123,7 @@ public class UserController : BaseController
             }
             else
             {
-                SetSelected(clicked.Side == side ? clicked : null);
+                SetSelected(clicked);
             }
             return;
         }
@@ -131,6 +131,7 @@ public class UserController : BaseController
 
     private void SetSelected(Bug bug)
     {
+        ui.BugInfo.Hide();
         ui.LevelHover.Clear();
         selectedPossibleMoves.Clear();
         selectedPossibleAttacks.Clear();
@@ -142,14 +143,18 @@ public class UserController : BaseController
         selected = bug;
         if (selected != null)
         {
-            selected.SetOutlined();
-            foreach (KeyValuePair<Vector2Int, Path> move in level.GetPossibleMoves(selected))
+            if (bug.Side == side)
             {
-                selectedPossibleMoves.Add(move.Key, move.Value);
+                selected.SetOutlined();
+                foreach (KeyValuePair<Vector2Int, Path> move in level.GetPossibleMoves(selected))
+                {
+                    selectedPossibleMoves.Add(move.Key, move.Value);
+                }
+                selectedPossibleAttacks.AddRange(level.GetPossibleAttacks(selected));
+                ui.LevelHover.SetMovable(selectedPossibleMoves.Keys);
+                ui.LevelHover.SetAttackable(selectedPossibleAttacks);
             }
-            selectedPossibleAttacks.AddRange(level.GetPossibleAttacks(selected));
-            ui.LevelHover.SetMovable(selectedPossibleMoves.Keys);
-            ui.LevelHover.SetAttackable(selectedPossibleAttacks);
+            ui.BugInfo.Show(selected);
         }
     }
 }

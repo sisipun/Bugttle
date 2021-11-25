@@ -22,6 +22,9 @@ public class Bug : MonoBehaviour
     public Vector2Int Position => position;
     public int StepsLeft => stepsLeft;
     public int AttacksLeft => attacksLeft;
+    public Sprite Sprite => spriteRenderer.sprite;
+    public int Health => health.Count;
+    public int MoveRange => moveRange;
     public int AttackRange => attackRange;
 
     void Awake()

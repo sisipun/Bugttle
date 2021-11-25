@@ -5,9 +5,11 @@ public class PlayerUi : BaseUi
 {
     [SerializeField] private Hover hover;
     [SerializeField] private Pointer pointer;
+    [SerializeField] private BugInfo bugInfo;
 
     public Hover LevelHover => hover;
     public Pointer LevelPointer => pointer;
+    public BugInfo BugInfo => bugInfo;
 
     public void Init(Map map)
     {
@@ -19,5 +21,6 @@ public class PlayerUi : BaseUi
     {
         this.hover.Clear();
         this.pointer.Clear();
+        this.bugInfo.Hide();
     }
 }

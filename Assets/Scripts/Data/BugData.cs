@@ -4,12 +4,8 @@ using UnityEngine;
 public class BugData : ScriptableObject
 {
     [SerializeField] private GameObject prefub;
-    [SerializeField] private Sprite userBody;
-    [SerializeField] private Color userColor;
     [SerializeField] private Sprite greenBody;
     [SerializeField] private Color greenColor;
-    [SerializeField] private Sprite aiBody;
-    [SerializeField] private Color aiColor;
     [SerializeField] private Sprite redBody;
     [SerializeField] private Color redColor;
     [SerializeField] private int moveRange;
@@ -17,10 +13,6 @@ public class BugData : ScriptableObject
     [SerializeField] private int health;
 
     public GameObject Prefub => prefub;
-    public Sprite UserBody => userBody;
-    public Color UserColor => userColor;
-    public Sprite AiBody => aiBody;
-    public Color AiColor => aiColor;
     public Sprite GreenBody => greenBody;
     public Color GreenColor => greenColor;
     public Sprite RedBody => redBody;

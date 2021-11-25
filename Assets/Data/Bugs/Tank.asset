@@ -13,12 +13,8 @@ MonoBehaviour:
   m_Name: Tank
   m_EditorClassIdentifier: 
   prefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
-  userBody: {fileID: 21300000, guid: e3f17e68c79df31479a1a0390b77dabc, type: 3}
-  userColor: {r: 0.26666668, g: 0.9529412, b: 0.5686275, a: 1}
   greenBody: {fileID: 21300000, guid: e3f17e68c79df31479a1a0390b77dabc, type: 3}
   greenColor: {r: 0.26666668, g: 0.9529412, b: 0.5686275, a: 1}
-  aiBody: {fileID: 21300000, guid: 6c48e6c1a6d15674cb9f942855823223, type: 3}
-  aiColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
   redBody: {fileID: 21300000, guid: 6c48e6c1a6d15674cb9f942855823223, type: 3}
   redColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
   moveRange: 2

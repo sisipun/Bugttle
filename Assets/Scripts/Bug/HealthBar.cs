@@ -11,6 +11,7 @@ public class HealthBar : MonoBehaviour
     private int health;
 
     public bool IsDead => health <= 0;
+    public int Count => health;
 
     void Awake()
     {
