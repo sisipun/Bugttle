@@ -43,11 +43,6 @@ public class BattleRoyal : BaseLevel
 
     private void CellToFire(int x, int y)
     {
-        Bug bug = map.GetBug(x, y);
-        if (bug != null)
-        {
-            Kill(bug);
-        }
         map.SetCell(x, y, fireCell);
     }
 }

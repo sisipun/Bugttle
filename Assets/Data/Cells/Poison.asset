@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b04bec0b3d96b5d43b284932086ed44f, type: 3}
-  m_Name: Ground
+  m_Name: Poison
   m_EditorClassIdentifier: 
-  cellBehaviour: {fileID: 11400000, guid: 1a96e8035f3556b4f9dc9482fa032277, type: 2}
-  tile: {fileID: 11400000, guid: 741700d0cb28c1545a762f46bbf79fe8, type: 2}
+  cellBehaviour: {fileID: 11400000, guid: 24ffcd10236f9694484c5372d94c225f, type: 2}
+  tile: {fileID: 11400000, guid: 56208543e0d9c6247aa4e156488a923a, type: 2}
   cost: 1

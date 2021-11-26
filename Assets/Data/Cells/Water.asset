@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b04bec0b3d96b5d43b284932086ed44f, type: 3}
-  m_Name: Ground
+  m_Name: Water
   m_EditorClassIdentifier: 
   cellBehaviour: {fileID: 11400000, guid: 1a96e8035f3556b4f9dc9482fa032277, type: 2}
-  tile: {fileID: 11400000, guid: 741700d0cb28c1545a762f46bbf79fe8, type: 2}
-  cost: 1
+  tile: {fileID: 11400000, guid: 7ec956d4906208e4f8032c2398b4af93, type: 2}
+  cost: -1

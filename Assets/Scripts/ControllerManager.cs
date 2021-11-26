@@ -42,7 +42,8 @@ public class ControllerManager : MonoBehaviour
 
     public void EndTurn()
     {
-        if (currentAction != null) {
+        if (currentAction != null)
+        {
             StopCoroutine(currentAction);
             sideToController[currentActionSide].OnEndTurn();
             currentAction = null;

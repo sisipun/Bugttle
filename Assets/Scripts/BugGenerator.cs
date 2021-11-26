@@ -18,7 +18,7 @@ public class BugGenerator : MonoBehaviour
             Vector2Int position = new Vector2Int(0, y);
             BugData data = bugs[Random.Range(0, bugs.Length)];
             Bug bug = Instantiate<GameObject>(data.Prefub).GetComponent<Bug>();
-            bug.Init(position,BugSide.GREEN, data);
+            bug.Init(position, BugSide.GREEN, data);
             map.SetBug(position, bug);
         }
 
@@ -27,7 +27,7 @@ public class BugGenerator : MonoBehaviour
             Vector2Int position = new Vector2Int(map.Size - 1, map.Size - 1 - y);
             BugData data = bugs[Random.Range(0, bugs.Length)];
             Bug bug = Instantiate<GameObject>(data.Prefub).GetComponent<Bug>();
-            bug.Init(position,BugSide.RED, data);
+            bug.Init(position, BugSide.RED, data);
             map.SetBug(position, bug);
         }
     }

@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 7512556909287838256}
   - component: {fileID: 7415263508359228450}
   m_Layer: 5
-  m_Name: BugCard
+  m_Name: Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

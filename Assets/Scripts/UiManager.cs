@@ -13,7 +13,7 @@ public class UiManager : MonoBehaviour
         menuUi.Show();
         levelUi.Hide();
         gameOverUi.Hide();
-    } 
+    }
 
     public void ShowLevel()
     {

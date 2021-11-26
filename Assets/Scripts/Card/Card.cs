@@ -8,7 +8,7 @@ public class Card : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
     [SerializeField] private Image image;
 
     public UnityAction<Card> OnClick;
-    
+
     private CardData data;
 
     public void Init(CardData data)

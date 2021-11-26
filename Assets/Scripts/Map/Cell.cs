@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MapCell
+public class Cell
 {
     private TileBase tile;
     private Vector2Int position;
     private int cost;
     private Bug bug;
+    private CellBehaviour cellBehaviour;
 
     public TileBase Tile => tile;
     public Vector2Int Position => position;
@@ -25,19 +26,26 @@ public class MapCell
         }
     }
 
-    public MapCell(Vector2Int position, CellData data)
+    public Cell(Vector2Int position, CellData data)
     {
         this.tile = data.Tile;
         this.position = position;
         this.cost = data.Cost;
+        this.cellBehaviour = data.CellBehaviour;
         this.bug = null;
     }
 
-    public MapCell(Vector2Int position, CellData data, Bug bug)
+    public Cell(Vector2Int position, CellData data, Bug bug)
     {
         this.tile = data.Tile;
         this.position = position;
         this.cost = data.Cost;
-        this.bug = null;
+        this.cellBehaviour = data.CellBehaviour;
+        this.bug = bug;
+    }
+
+    public void OnEndRound()
+    {
+        cellBehaviour.OnEndRound(this);
     }
 }

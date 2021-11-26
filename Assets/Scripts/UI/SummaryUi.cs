@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BugInfo : MonoBehaviour
+public class SummaryUi : MonoBehaviour
 {
     [SerializeField] private Image image;
     [SerializeField] private Text attackRangeText;

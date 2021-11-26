@@ -7,15 +7,16 @@ public class Bug : MonoBehaviour
 
     [SerializeField] private HealthBar health;
 
-    private SpriteRenderer spriteRenderer;
+    protected SpriteRenderer spriteRenderer;
 
-    private BugSide side;
-    private int moveRange;
-    private int attackRange;
+    protected BugSide side;
+    protected int moveRange;
+    protected int attackRange;
+    protected int attacksCount;
 
-    private Vector2Int position;
-    private int stepsLeft;
-    private int attacksLeft;
+    protected Vector2Int position;
+    protected int stepsLeft;
+    protected int attacksLeft;
 
     public BugSide Side => side;
     public bool IsDead => health.IsDead;
@@ -39,7 +40,8 @@ public class Bug : MonoBehaviour
         this.moveRange = data.MoveRange;
         this.attackRange = data.AttackRange;
         this.stepsLeft = moveRange;
-        this.attacksLeft = 1;
+        this.attacksCount = data.AttacksCount;
+        this.attacksLeft = attacksCount;
         this.spriteRenderer.sprite = side == BugSide.GREEN ? data.GreenBody : data.RedBody;
         this.health.Init(data.Health, side == BugSide.GREEN ? data.GreenColor : data.RedColor);
     }
@@ -49,7 +51,7 @@ public class Bug : MonoBehaviour
         health.Damage(1);
     }
 
-    public void Attack()
+    public virtual void Attack()
     {
         attacksLeft--;
         stepsLeft = 0;
@@ -58,7 +60,7 @@ public class Bug : MonoBehaviour
     public void StartTurn()
     {
         stepsLeft = moveRange;
-        attacksLeft = 1;
+        attacksLeft = attacksCount;
     }
 
     public void Move(Vector2Int newPosition, Path path)

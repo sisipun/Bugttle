@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour
     }
 
     public void StartLevel(LevelData data)
-    {        
+    {
         this.map.Init();
 
         this.bugGenerator.Init(map);

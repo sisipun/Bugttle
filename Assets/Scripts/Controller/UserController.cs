@@ -131,7 +131,7 @@ public class UserController : BaseController
 
     private void SetSelected(Bug bug)
     {
-        ui.BugInfo.Hide();
+        ui.Summary.Hide();
         ui.LevelHover.Clear();
         selectedPossibleMoves.Clear();
         selectedPossibleAttacks.Clear();
@@ -154,7 +154,7 @@ public class UserController : BaseController
                 ui.LevelHover.SetMovable(selectedPossibleMoves.Keys);
                 ui.LevelHover.SetAttackable(selectedPossibleAttacks);
             }
-            ui.BugInfo.Show(selected);
+            ui.Summary.Show(selected);
         }
     }
 }

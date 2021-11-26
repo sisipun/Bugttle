@@ -10,6 +10,7 @@ public class BugData : ScriptableObject
     [SerializeField] private Color redColor;
     [SerializeField] private int moveRange;
     [SerializeField] private int attackRange;
+    [SerializeField] private int attacksCount;
     [SerializeField] private int health;
 
     public GameObject Prefub => prefub;
@@ -19,5 +20,6 @@ public class BugData : ScriptableObject
     public Color RedColor => redColor;
     public int MoveRange => moveRange;
     public int AttackRange => attackRange;
+    public int AttacksCount => attacksCount;
     public int Health => health;
 }

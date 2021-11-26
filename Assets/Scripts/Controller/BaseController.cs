@@ -15,7 +15,7 @@ public abstract class BaseController : MonoBehaviour
     public virtual void OnStartTurn()
     {
     }
-    
+
     public abstract IEnumerator TurnAction();
 
     public virtual void OnEndTurn()

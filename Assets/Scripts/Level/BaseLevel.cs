@@ -80,7 +80,7 @@ public abstract class BaseLevel : MonoBehaviour
 
     public List<Vector2Int> GetPossibleAttacks(Bug bug)
     {
-        if (currentState != LevelState.TURN)
+        if (bug.AttacksLeft == 0 || currentState != LevelState.TURN)
         {
             return new List<Vector2Int>();
         }
@@ -135,6 +135,7 @@ public abstract class BaseLevel : MonoBehaviour
         }
 
         SwitchSide();
+        CheckForBugState();
         CheckForStateChange();
         OnEndTurn(currentSide);
         CheckForGameOver();
@@ -150,17 +151,31 @@ public abstract class BaseLevel : MonoBehaviour
     protected virtual void EndRound()
     {
         roundNumber++;
+        map.OnEndRound();
     }
 
     protected void SwitchSide()
     {
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
+    }
+
+    protected void CheckForBugState()
+    {
         for (int x = 0; x < map.Size; x++)
         {
             for (int y = 0; y < map.Size; y++)
             {
                 Bug bug = map.GetBug(x, y);
-                if (bug != null && bug.Side == currentSide)
+                if (bug == null)
+                {
+                    continue;
+                }
+
+                if (bug.IsDead)
+                {
+                    Kill(bug);
+                }
+                else if (bug.Side == currentSide)
                 {
                     bug.StartTurn();
                 }

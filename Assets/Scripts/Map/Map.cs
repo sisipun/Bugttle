@@ -6,18 +6,18 @@ public class Map : MonoBehaviour
     [SerializeField] private CellData[] cells;
     [SerializeField] private Background background;
 
-    private MapCell[,] map;
+    private Cell[,] map;
 
     public int Size => size;
 
     public void Init()
     {
-        this.map = new MapCell[size, size];
+        this.map = new Cell[size, size];
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
-                MapCell cell = new MapCell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
+                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
                 map[x, y] = cell;
             }
         }
@@ -29,12 +29,12 @@ public class Map : MonoBehaviour
         return PathFinder.Find(map, soruce, target, maxCost);
     }
 
-    public MapCell GetCell(Vector2Int position)
+    public Cell GetCell(Vector2Int position)
     {
         return GetCell(position.x, position.y);
     }
 
-    public MapCell GetCell(int x, int y)
+    public Cell GetCell(int x, int y)
     {
         return map[x, y];
     }
@@ -47,7 +47,7 @@ public class Map : MonoBehaviour
     public void SetCell(Vector2Int position, CellData data)
     {
         Bug bug = GetBug(position);
-        map[position.x, position.y] = new MapCell(position, data, bug);
+        map[position.x, position.y] = new Cell(position, data, bug);
         background.SetTile(position, data.Tile);
     }
 
@@ -95,6 +95,17 @@ public class Map : MonoBehaviour
         return background.WorldToCell(position);
     }
 
+    public void OnEndRound()
+    {
+        for (int x = 0; x < Size; x++)
+        {
+            for (int y = 0; y < Size; y++)
+            {
+                map[x, y].OnEndRound();
+            }
+        }
+    }
+
     public void Clear()
     {
         for (int x = 0; x < size; x++)
@@ -102,7 +113,7 @@ public class Map : MonoBehaviour
             for (int y = 0; y < size; y++)
             {
                 RemoveBug(x, y);
-                MapCell cell = new MapCell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
+                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
                 map[x, y] = cell;
             }
         }

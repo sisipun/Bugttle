@@ -7,11 +7,8 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b04bec0b3d96b5d43b284932086ed44f, type: 3}
-  m_Name: Ground
+  m_Script: {fileID: 11500000, guid: 0ccb6eef6b678884a8bd93c7c46799fe, type: 3}
+  m_Name: DamageCellBehaviour
   m_EditorClassIdentifier: 
-  cellBehaviour: {fileID: 11400000, guid: 1a96e8035f3556b4f9dc9482fa032277, type: 2}
-  tile: {fileID: 11400000, guid: 741700d0cb28c1545a762f46bbf79fe8, type: 2}
-  cost: 1

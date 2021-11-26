@@ -19,4 +19,5 @@ MonoBehaviour:
   redColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
   moveRange: 2
   attackRange: 1
+  attacksCount: 1
   health: 5
