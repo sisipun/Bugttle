@@ -12,14 +12,10 @@ public class PlayerController : BaseController
     private SkillType selectedSkillType;
     private List<Vector2Int> selectedTargets;
 
-    void Start()
-    {
-        ui.Hide();
-    }
-
     public override void Init(BaseLevel level, BugSide side)
     {
         base.Init(level, side);
+        Reset();
         this.ui.Init(level.Map);
         this.previouseMouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selected = null;
@@ -45,14 +41,13 @@ public class PlayerController : BaseController
     public override void OnEndTurn()
     {
         base.OnEndTurn();
-        ui.LevelHover.Clear();
-        ui.LevelPointer.Clear();
-        ui.Hide();
+        Reset();
         SetSelected(null);
     }
 
     public override void Reset()
     {
+        this.ui.Hide();
         this.ui.Reset();
     }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fedae4c4028d9b47a905f5808f8b087, type: 3}
   m_Name: Fly
   m_EditorClassIdentifier: 
-  prefub: {fileID: 2659671369643558156, guid: 3aaa5b65a6019174c8964f38c240c0fb, type: 3}
+  prefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
   greenBody: {fileID: 21300000, guid: 59719ad9392120d4d8d2afbb433edfec, type: 3}
   greenColor: {r: 0.26666668, g: 0.9529412, b: 0.5686275, a: 1}
   redBody: {fileID: 21300000, guid: 50986feed03de794db4e782dc1b9bfb1, type: 3}

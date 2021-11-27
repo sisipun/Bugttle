@@ -10,13 +10,9 @@ public class PlayerUi : BaseUi
     public Pointer LevelPointer => pointer;
     public SummaryUi Summary => summary;
 
-    void Start()
-    {
-        this.summary.Hide();
-    }
-
     public void Init(Map map)
     {
+        Reset();
         this.hover.Init(map);
         this.pointer.Init(map);
     }

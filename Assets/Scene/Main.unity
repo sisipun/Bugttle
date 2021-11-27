@@ -3780,11 +3780,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 206194004319269370, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 75
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 206194004319269370, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 206194004319269370, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3816,11 +3816,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 206194004319269370, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 50
+      value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 206194004319269370, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 65
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 206194004319269370, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3840,12 +3840,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1837049471985183778, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3491688789552331804, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
       propertyPath: playerController
       value: 
       objectReference: {fileID: 2125972987}
+    - target: {fileID: 3491688789552331804, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
+      propertyPath: buttons.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b19cc65d33b4a1468d1b667e8bb3704, type: 3}
 --- !u!224 &4230256188440746264 stripped

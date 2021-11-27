@@ -93,10 +93,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 6741972428360085669}
-  firstSkillButton: {fileID: 1443956168895869106}
-  secondSkillButton: {fileID: 6851019294929629134}
-  thirdSkillButton: {fileID: 188224569932527004}
   playerController: {fileID: 0}
+  buttons:
+  - {fileID: 1443956168895869106}
+  - {fileID: 6851019294929629134}
+  - {fileID: 188224569932527004}
 --- !u!1 &2779245249036504083
 GameObject:
   m_ObjectHideFlags: 0

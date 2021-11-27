@@ -5,17 +5,9 @@ using UnityEngine.UI;
 public class SummaryUi : MonoBehaviour
 {
     [SerializeField] private Image image;
-    [SerializeField] private Button firstSkillButton;
-    [SerializeField] private Button secondSkillButton;
-    [SerializeField] private Button thirdSkillButton;
     [SerializeField] private PlayerController playerController;
 
-    private Button[] buttons;
-
-    void Awake()
-    {
-        buttons = new Button[] { firstSkillButton, secondSkillButton, thirdSkillButton };
-    }
+    [SerializeField] private Button[] buttons;
 
     public void Hide()
     {
