@@ -5,8 +5,8 @@ using UnityEngine;
 public class UserController : BaseController
 {
     [SerializeField] private PlayerUi ui;
-
-    private Camera mainCamera;
+    [SerializeField] private Camera mainCamera;
+    
     private Vector2Int previouseMouseCell;
     private Bug selected;
     private Dictionary<Vector2Int, Path> selectedPossibleMoves;
@@ -16,7 +16,6 @@ public class UserController : BaseController
     {
         base.Init(level, side);
         this.ui.Init(level.LevelMap);
-        this.mainCamera = Camera.main;
         this.previouseMouseCell = ((Vector2Int)level.LevelMap.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selected = null;
         this.selectedPossibleMoves = new Dictionary<Vector2Int, Path>();
