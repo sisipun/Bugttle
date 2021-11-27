@@ -3,13 +3,16 @@ using UnityEngine.Tilemaps;
 
 public class Cell
 {
-    private TileBase tile;
+    private TileBase backTile;
+    private TileBase frontTile;
+
     private Vector2Int position;
     private int cost;
     private Bug bug;
     private BaseCellEffect cellEffect;
 
-    public TileBase Tile => tile;
+    public TileBase BackTile => backTile;
+    public TileBase FrontTile => frontTile;
     public Vector2Int Position => position;
     public int Cost => cost;
     public bool HasBug => bug != null;
@@ -28,7 +31,8 @@ public class Cell
 
     public Cell(Vector2Int position, CellData data)
     {
-        this.tile = data.Tile;
+        this.backTile = data.BackTile;
+        this.frontTile = data.FrontTile;
         this.position = position;
         this.cost = data.Cost;
         this.cellEffect = data.CellEffect;
@@ -37,7 +41,8 @@ public class Cell
 
     public Cell(Vector2Int position, CellData data, Bug bug)
     {
-        this.tile = data.Tile;
+        this.backTile = data.BackTile;
+        this.frontTile = data.FrontTile;
         this.position = position;
         this.cost = data.Cost;
         this.cellEffect = data.CellEffect;

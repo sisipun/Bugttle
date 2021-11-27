@@ -56,7 +56,7 @@ public class MoveSkillEffect : BaseSkillEffect
         {
             for (int y = 0; y < map.Size; y++)
             {
-                if (map.GetBug(x, y) == null)
+                if (map.GetBug(x, y) == null && map.GetCell(x, y).Cost >= 0)
                 {
                     initialPositions.Add(new Vector2Int(x, y));
                 }

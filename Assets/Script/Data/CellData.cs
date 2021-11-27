@@ -5,11 +5,13 @@ using UnityEngine.Tilemaps;
 public class CellData : ScriptableObject
 {
     [SerializeField] private BaseCellEffect cellEffect;
-    [SerializeField] private TileBase tile;
+    [SerializeField] private TileBase backTile;
+    [SerializeField] private TileBase frontTile;
     [SerializeField] private int cost;
 
 
     public BaseCellEffect CellEffect => cellEffect;
-    public TileBase Tile => tile;
+    public TileBase BackTile => backTile;
+    public TileBase FrontTile => frontTile;
     public int Cost => cost;
 }

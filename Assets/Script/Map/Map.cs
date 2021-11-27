@@ -17,7 +17,12 @@ public class Map : MonoBehaviour
         {
             for (int y = 0; y < size; y++)
             {
-                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
+                CellData cellData = cells[Random.Range(0, cells.Length)];
+                while((x == 0 || x == size - 1) && cellData.Cost < 0)
+                {
+                    cellData = cells[Random.Range(0, cells.Length)];
+                }
+                Cell cell = new Cell(new Vector2Int(x, y), cellData);
                 map[x, y] = cell;
             }
         }
@@ -53,7 +58,7 @@ public class Map : MonoBehaviour
     {
         Bug bug = GetBug(position);
         map[position.x, position.y] = new Cell(position, data, bug);
-        background.SetTile(position, data.Tile);
+        background.SetCell(position, map[position.x, position.y]);
     }
 
     public Bug GetBug(Vector2Int position)

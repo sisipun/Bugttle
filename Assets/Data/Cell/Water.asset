@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04bec0b3d96b5d43b284932086ed44f, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  cellEffect: {fileID: 11400000, guid: d80ca6b41d3ffca418256c94818408db, type: 2}
-  tile: {fileID: 11400000, guid: 7ec956d4906208e4f8032c2398b4af93, type: 2}
-  cost: -1
+  cellEffect: {fileID: 11400000, guid: 24ffcd10236f9694484c5372d94c225f, type: 2}
+  backTile: {fileID: 11400000, guid: 73a91c6d086e0fe4daab1519345a6bc3, type: 2}
+  frontTile: {fileID: 0}
+  cost: 1

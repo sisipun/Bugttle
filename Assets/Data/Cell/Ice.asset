@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Ice
   m_EditorClassIdentifier: 
   cellEffect: {fileID: 11400000, guid: d80ca6b41d3ffca418256c94818408db, type: 2}
-  tile: {fileID: 11400000, guid: 365ba1eb21f8e3f46aa38b0b65004a00, type: 2}
+  backTile: {fileID: 11400000, guid: 2240f3698c1e36644bceda6b7c399427, type: 2}
+  frontTile: {fileID: 0}
   cost: 0

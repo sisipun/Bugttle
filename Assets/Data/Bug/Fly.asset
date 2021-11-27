@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Fly
   m_EditorClassIdentifier: 
   prefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
-  greenBody: {fileID: 21300000, guid: 59719ad9392120d4d8d2afbb433edfec, type: 3}
+  greenBody: {fileID: 21300000, guid: 6575398ee857f654faffd2616820df7d, type: 3}
   greenColor: {r: 0.26666668, g: 0.9529412, b: 0.5686275, a: 1}
-  redBody: {fileID: 21300000, guid: 50986feed03de794db4e782dc1b9bfb1, type: 3}
+  redBody: {fileID: 21300000, guid: 8fbc6d7185c9fec40b6af006d247f74e, type: 3}
   redColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
   skills:
   - {fileID: 11400000, guid: d2b38dc5f65e12e47abcd523a0b54f70, type: 2}

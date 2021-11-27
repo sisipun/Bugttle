@@ -19,6 +19,11 @@ public class HealthBar : MonoBehaviour
         this.slider = GetComponent<Slider>();
     }
 
+    void Update()
+    {
+        this.slider.value = health;
+    }
+
     public void Init(int health, Color color)
     {
         this.health = health;
@@ -27,7 +32,7 @@ public class HealthBar : MonoBehaviour
         this.slider.value = health;
         this.fill.color = color;
     }
-    
+
     public void IncreaseHealth(int amount)
     {
         health += amount;
@@ -41,6 +46,7 @@ public class HealthBar : MonoBehaviour
 
     public void DecreaseHealth(int amount)
     {
+        Debug.Log("h");
         health -= amount;
         if (health < 0)
         {
