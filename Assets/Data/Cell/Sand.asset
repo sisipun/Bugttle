@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04bec0b3d96b5d43b284932086ed44f, type: 3}
+  m_Name: Sand
+  m_EditorClassIdentifier: 
+  cellEffect: {fileID: 11400000, guid: d80ca6b41d3ffca418256c94818408db, type: 2}
+  tile: {fileID: 11400000, guid: f6e453a5133c664469c826e3302f0556, type: 2}
+  cost: 2

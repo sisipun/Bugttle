@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fedae4c4028d9b47a905f5808f8b087, type: 3}
+  m_Name: Fly
+  m_EditorClassIdentifier: 
+  prefub: {fileID: 2659671369643558156, guid: 3aaa5b65a6019174c8964f38c240c0fb, type: 3}
+  greenBody: {fileID: 21300000, guid: 59719ad9392120d4d8d2afbb433edfec, type: 3}
+  greenColor: {r: 0.26666668, g: 0.9529412, b: 0.5686275, a: 1}
+  redBody: {fileID: 21300000, guid: 50986feed03de794db4e782dc1b9bfb1, type: 3}
+  redColor: {r: 1, g: 0.24313726, b: 0.32156864, a: 1}
+  skills:
+  - {fileID: 11400000, guid: d2b38dc5f65e12e47abcd523a0b54f70, type: 2}
+  - {fileID: 11400000, guid: 1fb3886b401a3394d93de7787511b52d, type: 2}
+  moveRange: 5
+  attackRange: 1
+  attacksCount: 1
+  health: 2
