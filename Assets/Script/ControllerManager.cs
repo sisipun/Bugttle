@@ -53,7 +53,7 @@ public class ControllerManager : MonoBehaviour
     public void EndLevel()
     {
         EndTurn();
-        greenController.Reset();
-        redController.Reset();
+        greenController.Clear();
+        redController.Clear();
     }
 }

@@ -8,8 +8,8 @@ public class HealSkillEffect : BaseSkillEffect
     {
         Map map = level.Map;
         Bug targetBug = map.GetCell(target).Bug;
-        bug.Skills[SkillType.HEAL].Count--;
-        bug.Skills[SkillType.MOVE].Range = 0;
+        bug.Skills[SkillType.HEAL].DecreaseCount(1);
+        bug.Skills[SkillType.MOVE].NullifyRange();
         targetBug.IncreaseHealth(1);
     }
 
@@ -30,7 +30,7 @@ public class HealSkillEffect : BaseSkillEffect
                 Bug target = map.GetBug(x, y);
                 if (range <= bug.Skills[SkillType.HEAL].Range && target != null && target.Side == bug.Side && !target.IsFullHealth)
                 {
-                    targets.Add(new Vector2Int(x, y));
+                    targets.Add(target.Position);
                 }
             }
         }

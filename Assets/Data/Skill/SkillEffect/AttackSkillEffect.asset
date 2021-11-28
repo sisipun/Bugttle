@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: AttackSkillEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 5284bbb5b89dfef4cb08ebdaee24c819, type: 3}
+  targetTile: {fileID: 11400000, guid: 4369ba129ca790346b142a8763605488, type: 2}

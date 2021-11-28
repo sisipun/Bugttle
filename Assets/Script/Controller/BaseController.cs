@@ -24,7 +24,7 @@ public abstract class BaseController : MonoBehaviour
     {
     }
 
-    public virtual void Reset()
+    public virtual void Clear()
     {
     }
 }

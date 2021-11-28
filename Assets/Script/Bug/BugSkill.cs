@@ -1,22 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class BugSkill
 {
     private int initialRange;
     private int initialCount;
+    private int range;
+    private int count;
     private BaseSkillEffect effect;
 
-    public int Range { get; set; }
-    public int Count { get; set; }
+    public int Range => range;
+    public int Count => count;
     public Sprite Icon => effect.Icon;
+    public TileBase TargetTile => effect.TargetTile;
 
     public BugSkill(SkillData data)
     {
         this.initialRange = data.Range;
         this.initialCount = data.Count;
-        this.Range = initialRange;
-        this.Count = initialCount;
+        this.range = initialRange;
+        this.count = initialCount;
         this.effect = data.SkillEffect;
     }
 
@@ -35,9 +39,37 @@ public class BugSkill
         return effect.Type();
     }
 
+    public void DecreaseRange(int value)
+    {
+        range -= value;
+        if (range < 0)
+        {
+            range = 0;
+        }
+    }
+
+    public void NullifyRange()
+    {
+        range = 0;
+    }
+
+    public void DecreaseCount(int value)
+    {
+        count -= value;
+        if (count < 0)
+        {
+            count = 0;
+        }
+    }
+
+    public void NullifyCount()
+    {
+        count = 0;
+    }
+
     public void Reset()
     {
-        this.Range = initialRange;
-        this.Count = initialCount;
+        this.range = initialRange;
+        this.count = initialCount;
     }
 }

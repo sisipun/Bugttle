@@ -7,7 +7,7 @@ public class FlyAttackSkillEffect : AttackSkillEffect
     {
         Map map = level.Map;
         Bug targetBug = map.GetCell(target).Bug;
-        bug.Skills[SkillType.ATTACK].Count--;
+        bug.Skills[SkillType.ATTACK].DecreaseCount(1);
         targetBug.DecreaseHealth(1);
         if (targetBug.IsDead)
         {

@@ -10,12 +10,12 @@ public class MoveSkillEffect : BaseSkillEffect
         if (level.CurrentState == LevelState.TURN)
         {
             Path path = map.FindPath(bug.Position, target);
-            bug.Skills[SkillType.MOVE].Range -= path.Cost;
+            bug.Skills[SkillType.MOVE].DecreaseRange(path.Cost);
         }
-        
+
         map.SetBug(bug.Position, null);
         map.SetBug(target, bug);
-        bug.ChangePosition(target);
+        bug.SetPosition(target);
     }
 
     public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)

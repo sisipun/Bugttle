@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private int size = 8;
+    [SerializeField] private int size;
     [SerializeField] private CellData[] cells;
     [SerializeField] private Background background;
 
@@ -57,8 +57,9 @@ public class Map : MonoBehaviour
     public void SetCell(Vector2Int position, CellData data)
     {
         Bug bug = GetBug(position);
-        map[position.x, position.y] = new Cell(position, data, bug);
-        background.SetCell(position, map[position.x, position.y]);
+        Cell cell = new Cell(position, data, bug);
+        map[position.x, position.y] = cell;
+        background.SetCell(cell);
     }
 
     public Bug GetBug(Vector2Int position)
@@ -74,15 +75,15 @@ public class Map : MonoBehaviour
     public void SetBug(Vector2Int position, Bug bug)
     {
         SetBug(position.x, position.y, bug);
-        if (bug != null)
-        {
-            bug.transform.position = background.CellToWorld(position);
-        }
     }
 
     public void SetBug(int x, int y, Bug bug)
     {
         map[x, y].Bug = bug;
+        if (bug != null)
+        {
+            bug.transform.position = background.CellToWorld(new Vector2Int(x, y));
+        }
     }
 
     public void RemoveBug(Vector2Int position)
@@ -123,8 +124,6 @@ public class Map : MonoBehaviour
             for (int y = 0; y < size; y++)
             {
                 RemoveBug(x, y);
-                Cell cell = new Cell(new Vector2Int(x, y), cells[Random.Range(0, cells.Length)]);
-                map[x, y] = cell;
             }
         }
         this.background.Clear();

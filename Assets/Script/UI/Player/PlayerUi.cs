@@ -12,12 +12,12 @@ public class PlayerUi : BaseUi
 
     public void Init(Map map)
     {
-        Reset();
+        Clear();
         this.hover.Init(map);
         this.pointer.Init(map);
     }
 
-    public void Reset()
+    public void Clear()
     {
         this.hover.Clear();
         this.pointer.Clear();

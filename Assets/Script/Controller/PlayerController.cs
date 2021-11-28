@@ -15,12 +15,10 @@ public class PlayerController : BaseController
     public override void Init(BaseLevel level, BugSide side)
     {
         base.Init(level, side);
-        Reset();
         this.ui.Init(level.Map);
         this.previouseMouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
-        this.selected = null;
-        this.selectedSkillType = SkillType.MOVE;
         this.selectedTargets = new List<Vector2Int>();
+        Clear();
     }
 
     public override void OnStartTurn()
@@ -41,14 +39,14 @@ public class PlayerController : BaseController
     public override void OnEndTurn()
     {
         base.OnEndTurn();
-        Reset();
-        SetSelected(null);
+        Clear();
     }
 
-    public override void Reset()
+    public override void Clear()
     {
         this.ui.Hide();
-        this.ui.Reset();
+        this.ui.Clear();
+        SetSelected(null);
     }
 
     public void EndTurn()
@@ -56,15 +54,32 @@ public class PlayerController : BaseController
         level.EndTurn();
     }
 
+    public void SetSelected(Bug bug)
+    {
+        ui.Summary.Hide();
+        selected?.SetOutlined(false);
+
+        selected = bug;
+        SetSelectedSkill(SkillType.MOVE);
+
+        if (selected != null)
+        {
+            selected.SetOutlined(true);
+            ui.Summary.Show(selected);
+        }
+    }
+
     public void SetSelectedSkill(SkillType skillType)
     {
         ui.LevelHover.Clear();
         selectedTargets.Clear();
         selectedSkillType = skillType;
+
         if (selected != null && selected.Side == Side)
         {
-            selectedTargets = selected.Skills[selectedSkillType].GetTargets(selected, level);
-            ui.LevelHover.SetMovable(selectedTargets);
+            BugSkill skill = selected.Skills[selectedSkillType];
+            selectedTargets = skill.GetTargets(selected, level);
+            ui.LevelHover.Set(selectedTargets, skill.TargetTile);
         }
     }
 
@@ -113,46 +128,14 @@ public class PlayerController : BaseController
     private void onClick(Vector2Int click)
     {
         Bug clicked = level.Map.GetBug(click);
-
-        if (selected == null && clicked != null)
+        if (selectedTargets.Contains(click))
+        {
+            selected.Skills[selectedSkillType].Apply(selected, click, level);
+            SetSelected(null);
+        }
+        else
         {
             SetSelected(clicked);
-            return;
         }
-
-        if (selected != null)
-        {
-            if (selectedTargets.Contains(click))
-            {
-                selected.Skills[selectedSkillType].Apply(selected, click, level);
-                SetSelected(null);
-            }
-            else
-            {
-                SetSelected(clicked);
-            }
-            return;
-        }
-    }
-
-    private void SetSelected(Bug bug)
-    {
-        ui.Summary.Hide();
-        if (selected != null)
-        {
-            selected.ResetOutlined();
-        }
-
-        selected = bug;
-        if (selected != null)
-        {
-            if (bug.Side == Side)
-            {
-                selected.SetOutlined();
-            }
-            ui.Summary.Show(selected);
-        }
-
-        SetSelectedSkill(SkillType.MOVE);
     }
 }

@@ -9,16 +9,6 @@ public class SummaryUi : MonoBehaviour
 
     [SerializeField] private Button[] buttons;
 
-    public void Hide()
-    {
-        foreach (Button button in buttons)
-        {
-            button.gameObject.SetActive(false);
-            button.onClick.RemoveAllListeners();
-        }
-        gameObject.SetActive(false);
-    }
-
     public void Show(Bug bug)
     {
         gameObject.SetActive(true);
@@ -30,7 +20,7 @@ public class SummaryUi : MonoBehaviour
         }
 
         List<SkillType> skills = new List<SkillType>(bug.Skills.Keys);
-        for (int i = 0; i < skills.Count; i++)
+        for (int i = 0; i < skills.Count && i < buttons.Length; i++)
         {
             Button button = buttons[i];
             BugSkill skill = bug.Skills[skills[i]];
@@ -38,5 +28,15 @@ public class SummaryUi : MonoBehaviour
             button.onClick.AddListener(() => playerController.SetSelectedSkill(skill.Type()));
             button.gameObject.SetActive(true);
         }
+    }
+    
+    public void Hide()
+    {
+        foreach (Button button in buttons)
+        {
+            button.gameObject.SetActive(false);
+            button.onClick.RemoveAllListeners();
+        }
+        gameObject.SetActive(false);
     }
 }

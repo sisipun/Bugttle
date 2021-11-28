@@ -21,10 +21,10 @@ public class Background : MonoBehaviour
         }
     }
 
-    public void SetCell(Vector2Int position, Cell cell)
+    public void SetCell(Cell cell)
     {
-        backTilemap.SetTile(((Vector3Int)position), cell.BackTile);
-        frontTilemap.SetTile(((Vector3Int)position), cell.FrontTile);
+        backTilemap.SetTile(((Vector3Int)cell.Position), cell.BackTile);
+        frontTilemap.SetTile(((Vector3Int)cell.Position), cell.FrontTile);
     }
 
     public void Clear()

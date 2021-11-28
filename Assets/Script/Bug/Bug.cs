@@ -14,11 +14,10 @@ public class Bug : MonoBehaviour
     private Dictionary<SkillType, BugSkill> skills;
 
     public BugSide Side => side;
+    public Vector2Int Position => position;
     public bool IsDead => health.IsDead;
     public bool IsFullHealth => health.IsFull;
-    public Vector2Int Position => position;
     public Sprite Sprite => spriteRenderer.sprite;
-    public int Health => health.Count;
     public Dictionary<SkillType, BugSkill> Skills => skills;
 
     void Awake()
@@ -40,7 +39,7 @@ public class Bug : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public void ResetSkills()
     {
         foreach (BugSkill skill in skills.Values)
         {
@@ -58,18 +57,13 @@ public class Bug : MonoBehaviour
         health.DecreaseHealth(count);
     }
 
-    public void ChangePosition(Vector2Int newPosition)
+    public void SetPosition(Vector2Int newPosition)
     {
         position = newPosition;
     }
 
-    public void SetOutlined()
+    public void SetOutlined(bool outlined)
     {
-        spriteRenderer.material.SetFloat(ENABLE_OUTLINE_MATERIAL_KEY, 1);
-    }
-
-    public void ResetOutlined()
-    {
-        spriteRenderer.material.SetFloat(ENABLE_OUTLINE_MATERIAL_KEY, 0);
+        spriteRenderer.material.SetFloat(ENABLE_OUTLINE_MATERIAL_KEY, outlined ? 1 : 0);
     }
 }

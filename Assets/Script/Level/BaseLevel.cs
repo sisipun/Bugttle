@@ -4,11 +4,9 @@ using UnityEngine.Events;
 
 public abstract class BaseLevel : MonoBehaviour
 {
-    protected LevelState initialState;
     protected LevelState currentState;
-    protected BugSide initialSide;
     protected BugSide currentSide;
-    protected int initialZoneSize;
+    protected BugSide initialSide;
 
     protected Map map;
     protected int roundNumber;
@@ -25,10 +23,12 @@ public abstract class BaseLevel : MonoBehaviour
 
     public virtual void Init(Map map)
     {
-        this.initialState = LevelState.SET_POSITIONS;
+        this.currentState = LevelState.SET_POSITIONS;
         this.initialSide = BugSide.GREEN;
-        this.initialZoneSize = map.Size / 4;
+        this.currentSide = initialSide;
+        this.roundNumber = 1;
         this.map = map;
+
         this.bugs = new Dictionary<BugSide, List<Bug>>();
         bugs[BugSide.GREEN] = new List<Bug>();
         bugs[BugSide.RED] = new List<Bug>();
@@ -43,12 +43,27 @@ public abstract class BaseLevel : MonoBehaviour
                 }
             }
         }
-        Reset();
+    }
+
+    public abstract LevelType Type();
+
+    public virtual string CurrentStateText()
+    {
+        if (CurrentState == LevelState.SET_POSITIONS)
+        {
+            return string.Format("Set bugs position");
+        }
+        else if (CurrentState == LevelState.TURN)
+        {
+            return string.Format("Round: {0}", RoundNumber);
+        }
+        else
+        {
+            return "";
+        }
     }
 
     protected abstract void CheckGameOver();
-
-    public abstract LevelType Type();
 
     public void Kill(Bug bug)
     {
@@ -71,13 +86,6 @@ public abstract class BaseLevel : MonoBehaviour
         CheckGameOver();
     }
 
-    public void Reset()
-    {
-        this.currentState = initialState;
-        this.currentSide = initialSide;
-        this.roundNumber = 1;
-    }
-
     protected virtual void OnEndRound()
     {
         roundNumber++;
@@ -89,7 +97,7 @@ public abstract class BaseLevel : MonoBehaviour
         currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
     }
 
-    protected void CheckBugsState()
+    private void CheckBugsState()
     {
         for (int x = 0; x < map.Size; x++)
         {
@@ -107,13 +115,13 @@ public abstract class BaseLevel : MonoBehaviour
                 }
                 else if (bug.Side == currentSide)
                 {
-                    bug.Reset();
+                    bug.ResetSkills();
                 }
             }
         }
     }
 
-    protected void CheckStateChange()
+    private void CheckStateChange()
     {
         if (currentState == LevelState.SET_POSITIONS && currentSide == initialSide)
         {

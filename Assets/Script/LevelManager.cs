@@ -36,7 +36,8 @@ public class LevelManager : MonoBehaviour
         this.level = typeToLevel[levelData.Type];
         this.level.Init(map);
 
-        uiManager.ShowLevel();
+        uiManager.ShowLevel(level);
+        uiManager.UpdateLevelState(level);
         controllerManager.StartLevel(level);
     }
 
@@ -61,13 +62,13 @@ public class LevelManager : MonoBehaviour
     private void OnEndTurn(BugSide started)
     {
         controllerManager.EndTurn();
+        uiManager.UpdateLevelState(level);
         controllerManager.StartTurn(started);
     }
 
     private void Reset()
     {
         controllerManager.EndLevel();
-        this.level.Reset();
         this.map.Clear();
     }
 }

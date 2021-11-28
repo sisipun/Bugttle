@@ -15,11 +15,16 @@ public class UiManager : MonoBehaviour
         gameOverUi.Hide();
     }
 
-    public void ShowLevel()
+    public void ShowLevel(BaseLevel level)
     {
         menuUi.Hide();
         levelUi.Show();
         gameOverUi.Hide();
+    }
+
+    public void UpdateLevelState(BaseLevel level)
+    {
+        levelUi.SetLevelState(level.CurrentStateText());
     }
 
     public void ShowGameOver(BugSide winner)

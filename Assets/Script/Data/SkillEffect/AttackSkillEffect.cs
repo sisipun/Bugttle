@@ -8,8 +8,8 @@ public class AttackSkillEffect : BaseSkillEffect
     {
         Map map = level.Map;
         Bug targetBug = map.GetCell(target).Bug;
-        bug.Skills[SkillType.ATTACK].Count--;
-        bug.Skills[SkillType.MOVE].Range = 0;
+        bug.Skills[SkillType.ATTACK].DecreaseCount(1);
+        bug.Skills[SkillType.MOVE].NullifyRange();
         targetBug.DecreaseHealth(1);
         if (targetBug.IsDead)
         {
@@ -34,7 +34,7 @@ public class AttackSkillEffect : BaseSkillEffect
                 Bug target = map.GetBug(x, y);
                 if (range <= bug.Skills[SkillType.ATTACK].Range && target != null && target.Side != bug.Side)
                 {
-                    targets.Add(new Vector2Int(x, y));
+                    targets.Add(target.Position);
                 }
             }
         }

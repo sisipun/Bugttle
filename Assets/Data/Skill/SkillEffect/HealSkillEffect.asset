@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: HealSkillEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: cba30352681f52f43af2f4e8d7aed302, type: 3}
+  targetTile: {fileID: 11400000, guid: f58651913b506164f88ee05eb4f3ba71, type: 2}

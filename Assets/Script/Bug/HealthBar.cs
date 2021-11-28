@@ -46,7 +46,6 @@ public class HealthBar : MonoBehaviour
 
     public void DecreaseHealth(int amount)
     {
-        Debug.Log("h");
         health -= amount;
         if (health < 0)
         {
