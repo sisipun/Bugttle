@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UiManager : MonoBehaviour
@@ -7,12 +5,14 @@ public class UiManager : MonoBehaviour
     [SerializeField] private MenuUi menuUi;
     [SerializeField] private LevelUi levelUi;
     [SerializeField] private GameOverUi gameOverUi;
+    [SerializeField] private PlayerUi playerUi;
 
     void Start()
     {
         menuUi.Show();
         levelUi.Hide();
         gameOverUi.Hide();
+        playerUi.Hide();
     }
 
     public void ShowLevel(BaseLevel level)

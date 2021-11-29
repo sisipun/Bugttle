@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Map : MonoBehaviour
 {
     [SerializeField] private int size;
-    [SerializeField] private CellData[] cells;
     [SerializeField] private Background background;
+    [SerializeField] private MapGenerator mapGenerator;
 
     private Cell[,] map;
 
@@ -12,20 +13,7 @@ public class Map : MonoBehaviour
 
     public void Init()
     {
-        this.map = new Cell[size, size];
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                CellData cellData = cells[Random.Range(0, cells.Length)];
-                while((x == 0 || x == size - 1) && cellData.Cost < 0)
-                {
-                    cellData = cells[Random.Range(0, cells.Length)];
-                }
-                Cell cell = new Cell(new Vector2Int(x, y), cellData);
-                map[x, y] = cell;
-            }
-        }
+        this.map = mapGenerator.Generate(size);
         this.background.Init(this);
     }
 

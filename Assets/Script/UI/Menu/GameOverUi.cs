@@ -7,6 +7,6 @@ public class GameOverUi : BaseUi
 
     public void SetWinner(BugSide winner)
     {
-        title.text = string.Format("Game Over, {0} won!", winner);
+        title.text = string.Format("Game Over.\nPlayer {0} won!", winner.ToString().ToLower());
     }
 }

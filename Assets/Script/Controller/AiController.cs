@@ -21,19 +21,21 @@ public class AiController : BaseController
 
     private IEnumerator MakeBugTurn(Bug bug)
     {
-        foreach (SkillType type in bug.Skills.Keys)
+        List<SkillType> shuffeledSkills = new List<SkillType>(bug.Skills.Keys);
+        shuffeledSkills.Sort((a, b) => 1 - 2 * Random.Range(0, 2));
+        foreach (SkillType skill in shuffeledSkills)
         {
-            yield return StartCoroutine(UseSkill(bug, type));
+            yield return StartCoroutine(UseSkill(bug, skill));
         }
     }
 
     private IEnumerator UseSkill(Bug bug, SkillType skillType)
     {
-        BugSkill attackSkill = bug.Skills[skillType];
+        BugSkill skill = bug.Skills[skillType];
         List<Vector2Int> targets = bug.Skills[skillType].GetTargets(bug, level);
-        if(targets.Count > 0 && attackSkill.Count > 0)
+        if (targets.Count > 0 && skill.Count > 0)
         {
-            attackSkill.Apply(bug, targets[Random.Range(0, targets.Count)], level);
+            skill.Apply(bug, targets[Random.Range(0, targets.Count)], level);
             yield return new WaitForSeconds(1.0f);
         }
     }

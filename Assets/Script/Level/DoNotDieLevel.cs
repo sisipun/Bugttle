@@ -18,7 +18,7 @@ public class DoNotDieLevel : BaseLevel
         else if (CurrentState == LevelState.TURN)
         {
             return string.Format(
-                "Round: {0}\n {1} rounds to win",
+                "Round: {0}.\n{1} rounds to win",
                 RoundNumber,
                 roundCount - RoundNumber + 1
             );

@@ -16,3 +16,4 @@ MonoBehaviour:
   backTile: {fileID: 11400000, guid: 88b9a39133f47b44c8f7bb9a1bf41131, type: 2}
   frontTile: {fileID: 0}
   cost: 2
+  frequency: 5

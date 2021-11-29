@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f9373c215df7845acd2a123b60c7b1, type: 3}
   m_Name: FlyAttackSkillEffect
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 332e098e947d48d44bec9bc09c2a57bc, type: 3}
+  icon: {fileID: 21300000, guid: acd3f9b82454a414aa32a24e46694904, type: 3}
   targetTile: {fileID: 11400000, guid: 4369ba129ca790346b142a8763605488, type: 2}

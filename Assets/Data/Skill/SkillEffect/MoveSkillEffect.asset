@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a411782d383ecad44a4c9ca78e87ca8a, type: 3}
   m_Name: MoveSkillEffect
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: f9244e19277ee8043b66ccc56c05a709, type: 3}
+  icon: {fileID: 21300000, guid: 78be4475243f0d94d8a4bfb5821ad3b9, type: 3}
   targetTile: {fileID: 11400000, guid: f58651913b506164f88ee05eb4f3ba71, type: 2}

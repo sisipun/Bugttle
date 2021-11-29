@@ -19,7 +19,7 @@ public class BattleRoyal : BaseLevel
         else if (CurrentState == LevelState.TURN)
         {
             return string.Format(
-                "Round: {0}\n {1} rounds till water.", 
+                "Round: {0}.\n{1} rounds till water.", 
                 RoundNumber, 
                 (RoundNumber % waterPeriodInRounds) + 1
             );
