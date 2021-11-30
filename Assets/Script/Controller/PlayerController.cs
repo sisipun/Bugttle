@@ -72,6 +72,7 @@ public class PlayerController : BaseController
     public void SetSelectedSkill(SkillType skillType)
     {
         ui.LevelHover.Clear();
+        ui.LevelPointer.Clear();
         selectedTargets.Clear();
         selectedSkillType = skillType;
 
