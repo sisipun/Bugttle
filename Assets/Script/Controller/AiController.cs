@@ -35,8 +35,40 @@ public class AiController : BaseController
         List<Vector2Int> targets = bug.Skills[skillType].GetTargets(bug, level);
         if (targets.Count > 0 && skill.Count > 0)
         {
-            skill.Apply(bug, targets[Random.Range(0, targets.Count)], level);
+            Vector2Int target = skillType == SkillType.MOVE
+                ? GetMovePosition(bug, targets)
+                : targets[Random.Range(0, targets.Count)];
+            skill.Apply(bug, target, level);
             yield return new WaitForSeconds(1.0f);
         }
+    }
+
+    private Vector2Int GetMovePosition(Bug bug, List<Vector2Int> targets)
+    {
+        List<Bug> enemyBugs = level.Bugs[Side == BugSide.RED ? BugSide.GREEN : BugSide.RED];
+        List<Vector2Int> enemyBugPositions = new List<Vector2Int>();
+        foreach (Bug enemyBug in enemyBugs)
+        {
+            enemyBugPositions.Add(enemyBug.Position);
+        }
+
+        return MinRange(MinRange(bug.Position, enemyBugPositions), targets);
+    }
+
+    private Vector2Int MinRange(Vector2Int source, List<Vector2Int> targets)
+    {
+        Vector2Int minRangeTarget = targets[0];
+        int minRange = Mathf.Abs(source.x - minRangeTarget.x) + Mathf.Abs(source.y - minRangeTarget.y);
+        for (int i = 1; i < targets.Count; i++)
+        {
+            Vector2Int target = targets[i];
+            int range = Mathf.Abs(source.x - target.x) + Mathf.Abs(source.y - target.y);
+            if (range < minRange)
+            {
+                minRange = range;
+                minRangeTarget = target;
+            }
+        }
+        return minRangeTarget;
     }
 }
