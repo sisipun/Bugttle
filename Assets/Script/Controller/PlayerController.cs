@@ -10,6 +10,7 @@ public class PlayerController : BaseController
     private Vector2Int previouseMouseCell;
     private Bug selected;
     private SkillType selectedSkillType;
+    private List<Vector2Int> selectedZone;
     private List<Vector2Int> selectedTargets;
 
     public override void Init(BaseLevel level, BugSide side)
@@ -17,6 +18,7 @@ public class PlayerController : BaseController
         base.Init(level, side);
         this.ui.Init(level.Map);
         this.previouseMouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
+        this.selectedZone = new List<Vector2Int>();
         this.selectedTargets = new List<Vector2Int>();
         Clear();
     }
@@ -73,13 +75,16 @@ public class PlayerController : BaseController
     {
         ui.LevelHover.Clear();
         ui.LevelPointer.Clear();
+        selectedZone.Clear();
         selectedTargets.Clear();
         selectedSkillType = skillType;
 
         if (selected != null && selected.Side == Side)
         {
             BugSkill skill = selected.Skills[selectedSkillType];
+            selectedZone = skill.GetZone(selected, level);
             selectedTargets = skill.GetTargets(selected, level);
+            ui.LevelHover.Set(selectedZone, skill.ZoneTile);
             ui.LevelHover.Set(selectedTargets, skill.TargetTile);
         }
     }

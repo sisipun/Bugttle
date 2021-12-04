@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: MoveSkillEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: e1caa27b3f33911408c47dac167da33e, type: 3}
-  targetTile: {fileID: 11400000, guid: f58651913b506164f88ee05eb4f3ba71, type: 2}
+  zoneTile: {fileID: 11400000, guid: 1d6ae45c38f84d34a82a691f37bf9ac6, type: 2}
+  targetTile: {fileID: 11400000, guid: c1672b51630c699459f9c3602bdf2f95, type: 2}

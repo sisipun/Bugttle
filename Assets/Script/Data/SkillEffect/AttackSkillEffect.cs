@@ -17,7 +17,7 @@ public class AttackSkillEffect : BaseSkillEffect
         }
     }
 
-    public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)
+    public override List<Vector2Int> GetZone(Bug bug, BaseLevel level)
     {
         if (bug == null || bug.Skills[SkillType.ATTACK].Count == 0 || level.CurrentState != LevelState.TURN)
         {
@@ -31,14 +31,21 @@ public class AttackSkillEffect : BaseSkillEffect
             for (int y = 0; y < map.Size; y++)
             {
                 int range = Mathf.Abs(bug.Position.x - x) + Mathf.Abs(bug.Position.y - y);
-                Bug target = map.GetBug(x, y);
-                if (range <= bug.Skills[SkillType.ATTACK].Range && target != null && target.Side != bug.Side)
+                if (range <= bug.Skills[SkillType.ATTACK].Range)
                 {
-                    targets.Add(target.Position);
+                    targets.Add(new Vector2Int(x, y));
                 }
             }
         }
         return targets;
+    }
+
+    public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)
+    {
+        return GetZone(bug, level).FindAll(it => {
+            Bug target = level.Map.GetBug(it);
+            return target != null && target.Side != bug.Side;
+        });
     }
 
     public override SkillType Type()

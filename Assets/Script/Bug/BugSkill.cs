@@ -14,6 +14,7 @@ public class BugSkill
     public int Count => count;
     public Sprite Icon => effect.Icon;
     public TileBase TargetTile => effect.TargetTile;
+    public TileBase ZoneTile => effect.ZoneTile;
 
     public BugSkill(SkillData data)
     {
@@ -27,6 +28,11 @@ public class BugSkill
     public void Apply(Bug bug, Vector2Int target, BaseLevel level)
     {
         effect.Apply(bug, target, level);
+    }
+
+    public List<Vector2Int> GetZone(Bug bug, BaseLevel level)
+    {
+        return effect.GetZone(bug, level);
     }
 
     public List<Vector2Int> GetTargets(Bug bug, BaseLevel level)

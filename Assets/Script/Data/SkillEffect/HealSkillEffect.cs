@@ -13,7 +13,7 @@ public class HealSkillEffect : BaseSkillEffect
         targetBug.IncreaseHealth(1);
     }
 
-    public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)
+    public override List<Vector2Int> GetZone(Bug bug, BaseLevel level)
     {
         if (bug == null || bug.Skills[SkillType.HEAL].Count == 0 || level.CurrentState != LevelState.TURN)
         {
@@ -27,15 +27,23 @@ public class HealSkillEffect : BaseSkillEffect
             for (int y = 0; y < map.Size; y++)
             {
                 int range = Mathf.Abs(bug.Position.x - x) + Mathf.Abs(bug.Position.y - y);
-                Bug target = map.GetBug(x, y);
-                if (range <= bug.Skills[SkillType.HEAL].Range && target != null && target.Side == bug.Side && !target.IsFullHealth)
+                if (range <= bug.Skills[SkillType.HEAL].Range)
                 {
-                    targets.Add(target.Position);
+                    targets.Add(new Vector2Int(x, y));
                 }
             }
         }
 
         return targets;
+    }
+    
+    public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)
+    {
+        return GetZone(bug, level).FindAll(it =>
+        {
+            Bug target = level.Map.GetBug(it);
+            return target != null && target.Side == bug.Side && !target.IsFullHealth;
+        });
     }
 
     public override SkillType Type()

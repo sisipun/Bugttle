@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: AttackSkillEffect
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: d330aa6aae6c2bd418fda6e3ebf556fd, type: 3}
-  targetTile: {fileID: 11400000, guid: 4369ba129ca790346b142a8763605488, type: 2}
+  zoneTile: {fileID: 11400000, guid: 4369ba129ca790346b142a8763605488, type: 2}
+  targetTile: {fileID: 11400000, guid: de6d6235e4c853846bd33368099179ae, type: 2}

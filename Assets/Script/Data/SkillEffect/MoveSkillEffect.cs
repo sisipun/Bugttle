@@ -18,7 +18,7 @@ public class MoveSkillEffect : BaseSkillEffect
         bug.SetPosition(target);
     }
 
-    public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)
+    public override List<Vector2Int> GetZone(Bug bug, BaseLevel level)
     {
         if (bug == null || bug.Skills[SkillType.MOVE].Range == 0)
         {
@@ -45,6 +45,11 @@ public class MoveSkillEffect : BaseSkillEffect
             }
         }
         return targets;
+    }
+
+    public override List<Vector2Int> GetTargets(Bug bug, BaseLevel level)
+    {
+        return GetZone(bug, level);
     }
 
     private List<Vector2Int> GetInitialPositions(Map map, BugSide currentSide, int zoneSize)
