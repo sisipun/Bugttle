@@ -67,7 +67,7 @@ public class PlayerController : BaseController
         if (selected != null)
         {
             selected.SetOutlined(true);
-            ui.Summary.Show(selected);
+            ui.Summary.Show(selected, this);
         }
     }
 
