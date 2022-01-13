@@ -1,20 +1,25 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Map : MonoBehaviour
 {
     [SerializeField] private int size;
     [SerializeField] private Background background;
-    [SerializeField] private MapGenerator mapGenerator;
+    [SerializeField] private BugPool bugPool;
 
     private Cell[,] map;
 
     public int Size => size;
 
-    public void Init()
+    void Awake()
     {
-        this.map = mapGenerator.Generate(size);
-        this.background.Init(this);
+        this.map = new Cell[size, size];
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                this.map[x, y] = new Cell(new Vector2Int(x, y));
+            }
+        }
     }
 
     public Path FindPath(Vector2Int soruce, Vector2Int target, int maxCost)
@@ -45,7 +50,8 @@ public class Map : MonoBehaviour
     public void SetCell(Vector2Int position, CellData data)
     {
         Bug bug = GetBug(position);
-        Cell cell = new Cell(position, data, bug);
+        Cell cell = GetCell(position);
+        cell.Init(position, data, bug);
         map[position.x, position.y] = cell;
         background.SetCell(cell);
     }
@@ -85,7 +91,7 @@ public class Map : MonoBehaviour
         if (bug != null)
         {
             SetBug(x, y, null);
-            Destroy(bug.gameObject);
+            bugPool.Release(bug);
         }
     }
 

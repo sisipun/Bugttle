@@ -7,20 +7,6 @@ public class Background : MonoBehaviour
     [SerializeField] private Tilemap frontTilemap;
     private int size;
 
-    public void Init(Map map)
-    {
-        this.size = map.Size;
-        for (int x = 0; x < size; x++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                Vector2Int position = new Vector2Int(x, y);
-                backTilemap.SetTile(((Vector3Int)position), map.GetCell(position).BackTile);
-                frontTilemap.SetTile(((Vector3Int)position), map.GetCell(position).FrontTile);
-            }
-        }
-    }
-
     public void SetCell(Cell cell)
     {
         backTilemap.SetTile(((Vector3Int)cell.Position), cell.BackTile);

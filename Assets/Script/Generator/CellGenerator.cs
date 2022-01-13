@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public class CellGenerator : MonoBehaviour
 {
     [SerializeField] private CellData[] cells;
 
@@ -19,23 +19,19 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public Cell[,] Generate(int size)
+    public void Generate(Map map)
     {
-        Cell[,] generatedCells = new Cell[size, size];
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < map.Size; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < map.Size; y++)
             {
                 CellData cellData = cellsFrequency[Random.Range(0, cellsFrequency.Count)];
-                while ((x == 0 || x == size - 1) && cellData.Cost < 0)
+                while ((x == 0 || x == map.Size - 1) && cellData.Cost < 0)
                 {
                     cellData = cellsFrequency[Random.Range(0, cellsFrequency.Count)];
                 }
-                Cell cell = new Cell(new Vector2Int(x, y), cellData);
-                generatedCells[x, y] = cell;
+                map.SetCell(x, y, cellData);
             }
         }
-
-        return generatedCells;
     }
 }

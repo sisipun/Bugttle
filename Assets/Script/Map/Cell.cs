@@ -29,17 +29,12 @@ public class Cell
         }
     }
 
-    public Cell(Vector2Int position, CellData data)
+    public Cell(Vector2Int position)
     {
-        this.backTile = data.BackTile;
-        this.frontTile = data.FrontTile;
         this.position = position;
-        this.cost = data.Cost;
-        this.cellEffect = data.CellEffect;
-        this.bug = null;
     }
 
-    public Cell(Vector2Int position, CellData data, Bug bug)
+    public void Init(Vector2Int position, CellData data, Bug bug)
     {
         this.backTile = data.BackTile;
         this.frontTile = data.FrontTile;

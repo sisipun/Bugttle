@@ -32,7 +32,15 @@ public class Bug : MonoBehaviour
         this.spriteRenderer.sprite = side == BugSide.GREEN ? data.GreenBody : data.RedBody;
         this.health.Init(data.Health, side == BugSide.GREEN ? data.GreenColor : data.RedColor);
 
-        skills = new Dictionary<SkillType, BugSkill>();
+        if (skills == null)
+        {
+            skills = new Dictionary<SkillType, BugSkill>();
+        }
+        else
+        {
+            skills.Clear();
+        }
+        
         foreach (SkillData skillData in data.Skills)
         {
             skills.Add(skillData.SkillEffect.Type(), new BugSkill(skillData));

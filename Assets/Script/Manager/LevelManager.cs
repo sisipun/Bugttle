@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Map map;
     [SerializeField] private BaseLevel[] levels;
     [SerializeField] private BugGenerator bugGenerator;
+    [SerializeField] private CellGenerator cellGenerator;
+
 
     private Dictionary<LevelType, BaseLevel> typeToLevel;
     private BaseLevel level;
@@ -27,10 +29,8 @@ public class LevelManager : MonoBehaviour
 
     public void StartLevel(LevelData data)
     {
-        this.map.Init();
-
-        this.bugGenerator.Init(map);
-        this.bugGenerator.Generate(3);
+        this.cellGenerator.Generate(map);
+        this.bugGenerator.Generate(map, 3);
 
         this.levelData = data;
         this.level = typeToLevel[levelData.Type];
