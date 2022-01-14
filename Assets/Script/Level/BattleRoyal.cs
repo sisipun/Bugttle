@@ -47,21 +47,21 @@ public class BattleRoyal : BaseLevel
         if (RoundNumber % waterPeriodInRounds == 0)
         {
             int circleIndex = (RoundNumber / waterPeriodInRounds) - 1;
-            for (int x = circleIndex; x < map.Size - circleIndex; x++)
+            for (int x = circleIndex; x < map.Width - circleIndex; x++)
             {
-                CellToFire(x, circleIndex);
-                CellToFire(x, map.Size - circleIndex - 1);
+                CellToWater(x, circleIndex);
+                CellToWater(x, map.Height - circleIndex - 1);
             }
-            for (int y = circleIndex; y < map.Size - circleIndex; y++)
+            for (int y = circleIndex; y < map.Height - circleIndex; y++)
             {
-                CellToFire(circleIndex, y);
-                CellToFire(map.Size - circleIndex - 1, y);
+                CellToWater(circleIndex, y);
+                CellToWater(map.Width - circleIndex - 1, y);
             }
         }
         base.OnEndRound();
     }
 
-    private void CellToFire(int x, int y)
+    private void CellToWater(int x, int y)
     {
         map.SetCell(x, y, waterCell);
     }

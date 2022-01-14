@@ -32,9 +32,9 @@ public abstract class BaseLevel : MonoBehaviour
         this.bugs = new Dictionary<BugSide, List<Bug>>();
         bugs[BugSide.GREEN] = new List<Bug>();
         bugs[BugSide.RED] = new List<Bug>();
-        for (int x = 0; x < map.Size; x++)
+        for (int x = 0; x < map.Width; x++)
         {
-            for (int y = 0; y < map.Size; y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 Bug bug = map.GetBug(x, y);
                 if (bug != null)
@@ -99,9 +99,9 @@ public abstract class BaseLevel : MonoBehaviour
 
     private void CheckBugsState()
     {
-        for (int x = 0; x < map.Size; x++)
+        for (int x = 0; x < map.Width; x++)
         {
-            for (int y = 0; y < map.Size; y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 Bug bug = map.GetBug(x, y);
                 if (bug == null)

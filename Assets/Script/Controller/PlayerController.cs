@@ -98,7 +98,7 @@ public class PlayerController : BaseController
 
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int mouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
-        if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= level.Map.Size || mouseCell.y >= level.Map.Size)
+        if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= level.Map.Width || mouseCell.y >= level.Map.Height)
         {
             return;
         }

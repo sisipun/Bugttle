@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private int size;
+    [SerializeField] private int width;
+    [SerializeField] private int height;
     [SerializeField] private Background background;
     [SerializeField] private BugPool bugPool;
 
     private Cell[,] map;
 
-    public int Size => size;
+    public int Width => width;
+    public int Height => height;
 
     void Awake()
     {
-        this.map = new Cell[size, size];
-        for (int x = 0; x < size; x++)
+        this.map = new Cell[width, height];
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < height; y++)
             {
                 this.map[x, y] = new Cell(new Vector2Int(x, y));
             }
@@ -29,7 +31,7 @@ public class Map : MonoBehaviour
 
     public Path FindPath(Vector2Int soruce, Vector2Int target)
     {
-        return PathFinder.Find(map, soruce, target, Size * Size);
+        return PathFinder.Find(map, soruce, target, width * height);
     }
 
     public Cell GetCell(Vector2Int position)
@@ -102,9 +104,9 @@ public class Map : MonoBehaviour
 
     public void OnEndRound()
     {
-        for (int x = 0; x < Size; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < Size; y++)
+            for (int y = 0; y < height; y++)
             {
                 map[x, y].OnEndRound();
             }
@@ -113,9 +115,9 @@ public class Map : MonoBehaviour
 
     public void Clear()
     {
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < height; y++)
             {
                 RemoveBug(x, y);
             }

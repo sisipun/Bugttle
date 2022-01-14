@@ -557,7 +557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   greenController: {fileID: 2125972987}
-  redController: {fileID: 1328497067}
+  redController: {fileID: 1028318047}
 --- !u!114 &327306555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1769,7 +1769,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c0ac25986e17c543af4da7bfbb47906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 8
+  width: 8
+  height: 8
   background: {fileID: 1972123256}
   bugPool: {fileID: 1853719469}
 --- !u!1 &993102227

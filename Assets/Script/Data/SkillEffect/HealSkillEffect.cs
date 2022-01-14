@@ -22,9 +22,9 @@ public class HealSkillEffect : BaseSkillEffect
 
         Map map = level.Map;
         List<Vector2Int> targets = new List<Vector2Int>();
-        for (int x = 0; x < map.Size; x++)
+        for (int x = 0; x < map.Width; x++)
         {
-            for (int y = 0; y < map.Size; y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 int range = Mathf.Abs(bug.Position.x - x) + Mathf.Abs(bug.Position.y - y);
                 if (range <= bug.Skills[SkillType.HEAL].Range)

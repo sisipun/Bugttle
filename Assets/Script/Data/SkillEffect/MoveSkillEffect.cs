@@ -32,9 +32,9 @@ public class MoveSkillEffect : BaseSkillEffect
 
         Map map = level.Map;
         List<Vector2Int> targets = new List<Vector2Int>();
-        for (int x = 0; x < map.Size; x++)
+        for (int x = 0; x < map.Width; x++)
         {
-            for (int y = 0; y < map.Size; y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 Vector2Int target = new Vector2Int(x, y);
                 Path path = map.FindPath(bug.Position, target, bug.Skills[SkillType.MOVE].Range);
@@ -55,11 +55,11 @@ public class MoveSkillEffect : BaseSkillEffect
     private List<Vector2Int> GetInitialPositions(Map map, BugSide currentSide, int zoneSize)
     {
         List<Vector2Int> initialPositions = new List<Vector2Int>();
-        int from = currentSide == BugSide.GREEN ? 0 : map.Size - zoneSize;
-        int to = currentSide == BugSide.GREEN ? zoneSize : map.Size;
+        int from = currentSide == BugSide.GREEN ? 0 : map.Width - zoneSize;
+        int to = currentSide == BugSide.GREEN ? zoneSize : map.Width;
         for (int x = from; x < to; x++)
         {
-            for (int y = 0; y < map.Size; y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 if (map.GetBug(x, y) == null && map.GetCell(x, y).Cost >= 0)
                 {

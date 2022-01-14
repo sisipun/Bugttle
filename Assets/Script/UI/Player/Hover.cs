@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 public class Hover : MonoBehaviour
 {
     private Tilemap tilemap;
-    private int size;
+    private int width;
+    private int height;
 
     void Awake()
     {
@@ -14,7 +15,8 @@ public class Hover : MonoBehaviour
 
     public void Init(Map map)
     {
-        this.size = map.Size;
+        this.width = map.Width;
+        this.height = map.Height;
     }
 
     public void Set(ICollection<Vector2Int> positions, TileBase tile)
@@ -27,9 +29,9 @@ public class Hover : MonoBehaviour
 
     public void Clear()
     {
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < height; y++)
             {
                 tilemap.SetTile(((Vector3Int)new Vector2Int(x, y)), null);
             }

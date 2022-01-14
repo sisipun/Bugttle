@@ -7,7 +7,8 @@ public class Pointer : MonoBehaviour
     [SerializeField] private TileBase pointerTile;
 
     private Tilemap tilemap;
-    private int size;
+    private int width;
+    private int height;
 
     void Awake()
     {
@@ -16,7 +17,8 @@ public class Pointer : MonoBehaviour
 
     public void Init(Map map)
     {
-        this.size = map.Size;
+        this.width = map.Width;
+        this.height = map.Height;
     }
 
     public void SetPosition(Vector2Int position)
@@ -34,9 +36,9 @@ public class Pointer : MonoBehaviour
 
     public void Clear()
     {
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < height; y++)
             {
                 tilemap.SetTile(((Vector3Int)new Vector2Int(x, y)), null);
             }

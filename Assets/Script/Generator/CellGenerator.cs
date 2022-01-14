@@ -21,12 +21,12 @@ public class CellGenerator : MonoBehaviour
 
     public void Generate(Map map)
     {
-        for (int x = 0; x < map.Size; x++)
+        for (int x = 0; x < map.Width; x++)
         {
-            for (int y = 0; y < map.Size; y++)
+            for (int y = 0; y < map.Height; y++)
             {
                 CellData cellData = cellsFrequency[Random.Range(0, cellsFrequency.Count)];
-                while ((x == 0 || x == map.Size - 1) && cellData.Cost < 0)
+                while ((x == 0 || x == map.Width - 1) && cellData.Cost < 0)
                 {
                     cellData = cellsFrequency[Random.Range(0, cellsFrequency.Count)];
                 }
