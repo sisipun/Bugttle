@@ -13,8 +13,8 @@ public class PlayerUi : BaseUi
     public void Init(Map map)
     {
         Clear();
-        this.hover.Init(map);
-        this.pointer.Init(map);
+        this.hover.Init(map.Width, map.Height);
+        this.pointer.Init(map.Width, map.Height);
     }
 
     public void Clear()

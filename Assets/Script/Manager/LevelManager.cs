@@ -10,6 +10,10 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private BaseLevel[] levels;
     [SerializeField] private BugGenerator bugGenerator;
     [SerializeField] private CellGenerator cellGenerator;
+    [SerializeField] private int minWidth;
+    [SerializeField] private int maxWidth;
+    [SerializeField] private int minHeight;
+    [SerializeField] private int maxHeight;
 
 
     private Dictionary<LevelType, BaseLevel> typeToLevel;
@@ -29,6 +33,8 @@ public class LevelManager : MonoBehaviour
 
     public void StartLevel(LevelData data)
     {
+        this.map.Init(Random.Range(minWidth, maxWidth + 1), Random.Range(minHeight, maxHeight + 1));
+
         this.cellGenerator.Generate(map);
         this.bugGenerator.Generate(map, 3);
 

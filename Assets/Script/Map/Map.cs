@@ -2,18 +2,26 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    [SerializeField] private int width;
-    [SerializeField] private int height;
     [SerializeField] private Background background;
     [SerializeField] private BugPool bugPool;
 
     private Cell[,] map;
 
-    public int Width => width;
-    public int Height => height;
+    public int Width => map.GetLength(0);
+    public int Height => map.GetLength(1);
 
     void Awake()
     {
+        Init(0, 0);
+    }
+
+    public void Init(int width, int height)
+    {
+        if (this.map != null && this.Width == width && this.Height == height)
+        {
+            return;
+        }
+
         this.map = new Cell[width, height];
         for (int x = 0; x < width; x++)
         {
@@ -22,6 +30,7 @@ public class Map : MonoBehaviour
                 this.map[x, y] = new Cell(new Vector2Int(x, y));
             }
         }
+        this.background.Init(width, height);
     }
 
     public Path FindPath(Vector2Int soruce, Vector2Int target, int maxCost)
@@ -31,7 +40,7 @@ public class Map : MonoBehaviour
 
     public Path FindPath(Vector2Int soruce, Vector2Int target)
     {
-        return PathFinder.Find(map, soruce, target, width * height);
+        return PathFinder.Find(map, soruce, target, Width * Height);
     }
 
     public Cell GetCell(Vector2Int position)
@@ -104,9 +113,9 @@ public class Map : MonoBehaviour
 
     public void OnEndRound()
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < Width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < Height; y++)
             {
                 map[x, y].OnEndRound();
             }
@@ -115,9 +124,9 @@ public class Map : MonoBehaviour
 
     public void Clear()
     {
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < Width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < Height; y++)
             {
                 RemoveBug(x, y);
             }

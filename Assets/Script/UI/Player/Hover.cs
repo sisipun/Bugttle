@@ -13,10 +13,10 @@ public class Hover : MonoBehaviour
         this.tilemap = GetComponent<Tilemap>();
     }
 
-    public void Init(Map map)
+    public void Init(int width, int height)
     {
-        this.width = map.Width;
-        this.height = map.Height;
+        this.width = width;
+        this.height = height;
     }
 
     public void Set(ICollection<Vector2Int> positions, TileBase tile)

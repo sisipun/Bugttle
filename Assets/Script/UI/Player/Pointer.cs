@@ -15,10 +15,10 @@ public class Pointer : MonoBehaviour
         this.tilemap = GetComponent<Tilemap>();
     }
 
-    public void Init(Map map)
+    public void Init(int width, int height)
     {
-        this.width = map.Width;
-        this.height = map.Height;
+        this.width = width;
+        this.height = height;
     }
 
     public void SetPosition(Vector2Int position)

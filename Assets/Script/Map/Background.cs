@@ -5,7 +5,17 @@ public class Background : MonoBehaviour
 {
     [SerializeField] private Tilemap backTilemap;
     [SerializeField] private Tilemap frontTilemap;
-    private int size;
+    [SerializeField] private Camera mainCamera;
+    private int width;
+    private int height;
+
+    public void Init(int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        Vector3 backgroundCenter = CellToWorld(new Vector2Int(width / 2, height / 2));
+        mainCamera.transform.position = new Vector3(backgroundCenter.x, backgroundCenter.y, mainCamera.transform.position.z);
+    }
 
     public void SetCell(Cell cell)
     {
@@ -15,9 +25,9 @@ public class Background : MonoBehaviour
 
     public void Clear()
     {
-        for (int x = 0; x < size; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < size; y++)
+            for (int y = 0; y < height; y++)
             {
                 backTilemap.SetTile(((Vector3Int)new Vector2Int(x, y)), null);
                 frontTilemap.SetTile(((Vector3Int)new Vector2Int(x, y)), null);
