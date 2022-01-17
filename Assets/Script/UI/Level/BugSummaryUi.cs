@@ -2,16 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SummaryUi : MonoBehaviour
+public class BugSummaryUi : MonoBehaviour
 {
-    [SerializeField] private Image image;
-
+    [SerializeField] private Image icon;
     [SerializeField] private Button[] buttons;
 
     public void Show(Bug bug, PlayerController controller)
     {
         gameObject.SetActive(true);
-        image.sprite = bug.Sprite;
+        icon.sprite = bug.Sprite;
 
         if (controller.Side != bug.Side)
         {
@@ -24,7 +23,7 @@ public class SummaryUi : MonoBehaviour
             Button button = buttons[i];
             BugSkill skill = bug.Skills[skills[i]];
             button.image.sprite = skill.Icon;
-            button.onClick.AddListener(() => controller.SetSelectedSkill(skill.Type()));
+            button.onClick.AddListener(() => controller.SetSelectedBugSkill(skill.Type()));
             button.gameObject.SetActive(true);
         }
     }

@@ -5,12 +5,14 @@ public class LevelUi : BaseUi
 {
     [SerializeField] private Hover hover;
     [SerializeField] private Pointer pointer;
-    [SerializeField] private SummaryUi summary;
+    [SerializeField] private BugSummaryUi bugSummary;
+    [SerializeField] private CellSummaryUi cellSummary;
     [SerializeField] private Button endTurnButton;
 
     public Hover Hover => hover;
     public Pointer Pointer => pointer;
-    public SummaryUi Summary => summary;
+    public BugSummaryUi BugSummary => bugSummary;
+    public CellSummaryUi CellSummary => cellSummary;
 
     public void Init(Map map)
     {
@@ -33,6 +35,7 @@ public class LevelUi : BaseUi
     {
         this.hover.Clear();
         this.pointer.Clear();
-        this.summary.Hide();
+        this.bugSummary.Hide();
+        this.cellSummary.Hide();
     }
 }

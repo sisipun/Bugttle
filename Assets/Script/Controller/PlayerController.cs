@@ -8,17 +8,19 @@ public class PlayerController : BaseController
     [SerializeField] private Camera mainCamera;
 
     private Vector2Int previouseMouseCell;
-    private Bug selected;
-    private SkillType selectedSkillType;
-    private List<Vector2Int> selectedZone;
-    private List<Vector2Int> selectedTargets;
+    private Cell selectedCell;
+    private Bug selectedBug;
+    private SkillType selectedBugSkillType;
+    private List<Vector2Int> selectedBugZone;
+    private List<Vector2Int> selectedBugTargets;
 
     public override void Init(BaseLevel level, BugSide side)
     {
         base.Init(level, side);
         this.previouseMouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
-        this.selectedZone = new List<Vector2Int>();
-        this.selectedTargets = new List<Vector2Int>();
+        this.selectedBugSkillType = SkillType.MOVE;
+        this.selectedBugZone = new List<Vector2Int>();
+        this.selectedBugTargets = new List<Vector2Int>();
         Clear();
     }
 
@@ -55,36 +57,43 @@ public class PlayerController : BaseController
         level.EndTurn();
     }
 
-    public void SetSelected(Bug bug)
+    public void SetSelected(Cell cell)
     {
-        levelUi.Summary.Hide();
-        selected?.SetOutlined(false);
+        levelUi.BugSummary.Hide();
+        levelUi.CellSummary.Hide();
+        selectedBug?.SetOutlined(false);
 
-        selected = bug;
-        SetSelectedSkill(SkillType.MOVE);
+        selectedCell = cell;
+        selectedBug = cell?.Bug;
+        SetSelectedBugSkill(SkillType.MOVE);
 
-        if (selected != null)
+        if (selectedCell != null)
         {
-            selected.SetOutlined(true);
-            levelUi.Summary.Show(selected, this);
+            levelUi.CellSummary.Show(selectedCell);
+        }
+
+        if (selectedBug != null)
+        {
+            selectedBug.SetOutlined(true);
+            levelUi.BugSummary.Show(selectedBug, this);
         }
     }
 
-    public void SetSelectedSkill(SkillType skillType)
+    public void SetSelectedBugSkill(SkillType skillType)
     {
         levelUi.Hover.Clear();
         levelUi.Pointer.Clear();
-        selectedZone.Clear();
-        selectedTargets.Clear();
-        selectedSkillType = skillType;
+        selectedBugZone.Clear();
+        selectedBugTargets.Clear();
+        selectedBugSkillType = skillType;
 
-        if (selected != null && selected.Side == Side)
+        if (selectedBug?.Side == Side)
         {
-            BugSkill skill = selected.Skills[selectedSkillType];
-            selectedZone = skill.GetZone(selected, level);
-            selectedTargets = skill.GetTargets(selected, level);
-            levelUi.Hover.Set(selectedZone, skill.ZoneTile);
-            levelUi.Hover.Set(selectedTargets, skill.TargetTile);
+            BugSkill skill = selectedBug.Skills[selectedBugSkillType];
+            selectedBugZone = skill.GetZone(selectedBug, level);
+            selectedBugTargets = skill.GetTargets(selectedBug, level);
+            levelUi.Hover.Set(selectedBugZone, skill.ZoneTile);
+            levelUi.Hover.Set(selectedBugTargets, skill.TargetTile);
         }
     }
 
@@ -119,13 +128,13 @@ public class PlayerController : BaseController
         levelUi.Pointer.SetPosition(newMouseCell);
         previouseMouseCell = newMouseCell;
         if (
-            selected != null &&
+            selectedBug != null &&
             level.CurrentState == LevelState.TURN &&
-            selectedSkillType == SkillType.MOVE &&
-            selectedTargets.Contains(newMouseCell)
+            selectedBugSkillType == SkillType.MOVE &&
+            selectedBugTargets.Contains(newMouseCell)
         )
         {
-            Path path = level.Map.FindPath(selected.Position, newMouseCell);
+            Path path = level.Map.FindPath(selectedBug.Position, newMouseCell);
             levelUi.Pointer.SetPath(path.Value);
         }
     }
@@ -133,14 +142,14 @@ public class PlayerController : BaseController
     private void onClick(Vector2Int click)
     {
         Bug clicked = level.Map.GetBug(click);
-        if (selectedTargets.Contains(click))
+        if (selectedBugTargets.Contains(click))
         {
-            selected.Skills[selectedSkillType].Apply(selected, click, level);
+            selectedBug.Skills[selectedBugSkillType].Apply(selectedBug, click, level);
             SetSelected(null);
         }
         else
         {
-            SetSelected(clicked);
+            SetSelected(level.Map.GetCell(click));
         }
     }
 }
