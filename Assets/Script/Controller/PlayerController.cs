@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
-    [SerializeField] private PlayerUi ui;
+    [SerializeField] private LevelUi levelUi;
     [SerializeField] private Camera mainCamera;
 
     private Vector2Int previouseMouseCell;
@@ -16,7 +16,6 @@ public class PlayerController : BaseController
     public override void Init(BaseLevel level, BugSide side)
     {
         base.Init(level, side);
-        this.ui.Init(level.Map);
         this.previouseMouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selectedZone = new List<Vector2Int>();
         this.selectedTargets = new List<Vector2Int>();
@@ -25,8 +24,8 @@ public class PlayerController : BaseController
 
     public override void OnStartTurn()
     {
+        levelUi.Enable();
         base.OnStartTurn();
-        ui.Show();
     }
 
     public override IEnumerator TurnAction()
@@ -41,13 +40,13 @@ public class PlayerController : BaseController
     public override void OnEndTurn()
     {
         base.OnEndTurn();
+        levelUi.Disable();
         Clear();
     }
 
     public override void Clear()
     {
-        this.ui.Hide();
-        this.ui.Clear();
+        this.levelUi.Clear();
         SetSelected(null);
     }
 
@@ -58,7 +57,7 @@ public class PlayerController : BaseController
 
     public void SetSelected(Bug bug)
     {
-        ui.Summary.Hide();
+        levelUi.Summary.Hide();
         selected?.SetOutlined(false);
 
         selected = bug;
@@ -67,14 +66,14 @@ public class PlayerController : BaseController
         if (selected != null)
         {
             selected.SetOutlined(true);
-            ui.Summary.Show(selected, this);
+            levelUi.Summary.Show(selected, this);
         }
     }
 
     public void SetSelectedSkill(SkillType skillType)
     {
-        ui.LevelHover.Clear();
-        ui.LevelPointer.Clear();
+        levelUi.Hover.Clear();
+        levelUi.Pointer.Clear();
         selectedZone.Clear();
         selectedTargets.Clear();
         selectedSkillType = skillType;
@@ -84,8 +83,8 @@ public class PlayerController : BaseController
             BugSkill skill = selected.Skills[selectedSkillType];
             selectedZone = skill.GetZone(selected, level);
             selectedTargets = skill.GetTargets(selected, level);
-            ui.LevelHover.Set(selectedZone, skill.ZoneTile);
-            ui.LevelHover.Set(selectedTargets, skill.TargetTile);
+            levelUi.Hover.Set(selectedZone, skill.ZoneTile);
+            levelUi.Hover.Set(selectedTargets, skill.TargetTile);
         }
     }
 
@@ -116,8 +115,8 @@ public class PlayerController : BaseController
 
     private void onMouseCellChange(Vector2Int newMouseCell)
     {
-        ui.LevelPointer.Clear();
-        ui.LevelPointer.SetPosition(newMouseCell);
+        levelUi.Pointer.Clear();
+        levelUi.Pointer.SetPosition(newMouseCell);
         previouseMouseCell = newMouseCell;
         if (
             selected != null &&
@@ -127,7 +126,7 @@ public class PlayerController : BaseController
         )
         {
             Path path = level.Map.FindPath(selected.Position, newMouseCell);
-            ui.LevelPointer.SetPath(path.Value);
+            levelUi.Pointer.SetPath(path.Value);
         }
     }
 

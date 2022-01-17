@@ -1,13 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerUi : BaseUi
+public class LevelUi : BaseUi
 {
     [SerializeField] private Hover hover;
     [SerializeField] private Pointer pointer;
     [SerializeField] private SummaryUi summary;
+    [SerializeField] private Button endTurnButton;
 
-    public Hover LevelHover => hover;
-    public Pointer LevelPointer => pointer;
+    public Hover Hover => hover;
+    public Pointer Pointer => pointer;
     public SummaryUi Summary => summary;
 
     public void Init(Map map)
@@ -17,6 +19,16 @@ public class PlayerUi : BaseUi
         this.pointer.Init(map.Width, map.Height);
     }
 
+    public void Enable()
+    {
+        endTurnButton.interactable = true;
+    }
+
+    public void Disable()
+    {
+        endTurnButton.interactable = false;
+    }
+    
     public void Clear()
     {
         this.hover.Clear();

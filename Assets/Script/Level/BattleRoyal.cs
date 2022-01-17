@@ -10,26 +10,6 @@ public class BattleRoyal : BaseLevel
         return LevelType.BATTLE_ROYAL;
     }
 
-    public override string CurrentStateText()
-    {
-        if (CurrentState == LevelState.SET_POSITIONS)
-        {
-            return string.Format("Set bugs position");
-        }
-        else if (CurrentState == LevelState.TURN)
-        {
-            return string.Format(
-                "Round: {0}.\n{1} rounds till water.", 
-                RoundNumber, 
-                (RoundNumber % waterPeriodInRounds) + 1
-            );
-        }
-        else
-        {
-            return "";
-        }
-    }
-
     protected override void CheckGameOver()
     {
         if (bugs[BugSide.RED].Count == 0)

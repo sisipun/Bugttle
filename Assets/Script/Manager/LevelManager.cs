@@ -43,7 +43,6 @@ public class LevelManager : MonoBehaviour
         this.level.Init(map);
 
         uiManager.ShowLevel(level);
-        uiManager.UpdateLevelState(level);
         controllerManager.StartLevel(level);
     }
 
@@ -68,7 +67,6 @@ public class LevelManager : MonoBehaviour
     private void OnEndTurn(BugSide started)
     {
         controllerManager.EndTurn();
-        uiManager.UpdateLevelState(level);
         controllerManager.StartTurn(started);
     }
 

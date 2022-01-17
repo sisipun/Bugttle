@@ -47,22 +47,6 @@ public abstract class BaseLevel : MonoBehaviour
 
     public abstract LevelType Type();
 
-    public virtual string CurrentStateText()
-    {
-        if (CurrentState == LevelState.SET_POSITIONS)
-        {
-            return string.Format("Set bugs position");
-        }
-        else if (CurrentState == LevelState.TURN)
-        {
-            return string.Format("Round: {0}", RoundNumber);
-        }
-        else
-        {
-            return "";
-        }
-    }
-
     protected abstract void CheckGameOver();
 
     public void Kill(Bug bug)
