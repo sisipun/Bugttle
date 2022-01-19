@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefub: {fileID: 2697811543135085552, guid: 8fade22f056edcb4384e615305a0b9b7, type: 3}
   greenBody: {fileID: 21300000, guid: 3c236ac02504b564f9e337bc9be402cb, type: 3}
+  bottomBody: {fileID: 21300000, guid: 3c236ac02504b564f9e337bc9be402cb, type: 3}
   greenColor: {r: 0.21176472, g: 0.8470589, b: 0.54509807, a: 1}
   redBody: {fileID: 21300000, guid: 3fdea93c27cdea04cb97f18163f4db0f, type: 3}
+  topBody: {fileID: 21300000, guid: 3fdea93c27cdea04cb97f18163f4db0f, type: 3}
   redColor: {r: 0.98823535, g: 0.36078432, b: 0.39607847, a: 1}
   skills:
   - {fileID: 11400000, guid: 2f7fdae5618a5c24aaf60217ad1b91af, type: 2}

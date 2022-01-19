@@ -61,6 +61,7 @@ public class PlayerController : BaseController
     {
         levelUi.BugSummary.Hide();
         levelUi.CellSummary.Hide();
+        selectedBug?.ShowHealthBar(false);
         selectedBug?.SetOutlined(false);
 
         selectedCell = cell;
@@ -75,6 +76,7 @@ public class PlayerController : BaseController
         if (selectedBug != null)
         {
             selectedBug.SetOutlined(true);
+            selectedBug.ShowHealthBar(true);
             levelUi.BugSummary.Show(selectedBug, this);
         }
     }

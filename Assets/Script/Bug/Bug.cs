@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Bug : MonoBehaviour
 {
-    private const string ENABLE_OUTLINE_MATERIAL_KEY = "_OutlineEnabled";
+    private const string OUTLINE_ENABLED_SHADER_PROPERTY = "_OutlineEnabled";
+    private const string OUTLINE_COLOR_SHADER_PROPERTY = "_OutlineColor";
 
     [SerializeField] private HealthBar health;
 
@@ -25,12 +26,13 @@ public class Bug : MonoBehaviour
         this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    public void Init(Vector2Int position, BugSide side, BugData data)
+    public void Init(Vector2Int position, BugSide side, Color color, BugData data)
     {
         this.position = position;
         this.side = side;
-        this.spriteRenderer.sprite = side == BugSide.GREEN ? data.GreenBody : data.RedBody;
-        this.health.Init(data.Health, side == BugSide.GREEN ? data.GreenColor : data.RedColor);
+        this.spriteRenderer.sprite = side == BugSide.BOTTOM ? data.BottomBody : data.TopBody;
+        this.health.Init(data.Health, color);
+        this.spriteRenderer.material.SetColor(OUTLINE_COLOR_SHADER_PROPERTY, color);
 
         if (skills == null)
         {
@@ -45,6 +47,8 @@ public class Bug : MonoBehaviour
         {
             skills.Add(skillData.SkillEffect.Type(), new BugSkill(skillData));
         }
+
+        this.ShowHealthBar(false);
     }
 
     public void ResetSkills()
@@ -70,8 +74,13 @@ public class Bug : MonoBehaviour
         position = newPosition;
     }
 
+    public void ShowHealthBar(bool show)
+    {
+        health.Show(show);
+    }
+
     public void SetOutlined(bool outlined)
     {
-        spriteRenderer.material.SetFloat(ENABLE_OUTLINE_MATERIAL_KEY, outlined ? 1 : 0);
+        spriteRenderer.material.SetFloat(OUTLINE_ENABLED_SHADER_PROPERTY, outlined ? 1 : 0);
     }
 }

@@ -20,8 +20,8 @@ public class HealthBar : MonoBehaviour
 
     void Awake()
     {
-        this.separators = new List<GameObject>();
         this.slider = GetComponent<Slider>();
+        this.separators = new List<GameObject>();
     }
 
     public void Init(int health, Color color)
@@ -76,5 +76,10 @@ public class HealthBar : MonoBehaviour
         }
 
         slider.value = health;
+    }
+
+    public void Show(bool show)
+    {
+        gameObject.SetActive(show);
     }
 }

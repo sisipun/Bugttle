@@ -45,7 +45,7 @@ public class AiController : BaseController
 
     private Vector2Int GetMovePosition(Bug bug, List<Vector2Int> targets)
     {
-        List<Bug> enemyBugs = level.Bugs[Side == BugSide.RED ? BugSide.GREEN : BugSide.RED];
+        List<Bug> enemyBugs = level.Bugs[Side == BugSide.TOP ? BugSide.BOTTOM : BugSide.TOP];
         List<Vector2Int> enemyBugPositions = new List<Vector2Int>();
         foreach (Bug enemyBug in enemyBugs)
         {

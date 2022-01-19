@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ControllerManager : MonoBehaviour
 {
-    [SerializeField] private BaseController greenController;
-    [SerializeField] private BaseController redController;
+    [SerializeField] private BaseController bottomController;
+    [SerializeField] private BaseController topController;
 
     private Dictionary<BugSide, BaseController> sideToController;
 
@@ -15,14 +15,14 @@ public class ControllerManager : MonoBehaviour
     void Awake()
     {
         this.sideToController = new Dictionary<BugSide, BaseController>();
-        this.sideToController.Add(BugSide.GREEN, greenController);
-        this.sideToController.Add(BugSide.RED, redController);
+        this.sideToController.Add(BugSide.BOTTOM, bottomController);
+        this.sideToController.Add(BugSide.TOP, topController);
     }
 
     public void StartLevel(BaseLevel level)
     {
-        this.greenController.Init(level, BugSide.GREEN);
-        this.redController.Init(level, BugSide.RED);
+        this.bottomController.Init(level, BugSide.BOTTOM);
+        this.topController.Init(level, BugSide.TOP);
         StartTurn(level.CurrentSide);
     }
 
@@ -53,7 +53,7 @@ public class ControllerManager : MonoBehaviour
     public void EndLevel()
     {
         EndTurn();
-        greenController.Clear();
-        redController.Clear();
+        bottomController.Clear();
+        topController.Clear();
     }
 }

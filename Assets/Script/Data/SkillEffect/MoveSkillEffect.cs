@@ -55,8 +55,8 @@ public class MoveSkillEffect : BaseSkillEffect
     private List<Vector2Int> GetInitialPositions(Map map, BugSide currentSide, int zoneSize)
     {
         List<Vector2Int> initialPositions = new List<Vector2Int>();
-        int from = currentSide == BugSide.GREEN ? 0 : map.Width - zoneSize;
-        int to = currentSide == BugSide.GREEN ? zoneSize : map.Width;
+        int from = currentSide == BugSide.BOTTOM ? 0 : map.Width - zoneSize;
+        int to = currentSide == BugSide.BOTTOM ? zoneSize : map.Width;
         for (int x = from; x < to; x++)
         {
             for (int y = 0; y < map.Height; y++)

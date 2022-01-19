@@ -462,9 +462,9 @@ GameObject:
   m_Component:
   - component: {fileID: 327306552}
   - component: {fileID: 327306551}
-  - component: {fileID: 327306550}
   - component: {fileID: 327306553}
   - component: {fileID: 327306554}
+  - component: {fileID: 327306550}
   - component: {fileID: 327306555}
   m_Layer: 0
   m_Name: Managers
@@ -492,6 +492,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd1bf165dbf3c3f46a668b3a892d5d43, type: 2}
   - {fileID: 11400000, guid: 19a6579f7e1b0a64f94a4fab1c12d82e, type: 2}
   pool: {fileID: 1853719469}
+  bottomColor: {r: 0.1882353, g: 0.84313726, b: 0.53333336, a: 1}
+  topColor: {r: 0.9882353, g: 0.36078432, b: 0.39607844, a: 1}
 --- !u!114 &327306551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -559,8 +561,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2091a587b9f7944fb8a9504640e77b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  greenController: {fileID: 2125972987}
-  redController: {fileID: 1028318047}
+  bottomController: {fileID: 2125972987}
+  topController: {fileID: 1184148197}
 --- !u!114 &327306555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2025,7 +2027,7 @@ GameObject:
   - component: {fileID: 1028318046}
   - component: {fileID: 1028318047}
   m_Layer: 0
-  m_Name: RedAiController
+  m_Name: BottomAiController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2069,7 +2071,7 @@ GameObject:
   - component: {fileID: 1184148196}
   - component: {fileID: 1184148197}
   m_Layer: 0
-  m_Name: GreenAiController
+  m_Name: TopAiController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2548,7 +2550,7 @@ GameObject:
   - component: {fileID: 1328497066}
   - component: {fileID: 1328497067}
   m_Layer: 0
-  m_Name: RedController
+  m_Name: TopController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3643,7 +3645,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1868246512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4034,7 +4036,7 @@ GameObject:
   - component: {fileID: 2125972986}
   - component: {fileID: 2125972987}
   m_Layer: 0
-  m_Name: GreenController
+  m_Name: BottomController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

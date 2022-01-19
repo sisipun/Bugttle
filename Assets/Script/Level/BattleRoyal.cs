@@ -12,13 +12,13 @@ public class BattleRoyal : BaseLevel
 
     protected override void CheckGameOver()
     {
-        if (bugs[BugSide.RED].Count == 0)
+        if (bugs[BugSide.TOP].Count == 0)
         {
-            OnGameOver(BugSide.GREEN);
+            OnGameOver(BugSide.BOTTOM);
         }
-        else if (bugs[BugSide.GREEN].Count == 0)
+        else if (bugs[BugSide.BOTTOM].Count == 0)
         {
-            OnGameOver(BugSide.RED);
+            OnGameOver(BugSide.TOP);
         }
     }
 

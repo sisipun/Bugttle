@@ -24,14 +24,14 @@ public abstract class BaseLevel : MonoBehaviour
     public virtual void Init(Map map)
     {
         this.currentState = LevelState.SET_POSITIONS;
-        this.initialSide = BugSide.GREEN;
+        this.initialSide = BugSide.BOTTOM;
         this.currentSide = initialSide;
         this.roundNumber = 1;
         this.map = map;
 
         this.bugs = new Dictionary<BugSide, List<Bug>>();
-        bugs[BugSide.GREEN] = new List<Bug>();
-        bugs[BugSide.RED] = new List<Bug>();
+        bugs[BugSide.BOTTOM] = new List<Bug>();
+        bugs[BugSide.TOP] = new List<Bug>();
         for (int x = 0; x < map.Width; x++)
         {
             for (int y = 0; y < map.Height; y++)
@@ -78,7 +78,7 @@ public abstract class BaseLevel : MonoBehaviour
 
     private void SwitchSide()
     {
-        currentSide = currentSide == BugSide.GREEN ? BugSide.RED : BugSide.GREEN;
+        currentSide = currentSide == BugSide.BOTTOM ? BugSide.TOP : BugSide.BOTTOM;
     }
 
     private void CheckBugsState()

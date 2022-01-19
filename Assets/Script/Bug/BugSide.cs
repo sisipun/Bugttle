@@ -1,5 +1,5 @@
 public enum BugSide
 {
-    GREEN,
-    RED
+    BOTTOM,
+    TOP
 }
