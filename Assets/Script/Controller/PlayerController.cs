@@ -8,8 +8,8 @@ public class PlayerController : BaseController
     [SerializeField] private Camera mainCamera;
 
     private Vector2Int previouseMouseCell;
-    private Cell selectedCell;
     private Bug selectedBug;
+    private Bug hoveredBug;
     private SkillType selectedBugSkillType;
     private List<Vector2Int> selectedBugZone;
     private List<Vector2Int> selectedBugTargets;
@@ -57,30 +57,6 @@ public class PlayerController : BaseController
         level.EndTurn();
     }
 
-    public void SetSelected(Cell cell)
-    {
-        levelUi.BugSummary.Hide();
-        levelUi.CellSummary.Hide();
-        selectedBug?.ShowHealthBar(false);
-        selectedBug?.SetOutlined(false);
-
-        selectedCell = cell;
-        selectedBug = cell?.Bug;
-        SetSelectedBugSkill(SkillType.MOVE);
-
-        if (selectedCell != null)
-        {
-            levelUi.CellSummary.Show(selectedCell);
-        }
-
-        if (selectedBug != null)
-        {
-            selectedBug.SetOutlined(true);
-            selectedBug.ShowHealthBar(true);
-            levelUi.BugSummary.Show(selectedBug, this);
-        }
-    }
-
     public void SetSelectedBugSkill(SkillType skillType)
     {
         levelUi.Hover.Clear();
@@ -110,12 +86,13 @@ public class PlayerController : BaseController
         Vector2Int mouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= level.Map.Width || mouseCell.y >= level.Map.Height)
         {
+            setHovered(null);
             return;
         }
 
         if (previouseMouseCell != mouseCell)
         {
-            onMouseCellChange(mouseCell);
+            onHover(mouseCell);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -124,26 +101,26 @@ public class PlayerController : BaseController
         }
     }
 
-    private void onMouseCellChange(Vector2Int newMouseCell)
+    private void onHover(Vector2Int hover)
     {
         levelUi.Pointer.Clear();
-        levelUi.Pointer.SetPosition(newMouseCell);
-        previouseMouseCell = newMouseCell;
+        levelUi.Pointer.SetPosition(hover);
+        previouseMouseCell = hover;
+        setHovered(level.Map.GetCell(hover));
         if (
             selectedBug != null &&
             level.CurrentState == LevelState.TURN &&
             selectedBugSkillType == SkillType.MOVE &&
-            selectedBugTargets.Contains(newMouseCell)
+            selectedBugTargets.Contains(hover)
         )
         {
-            Path path = level.Map.FindPath(selectedBug.Position, newMouseCell);
+            Path path = level.Map.FindPath(selectedBug.Position, hover);
             levelUi.Pointer.SetPath(path.Value);
         }
     }
 
     private void onClick(Vector2Int click)
     {
-        Bug clicked = level.Map.GetBug(click);
         if (selectedBugTargets.Contains(click))
         {
             selectedBug.Skills[selectedBugSkillType].Apply(selectedBug, click, level);
@@ -152,6 +129,58 @@ public class PlayerController : BaseController
         else
         {
             SetSelected(level.Map.GetCell(click));
+        }
+    }
+
+    private void setHovered(Cell cell)
+    {
+        levelUi.CellSummary.Hide();
+
+        if (cell != null)
+        {
+            levelUi.CellSummary.Show(cell);
+        }
+
+        if (hoveredBug != selectedBug)
+        {
+            hoveredBug?.ShowHealthBar(false);
+        }
+
+        hoveredBug = cell?.Bug;
+        hoveredBug?.ShowHealthBar(true);
+
+        if (selectedBug != null)
+        {
+            return;
+        }
+
+        levelUi.BugSummary.Hide();
+        if (hoveredBug != null)
+        {
+            levelUi.BugSummary.Show(hoveredBug, this);
+        }
+    }
+
+    private void SetSelected(Cell cell)
+    {
+        levelUi.CellSummary.Hide();
+        if (cell != null)
+        {
+            levelUi.CellSummary.Show(cell);
+        }
+
+        levelUi.BugSummary.Hide();
+        selectedBug?.ShowHealthBar(false);
+        selectedBug?.SetOutlined(false);
+
+        selectedBug = cell?.Bug;
+        selectedBug?.SetOutlined(true);
+        selectedBug?.ShowHealthBar(true);
+        SetSelectedBugSkill(SkillType.MOVE);
+
+        if (selectedBug != null)
+        {
+            levelUi.BugSummary.Show(selectedBug, this);
         }
     }
 }
