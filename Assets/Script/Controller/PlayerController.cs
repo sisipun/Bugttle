@@ -7,9 +7,8 @@ public class PlayerController : BaseController
     [SerializeField] private LevelUi levelUi;
     [SerializeField] private Camera mainCamera;
 
-    private Vector2Int previouseMouseCell;
     private Bug selectedBug;
-    private Bug hoveredBug;
+    private Cell hoveredCell;
     private SkillType selectedBugSkillType;
     private List<Vector2Int> selectedBugZone;
     private List<Vector2Int> selectedBugTargets;
@@ -17,7 +16,6 @@ public class PlayerController : BaseController
     public override void Init(BaseLevel level, BugSide side)
     {
         base.Init(level, side);
-        this.previouseMouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         this.selectedBugSkillType = SkillType.MOVE;
         this.selectedBugZone = new List<Vector2Int>();
         this.selectedBugTargets = new List<Vector2Int>();
@@ -49,7 +47,8 @@ public class PlayerController : BaseController
     public override void Clear()
     {
         this.levelUi.Clear();
-        SetSelected(null);
+        SetHoveredCell(null);
+        SetSelectedBug(null);
     }
 
     public void EndTurn()
@@ -79,18 +78,18 @@ public class PlayerController : BaseController
     {
         if (Input.GetMouseButtonDown(1))
         {
-            SetSelected(null);
+            SetSelectedBug(null);
         }
 
         Vector2 mouseWorld = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int mouseCell = ((Vector2Int)level.Map.WorldToCell(mainCamera.ScreenToWorldPoint(Input.mousePosition)));
         if (mouseCell.x < 0 || mouseCell.y < 0 || mouseCell.x >= level.Map.Width || mouseCell.y >= level.Map.Height)
         {
-            setHovered(null);
+            SetHoveredCell(null);
             return;
         }
 
-        if (previouseMouseCell != mouseCell)
+        if (hoveredCell?.Position != mouseCell)
         {
             onHover(mouseCell);
         }
@@ -103,10 +102,8 @@ public class PlayerController : BaseController
 
     private void onHover(Vector2Int hover)
     {
-        levelUi.Pointer.Clear();
-        levelUi.Pointer.SetPosition(hover);
-        previouseMouseCell = hover;
-        setHovered(level.Map.GetCell(hover));
+        SetHoveredCell(level.Map.GetCell(hover));
+
         if (
             selectedBug != null &&
             level.CurrentState == LevelState.TURN &&
@@ -124,63 +121,67 @@ public class PlayerController : BaseController
         if (selectedBugTargets.Contains(click))
         {
             selectedBug.Skills[selectedBugSkillType].Apply(selectedBug, click, level);
-            SetSelected(null);
+            SetSelectedBug(null);
         }
         else
         {
-            SetSelected(level.Map.GetCell(click));
+            SetSelectedBug(level.Map.GetCell(click)?.Bug);
         }
     }
 
-    private void setHovered(Cell cell)
+    private void SetHoveredCell(Cell cell)
     {
-        levelUi.CellSummary.Hide();
-
-        if (cell != null)
-        {
-            levelUi.CellSummary.Show(cell);
-        }
-
-        if (hoveredBug != selectedBug)
-        {
-            hoveredBug?.ShowHealthBar(false);
-        }
-
-        hoveredBug = cell?.Bug;
-        hoveredBug?.ShowHealthBar(true);
-
-        if (selectedBug != null)
-        {
-            return;
-        }
-
-        levelUi.BugSummary.Hide();
-        if (hoveredBug != null)
-        {
-            levelUi.BugSummary.Show(hoveredBug, this);
-        }
+        ClearUi();
+        hoveredCell = cell;
+        ShowUi();
     }
 
-    private void SetSelected(Cell cell)
+    private void SetSelectedBug(Bug bug)
     {
-        levelUi.CellSummary.Hide();
-        if (cell != null)
-        {
-            levelUi.CellSummary.Show(cell);
-        }
-
-        levelUi.BugSummary.Hide();
-        selectedBug?.ShowHealthBar(false);
-        selectedBug?.SetOutlined(false);
-
-        selectedBug = cell?.Bug;
-        selectedBug?.SetOutlined(true);
-        selectedBug?.ShowHealthBar(true);
+        ClearUi();
+        selectedBug = bug;
         SetSelectedBugSkill(SkillType.MOVE);
+        ShowUi();
+    }
+
+    private void ClearUi() {
+        levelUi.CellSummary.Hide();
+        levelUi.BugSummary.Hide();
+        levelUi.Pointer.Clear();
+
+        if (hoveredCell != null && hoveredCell.Bug != null)
+        {
+            hoveredCell.Bug.ShowHealthBar(false);
+        }
 
         if (selectedBug != null)
         {
-            levelUi.BugSummary.Show(selectedBug, this);
+            selectedBug.ShowHealthBar(false);
+            selectedBug.ShowOutline(false);
         }
+    }
+
+    private void ShowUi() {
+        if (hoveredCell != null)
+        {
+            levelUi.CellSummary.Show(hoveredCell);
+            levelUi.Pointer.SetPosition(hoveredCell.Position);
+            if (hoveredCell.Bug != null)
+            {
+                hoveredCell.Bug.ShowHealthBar(true);
+            }
+        }
+
+        if (selectedBug != null)
+        {
+            selectedBug.ShowHealthBar(true);
+            selectedBug.ShowOutline(true);
+        }
+
+        Bug summary = selectedBug == null ? hoveredCell?.Bug : selectedBug;
+        if (summary != null)
+        {
+            levelUi.BugSummary.Show(summary, this);
+        } 
     }
 }

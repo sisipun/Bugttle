@@ -79,8 +79,8 @@ public class Bug : MonoBehaviour
         health.Show(show);
     }
 
-    public void SetOutlined(bool outlined)
+    public void ShowOutline(bool show)
     {
-        spriteRenderer.material.SetFloat(OUTLINE_ENABLED_SHADER_PROPERTY, outlined ? 1 : 0);
+        spriteRenderer.material.SetFloat(OUTLINE_ENABLED_SHADER_PROPERTY, show ? 1 : 0);
     }
 }
