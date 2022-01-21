@@ -17,3 +17,8 @@ MonoBehaviour:
   frontTile: {fileID: 0}
   cost: 0
   frequency: 5
+  groupsCost:
+  - group: {fileID: 11400000, guid: 57db446c80e5a3a438b9ad7130ae4542, type: 2}
+    cost: 0
+  - group: {fileID: 11400000, guid: 1532c119e03087840a3d21d27c7f537f, type: 2}
+    cost: 0

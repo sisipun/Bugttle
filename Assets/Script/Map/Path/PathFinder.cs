@@ -13,6 +13,7 @@ class PathFinder
         Dictionary<Vector2Int, Vector2Int> path = new Dictionary<Vector2Int, Vector2Int>();
         Dictionary<Vector2Int, int> cost = new Dictionary<Vector2Int, int>();
         SortedSet<KeyValuePair<Vector2Int, int>> points = new SortedSet<KeyValuePair<Vector2Int, int>>(new PointComparer());
+        BugGroup sourceBugGroup = map[source.x, source.y].Bug.Group;
 
         points.Add(new KeyValuePair<Vector2Int, int>(source, 0));
         cost.Add(source, 0);
@@ -27,16 +28,17 @@ class PathFinder
             foreach (Vector2Int neighbor in neighbors)
             {
                 Cell neighborCell = map[neighbor.x, neighbor.y];
-                int neighborCost = cost[point] + neighborCell.Cost;
+                int neighborCost = neighborCell.GetCost(sourceBugGroup);
+                int neighborPathCost = cost[point] + neighborCost;
                 if (
                     !neighborCell.HasBug
-                    && neighborCell.Cost >= 0
-                    && neighborCost <= maxCost
-                    && (!cost.ContainsKey(neighbor) || neighborCost < cost[neighbor]))
+                    && neighborCost >= 0
+                    && neighborPathCost <= maxCost
+                    && (!cost.ContainsKey(neighbor) || neighborPathCost < cost[neighbor]))
                 {
-                    cost[neighbor] = neighborCost;
+                    cost[neighbor] = neighborPathCost;
                     path[neighbor] = point;
-                    points.Add(new KeyValuePair<Vector2Int, int>(neighbor, neighborCost + Distance(neighbor, target)));
+                    points.Add(new KeyValuePair<Vector2Int, int>(neighbor, neighborPathCost + Distance(neighbor, target)));
                 }
             }
         }

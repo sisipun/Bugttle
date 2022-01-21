@@ -11,10 +11,12 @@ public class Bug : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     private BugSide side;
+    private BugGroup group;
     private Vector2Int position;
     private Dictionary<SkillType, BugSkill> skills;
 
     public BugSide Side => side;
+    public BugGroup Group => group;
     public Vector2Int Position => position;
     public bool IsDead => health.IsDead;
     public bool IsFullHealth => health.IsFull;
@@ -30,6 +32,7 @@ public class Bug : MonoBehaviour
     {
         this.position = position;
         this.side = side;
+        this.group = data.Group;
         this.spriteRenderer.sprite = side == BugSide.BOTTOM ? data.BottomBody : data.TopBody;
         this.health.Init(data.Health, color);
         this.spriteRenderer.material.SetColor(OUTLINE_COLOR_SHADER_PROPERTY, color);

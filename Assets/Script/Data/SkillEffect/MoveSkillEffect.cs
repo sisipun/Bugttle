@@ -27,7 +27,7 @@ public class MoveSkillEffect : BaseSkillEffect
 
         if (level.CurrentState == LevelState.SET_POSITIONS)
         {
-            return GetInitialPositions(level.Map, level.CurrentSide, 2);
+            return GetInitialPositions(bug, level.Map, level.CurrentSide, 2);
         }
 
         Map map = level.Map;
@@ -52,7 +52,7 @@ public class MoveSkillEffect : BaseSkillEffect
         return GetZone(bug, level);
     }
 
-    private List<Vector2Int> GetInitialPositions(Map map, BugSide currentSide, int zoneSize)
+    private List<Vector2Int> GetInitialPositions(Bug bug, Map map, BugSide currentSide, int zoneSize)
     {
         List<Vector2Int> initialPositions = new List<Vector2Int>();
         int from = currentSide == BugSide.BOTTOM ? 0 : map.Width - zoneSize;
@@ -61,7 +61,7 @@ public class MoveSkillEffect : BaseSkillEffect
         {
             for (int y = 0; y < map.Height; y++)
             {
-                if (map.GetBug(x, y) == null && map.GetCell(x, y).Cost >= 0)
+                if (map.GetBug(x, y) == null && map.GetCell(x, y).GetCost(bug.Group) >= 0)
                 {
                     initialPositions.Add(new Vector2Int(x, y));
                 }

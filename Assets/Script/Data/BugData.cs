@@ -7,11 +7,13 @@ public class BugData : ScriptableObject
     [SerializeField] private Sprite bottomBody;
     [SerializeField] private Sprite topBody;
     [SerializeField] private SkillData[] skills;
+    [SerializeField] private BugGroup group;
     [SerializeField] private int health;
 
     public GameObject Prefub => prefub;
     public Sprite BottomBody => bottomBody;
     public Sprite TopBody => topBody;
     public SkillData[] Skills => skills;
+    public BugGroup Group => group;
     public int Health => health;
 }

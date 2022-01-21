@@ -5,7 +5,6 @@ public class CellSummaryUi : MonoBehaviour
 {
     [SerializeField] private Image backIcon;
     [SerializeField] private Image frontIcon;
-    [SerializeField] private Text costLabel;
 
     public void Show(Cell cell)
     {
@@ -29,7 +28,6 @@ public class CellSummaryUi : MonoBehaviour
             frontIcon.gameObject.SetActive(true);
             frontIcon.sprite = cell.FrontTile.sprite;
         }
-        costLabel.text = cell.Cost.ToString();
     }
 
     public void Hide()

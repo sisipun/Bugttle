@@ -7,8 +7,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private GameObject pointPrefub;
     [SerializeField] private float pointDistance;
 
-    private List<GameObject> points;
-
+    private List<Image> points;
     private int maxHealth;
     private int health;
 
@@ -18,7 +17,7 @@ public class HealthBar : MonoBehaviour
 
     void Awake()
     {
-        this.points = new List<GameObject>();
+        this.points = new List<Image>();
     }
 
     public void Init(int health, Color color)
@@ -30,31 +29,17 @@ public class HealthBar : MonoBehaviour
         {
             if (i >= this.points.Count)
             {
-                this.points.Add(Instantiate(pointPrefub, this.transform));
+                this.points.Add(Instantiate(pointPrefub, this.transform).GetComponent<Image>());
             }
-            this.points[i].SetActive(true);
-            this.points[i].GetComponent<Image>().color = color;
+            this.points[i].gameObject.SetActive(true);
+            this.points[i].color = color;
         }
         for (int i = this.maxHealth; i < this.points.Count; i++)
         {
-            this.points[i].SetActive(false);
+            this.points[i].gameObject.SetActive(false);
         }
 
-        RectTransform transform = this.GetComponent<RectTransform>();
-        float separatorDeltaX = transform.rect.width / maxHealth;
-        RectTransform firstPointTransform = this.points[0].GetComponent<RectTransform>();
-        RectTransform lastPointTransform = this.points[maxHealth - 1].GetComponent<RectTransform>();
-        firstPointTransform.offsetMin = new Vector2(0, firstPointTransform.offsetMin.y);
-        lastPointTransform.offsetMax = new Vector2(0, lastPointTransform.offsetMax.y);
-
-        for (int i = 0; i < this.maxHealth - 1; i++)
-        {
-            RectTransform leftPointTransform = this.points[i].GetComponent<RectTransform>();
-            RectTransform rightPointTransform = this.points[i + 1].GetComponent<RectTransform>();
-            float separatorX = (i + 1) * separatorDeltaX;
-            leftPointTransform.offsetMax = new Vector2((separatorX - pointDistance / 2) - transform.rect.width, leftPointTransform.offsetMax.y);
-            rightPointTransform.offsetMin = new Vector2(separatorX + pointDistance / 2, rightPointTransform.offsetMin.y);
-        }
+        SetPointsPosition();
     }
 
     public void IncreaseHealth(int amount)
@@ -65,7 +50,7 @@ public class HealthBar : MonoBehaviour
             health = maxHealth;
         }
 
-        UpdatePoints();
+        UpdatePointsStatus();
     }
 
     public void DecreaseHealth(int amount)
@@ -76,7 +61,7 @@ public class HealthBar : MonoBehaviour
             health = 0;
         }
 
-        UpdatePoints();
+        UpdatePointsStatus();
     }
 
     public void Show(bool show)
@@ -84,15 +69,35 @@ public class HealthBar : MonoBehaviour
         gameObject.SetActive(show);
     }
 
-    private void UpdatePoints()
+    private void UpdatePointsStatus()
     {
         for (int i = 0; i < health; i++)
         {
-            this.points[i].SetActive(true);
+            this.points[i].gameObject.SetActive(true);
         }
         for (int i = health; i < maxHealth; i++)
         {
-            this.points[i].SetActive(false);
+            this.points[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void SetPointsPosition()
+    {
+        RectTransform transform = this.GetComponent<RectTransform>();
+        float separatorDeltaX = transform.rect.width / maxHealth;
+
+        RectTransform firstPointTransform = this.points[0].GetComponent<RectTransform>();
+        RectTransform lastPointTransform = this.points[maxHealth - 1].GetComponent<RectTransform>();
+        firstPointTransform.offsetMin = new Vector2(pointDistance / 2, firstPointTransform.offsetMin.y);
+        lastPointTransform.offsetMax = new Vector2(-pointDistance / 2, lastPointTransform.offsetMax.y);
+
+        for (int i = 0; i < this.maxHealth - 1; i++)
+        {
+            RectTransform leftPointTransform = this.points[i].GetComponent<RectTransform>();
+            RectTransform rightPointTransform = this.points[i + 1].GetComponent<RectTransform>();
+            float separatorX = (i + 1) * separatorDeltaX;
+            leftPointTransform.offsetMax = new Vector2((separatorX - pointDistance / 2) - transform.rect.width, leftPointTransform.offsetMax.y);
+            rightPointTransform.offsetMin = new Vector2(separatorX + pointDistance / 2, rightPointTransform.offsetMin.y);
         }
     }
 }
